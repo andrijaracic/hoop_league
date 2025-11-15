@@ -1,11 +1,9 @@
 ﻿@model List<HoopLeague.Models.ViewModels.GameCardViewModel>
 
 <style>
-
-    /* Kartica – FIXED SIZE */
     body {
         background: #ffa617;
-        background: linear-gradient(90deg,rgba(255, 166, 23, 1) 0%, rgba(224, 60, 0, 1) 86%);
+        background: linear-gradient(90deg, rgba(255,166,23,1) 0%, rgba(224,60,0,1) 86%);
     }
 
     .game-card {
@@ -36,11 +34,12 @@
         text-align: center;
     }
 
-    .team-box {
-        width: 35px;
-        height: 35px;
-        border-radius: 6px;
+    .team-logo {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
         margin: 0 auto;
+        display: block;
     }
 
     .team-label {
@@ -85,15 +84,13 @@
         font-weight: 500;
     }
 
-    /* ============ SLIDER ============ */
-
     .slider-wrapper {
         position: relative;
         display: flex;
         align-items: center;
         gap: 15px;
         margin-top: 30px;
-        overflow: hidden; /* bitno! */
+        overflow: hidden;
     }
 
     .slider-container {
@@ -103,12 +100,13 @@
         width: 100%;
         display: flex;
         gap: 20px;
-
         scrollbar-width: none;
         -ms-overflow-style: none;
     }
 
-    .slider-container::-webkit-scrollbar { display: none; }
+        .slider-container::-webkit-scrollbar {
+            display: none;
+        }
 
     .slider-arrow {
         width: 45px;
@@ -122,14 +120,12 @@
         align-items: center;
         cursor: pointer;
         font-size: 22px;
-        z-index: 5; /* iznad fade efekta */
+        z-index: 6;
     }
 
-    .slider-arrow:hover {
-        background: #f2f2f2;
-    }
-
-    /* ===== FADE LEFT / RIGHT EFFECT ===== */
+        .slider-arrow:hover {
+            background: #f2f2f2;
+        }
 
     .fade-left, .fade-right {
         position: absolute;
@@ -137,26 +133,24 @@
         width: 180px;
         height: 100%;
         pointer-events: none;
-        z-index: 4;
+        z-index: 5;
         filter: blur(16px);
     }
 
     .fade-left {
         left: 0;
-        background: linear-gradient(to right, rgba(255, 166, 23, 1), rgba(255,255,255,0));
+        background: linear-gradient(to right, rgba(255,166,23,1), rgba(255,255,255,0));
     }
 
     .fade-right {
         right: 0;
-        background: linear-gradient(to left, rgba(224, 60, 0, 1), rgba(255,255,255,0));
+        background: linear-gradient(to left, rgba(224,60,0,1), rgba(255,255,255,0));
     }
-
-
 </style>
+
 
 <div class="slider-wrapper">
 
-    <!-- FADE OVERLAYI -->
     <div class="fade-left"></div>
     <div class="fade-right"></div>
 
@@ -180,14 +174,15 @@
                         </div>
 
                         <div class="team-column">
-                            <div class="team-box" style="background:black;"></div>
-                            <div class="team-label">HOME</div>
+                            <img class="team-logo" src="~/@game.DomacinLogo" />
+                            <div class="team-label">@game.DomacinSkracenica</div>
                         </div>
 
                         <div class="team-column">
-                            <div class="team-box" style="background:red;"></div>
-                            <div class="team-label">AWAY</div>
+                            <img class="team-logo" src="~/@game.GostLogo" />
+                            <div class="team-label">@game.GostSkracenica</div>
                         </div>
+
                     </div>
                 }
                 else
@@ -195,8 +190,8 @@
                     <div class="d-flex justify-content-between align-items-center mt-3">
 
                         <div class="team-column">
-                            <div class="team-box" style="background:black;"></div>
-                            <div class="team-label">HOME</div>
+                            <img class="team-logo" src="~/@game.DomacinLogo" />
+                            <div class="team-label">@game.DomacinSkracenica</div>
                         </div>
 
                         <div class="center-column">
@@ -205,11 +200,13 @@
                         </div>
 
                         <div class="team-column">
-                            <div class="team-box" style="background:red;"></div>
-                            <div class="team-label">AWAY</div>
+                            <img class="team-logo" src="~/@game.GostLogo" />
+                            <div class="team-label">@game.GostSkracenica</div>
                         </div>
+
                     </div>
                 }
+
             </div>
         }
 
@@ -220,10 +217,6 @@
 </div>
 
 <script>
-    function slideLeft() {
-        document.getElementById("gameSlider").scrollLeft -= 300;
-    }
-    function slideRight() {
-        document.getElementById("gameSlider").scrollLeft += 300;
-    }
+    function slideLeft() { document.getElementById("gameSlider").scrollLeft -= 300; }
+    function slideRight() { document.getElementById("gameSlider").scrollLeft += 300; }
 </script>

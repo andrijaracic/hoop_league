@@ -12,6 +12,14 @@
         public int PoeniGost { get; set; }
 
         public int Ended {  get; set; }
+
+        public string DomacinLogo { get; set; }
+        public string GostLogo { get; set; }
+
+        public string DomacinSkracenica { get; set; }
+        public string GostSkracenica { get; set; }
+
+
     }
 
 }

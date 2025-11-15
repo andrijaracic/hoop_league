@@ -277,6 +277,11 @@ CREATE TABLE Timovi (
 );
 GO
 
+ALTER TABLE Timovi
+ADD skracenica NVARCHAR(10) NULL;
+
+
+
 INSERT INTO Timovi (drzava_id, naziv, logo_url, datum_osnivanja, grad, broj_titula) VALUES 
 (212, 'Anadolu Efes Istanbul', NULL, '1976-06-16', 'Istanbul', 2),
 (70, 'AS Monaco', NULL, '1928-07-01', 'Monaco', 0),
@@ -298,6 +303,34 @@ INSERT INTO Timovi (drzava_id, naziv, logo_url, datum_osnivanja, grad, broj_titu
 (104, 'Virtus Segafredo Bologna', NULL, '1929-03-29', 'Bologna', 2),
 (121, 'Žalgiris Kaunas', NULL, '1944-01-01', 'Kaunas', 1),
 (218, 'Dubai', NULL, '2024-01-01', 'Dubai', 0);
+
+UPDATE Timovi SET skracenica = 'EFS' WHERE naziv = 'Anadolu Efes Istanbul';
+UPDATE Timovi SET skracenica = 'ASM' WHERE naziv = 'AS Monaco';
+UPDATE Timovi SET skracenica = 'ASV' WHERE naziv = 'ASVEL LDLC Villeurbanne';
+UPDATE Timovi SET skracenica = 'BAS' WHERE naziv = 'Baskonia Vitoria-Gasteiz';
+UPDATE Timovi SET skracenica = 'CZV' WHERE naziv = 'Crvena Zvezda Meridianbet Belgrade';
+UPDATE Timovi SET skracenica = 'MIL' WHERE naziv = 'EA7 Emporio Armani Milan';
+UPDATE Timovi SET skracenica = 'BAR' WHERE naziv = 'FC Barcelona';
+UPDATE Timovi SET skracenica = 'BAY' WHERE naziv = 'FC Bayern Munich';
+UPDATE Timovi SET skracenica = 'FEN' WHERE naziv = 'Fenerbahçe Beko Istanbul';
+UPDATE Timovi SET skracenica = 'HAP' WHERE naziv = 'Hapoel Shlomo Tel Aviv';
+UPDATE Timovi SET skracenica = 'MAC' WHERE naziv = 'Maccabi Playtika Tel Aviv';
+UPDATE Timovi SET skracenica = 'OLY' WHERE naziv = 'Olympiacos Piraeus';
+UPDATE Timovi SET skracenica = 'PAN' WHERE naziv = 'Panathinaikos AKTOR Athens';
+UPDATE Timovi SET skracenica = 'PAR' WHERE naziv = 'Paris Basketball';
+UPDATE Timovi SET skracenica = 'PAR' WHERE naziv = 'Partizan Mozzart Bet Belgrade'; -- Ako želiš "PAR" i za Partizan, ili može "PTZ"
+UPDATE Timovi SET skracenica = 'RMB' WHERE naziv = 'Real Madrid';
+UPDATE Timovi SET skracenica = 'VAL' WHERE naziv = 'Valencia Basket';
+UPDATE Timovi SET skracenica = 'VIR' WHERE naziv = 'Virtus Segafredo Bologna';
+UPDATE Timovi SET skracenica = 'ZAL' WHERE naziv = 'Žalgiris Kaunas';
+UPDATE Timovi SET skracenica = 'DUB' WHERE naziv = 'Dubai';
+
+
+update Timovi set logo_url = 'images/logos/partizan.png' where id = 15;
+update Timovi set logo_url = 'images/logos/zvezda.png' where id = 5;
+
+
+update Timovi set logo_url = 'wwwroot/images/logos/logo_null.png'
 
 select * from Timovi
 
@@ -387,7 +420,7 @@ VALUES ('Uros', 'Mijailovic', 182, 10, '2002-02-11', 201.00, 98.00, 'Krilo', 'Be
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten,tim_id)
 VALUES ('Aleksej', 'Pokusevski', 182, 11, '2001-12-26', 213.00, 104.00, 'Krilo', 'Novi Sad', NULL, 0,15);
-GO
+
 -- Igraci KK Crvena Zvezda Medridian Bet
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
 VALUES (N'Codi', N'Miller-McIntyre', 220, 0, '1994-06-01', 191.00, 88.00, N'Bek', N'Grinsboro, SAD', NULL, 0, 5);
@@ -476,18 +509,6 @@ VALUES('Saša','Obradovi?','Glavni Trener',182,5,'1969-01-29',NULL)
 GO
 
 select * from Treneri
-
--- 3. Igraci_Klubovi
-/*CREATE TABLE Igraci_Klubovi (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    igrac_id INT NOT NULL,
-    tim_id INT NOT NULL,
-    datum_pocetka DATE,
-    datum_zavrsetka DATE,
-    FOREIGN KEY (igrac_id) REFERENCES Igraci(id) ON DELETE CASCADE,
-    FOREIGN KEY (tim_id) REFERENCES Timovi(id) ON DELETE NO ACTION 
-);
-GO*/
 
 -- 4. Utakmice
 CREATE TABLE Utakmice (
@@ -584,13 +605,6 @@ CREATE TABLE Utakmice_Igraci (
 );
 GO
 
-SELECT * FROM Igraci
-
-IF OBJECT_ID('dbo.TRG_UtakmiceIgraci_VremeNaTeren','TR') IS NOT NULL
-    DROP TRIGGER dbo.TRG_UtakmiceIgraci_VremeNaTeren;
-GO
-
-
 CREATE TRIGGER TRG_UtakmiceIgraci_VremeNaTeren
 ON Utakmice_Igraci
 AFTER INSERT, UPDATE
@@ -620,7 +634,7 @@ BEGIN
 END;
 GO
 
-select * from Igraci
+
 -------------------------------------------------------------------------------------------
 --Partizan 88 75 Crvena Zvezda
 -------------------------------------------------------------------------------------------
@@ -823,8 +837,6 @@ GO
 ----------------------------------------------------------
 -- VIEW 1: Prikaz rezultata App
 ----------------------------------------------------------
-
-
 CREATE OR ALTER VIEW vw_UtakmicaSlider AS
 SELECT 
     u.id AS UtakmicaId,
@@ -832,46 +844,53 @@ SELECT
     dom.naziv AS Domacin,
     gost.naziv AS Gost,
 
+    dom.skracenica AS DomacinSkracenica,
+    gost.skracenica AS GostSkracenica,
+
+    dom.logo_url AS DomacinLogo,
+    gost.logo_url AS GostLogo,
+
     -- Poeni doma?ina
-    (
-        SELECT SUM(
-            pogodjeno_trojki * 3 +
-            pogodjeno_dvojki * 2 +
-            pogodjeno_slobodnih_bacanja
-        )
-        FROM Utakmice_Igraci ui
-        JOIN Igraci ig ON ig.id = ui.igrac_id
-        WHERE ui.utakmica_id = u.id
-          AND ig.tim_id = dom.id
-    ) AS PoeniDomacin,
+    COALESCE(SUM(
+        CASE WHEN i.tim_id = dom.id THEN
+            (ui.pogodjeno_trojki * 3 +
+             ui.pogodjeno_dvojki * 2 +
+             ui.pogodjeno_slobodnih_bacanja)
+        END
+    ), 0) AS PoeniDomacin,
 
     -- Poeni gosta
-    (
-        SELECT SUM(
-            pogodjeno_trojki * 3 +
-            pogodjeno_dvojki * 2 +
-            pogodjeno_slobodnih_bacanja
-        )
-        FROM Utakmice_Igraci ui
-        JOIN Igraci ig ON ig.id = ui.igrac_id
-        WHERE ui.utakmica_id = u.id
-          AND ig.tim_id = gost.id
-    ) AS PoeniGost,
+    COALESCE(SUM(
+        CASE WHEN i.tim_id = gost.id THEN
+            (ui.pogodjeno_trojki * 3 +
+             ui.pogodjeno_dvojki * 2 +
+             ui.pogodjeno_slobodnih_bacanja)
+        END
+    ), 0) AS PoeniGost,
 
     u.datum_vreme AS Datum,
     u.runda AS Runda,
 
-    CASE 
-        WHEN u.datum_vreme < GETDATE() THEN 1 
-        ELSE 0 
-    END AS Ended
+    CASE WHEN u.datum_vreme < GETDATE() THEN 1 ELSE 0 END AS Ended
 
 FROM Utakmice u
 JOIN Utakmice_Timovi ut_dom ON ut_dom.utakmica_id = u.id AND ut_dom.domacin = 1
 JOIN Utakmice_Timovi ut_gost ON ut_gost.utakmica_id = u.id AND ut_gost.domacin = 0
-JOIN Timovi dom ON dom.id = ut_dom.tim_id
-JOIN Timovi gost ON gost.id = ut_gost.tim_id;
+
+JOIN Timovi dom ON ut_dom.tim_id = dom.id
+JOIN Timovi gost ON ut_gost.tim_id = gost.id
+
+LEFT JOIN Utakmice_Igraci ui ON ui.utakmica_id = u.id
+LEFT JOIN Igraci i ON i.id = ui.igrac_id
+
+GROUP BY
+    u.id, dom.naziv, gost.naziv,
+    dom.skracenica, gost.skracenica,
+    dom.logo_url, gost.logo_url,
+    u.datum_vreme, u.runda;
 GO
+
+
 
 
 ----------------------------------------------------------
@@ -1024,7 +1043,7 @@ INSERT INTO Tim_Hala(id_tim,id_hala) VALUES (5,1);
 INSERT INTO Tim_Hala(id_tim,id_hala) VALUES (15,2);
 INSERT INTO Tim_Hala(id_tim,id_hala) VALUES (5,2);
 
-
+select * from timovi
 
 -- 9. Sponzori
 CREATE TABLE Sponzori (
@@ -1056,3 +1075,79 @@ CREATE TABLE Vesti (
     FOREIGN KEY (utakmica_id) REFERENCES Utakmice(id) ON DELETE SET NULL
 );
 GO
+
+--INSERTI
+-- HALE
+INSERT INTO Hale (drzava_id, naziv, kapacitet, grad, adresa, url_slika) VALUES
+(212, 'Sinan Erdem Dome', 16000, 'Istanbul', 'Ataköy 11. K?s?m, Bak?rköy', NULL),                 -- Efes
+(70,  'Salle Gaston Médecin', 4100, 'Monaco', '11 Av. des Castelans', NULL),                      -- Monaco
+(70,  'Astroballe', 5500, 'Villeurbanne', '44 Av. Marcel Cerdan', NULL),                          -- ASVEL
+(194, 'Buesa Arena', 15504, 'Vitoria-Gasteiz', 'Portal de Zurbano', NULL),                        -- Baskonia
+(194, 'Mediolanum Forum', 12331, 'Milan', 'Via Giuseppe di Vittorio', NULL),                      -- EA7 Milano
+(77,  'Palau Blaugrana', 7585, 'Barcelona', 'Carrer d''Arístides Maillol', NULL),                 -- Barcelona
+(77,  'Audi Dome', 6700, 'Munich', 'Grasweg 74', NULL),                                           -- Bayern
+(194, 'Ülker Sports Arena', 13000, 'Istanbul', 'Yenisahra, Ata?ehir', NULL),                      -- Fenerbahçe
+(103, 'Menora Mivtachim Arena', 10500, 'Tel Aviv', '51 Yigal Alon St', NULL),                     -- Hapoel Tel Aviv
+(103, 'Menora Mivtachim Arena', 10500, 'Tel Aviv', '51 Yigal Alon St', NULL),                     -- Maccabi
+(194, 'Peace and Friendship Stadium', 12000, 'Piraeus', 'Faliro Coastal Zone', NULL),             -- Olympiacos
+(70,  'OAKA Arena', 19000, 'Athens', '37 Kifisias Ave', NULL),                                    -- Panathinaikos
+(194, 'Accor Arena', 15000, 'Paris', '8 Bd de Bercy', NULL),                                      -- Paris Basketball
+(194, 'WiZink Center', 17400, 'Madrid', 'Av. Felipe II', NULL),                                  -- Real Madrid
+(194, 'Fonteta Arena', 9000, 'Valencia', 'Carrer de Bomber Ramon Duart', NULL),                  -- Valencia
+(70,  'Virtus Segafredo Arena', 9000, 'Bologna', 'Via Antonio Nannetti 1', NULL),                 -- Virtus Bologna
+(121,'Žalgirio Arena', 15500, 'Kaunas', 'Karaliaus Mindaugo pr. 50', NULL),                       -- Zalgiris
+(218,'Coca-Cola Arena', 17000, 'Dubai', 'City Walk, Al Wasl', NULL);                             -- Dubai
+-- ---------------------------------------------------------
+-- UTAKMICE
+SELECT * FROM Hale
+select * from Utakmice
+
+delete from Utakmice where id = 4
+
+-- 4) Real Madrid vs Barcelona
+INSERT INTO Utakmice (hala_id, datum_vreme, runda, sezona_id)
+VALUES (18, '2025-10-11 20:30', 1, 1);
+
+INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
+VALUES
+(5, 16, NULL, 1), -- Real doma?in
+(5, 7,  NULL, 0); -- Barcelona gost
+
+
+-- 5) Panathinaikos vs Olympiacos
+INSERT INTO Utakmice (hala_id, datum_vreme, runda, sezona_id)
+VALUES ( 13, '2025-10-12 21:00', 1, 1);
+
+INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
+VALUES
+(6, 13, NULL, 1), -- Pao doma?in
+(6, 12, NULL, 0); -- Oly gost
+
+
+-- 6) Fenerbahce vs Efes
+INSERT INTO Utakmice (hala_id, datum_vreme, runda, sezona_id)
+VALUES (9, '2025-10-13 19:45', 1, 1);
+
+INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
+VALUES
+(7, 9, NULL, 1),  -- Fener doma?in
+(7, 1, NULL, 0);  -- Efes gost
+
+select * from Timovi
+select * from Hale
+
+INSERT INTO Utakmice (hala_id, datum_vreme, runda, sezona_id)
+VALUES (22, '2025-10-13 16:45', 1, 1);
+
+INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
+VALUES
+(8, 20, NULL, 1),  -- Dubai
+(8, 19, NULL, 0); -- Zalgiris
+
+INSERT INTO Utakmice (hala_id, datum_vreme, runda, sezona_id)
+VALUES (22, '2025-10-20 16:45', 2, 1);
+
+INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
+VALUES
+(9, 20, NULL, 1),  -- Dubai
+(9, 15, NULL, 0); 
