@@ -1018,9 +1018,144 @@ GROUP BY dom.naziv, gost.naziv, u.datum_vreme, u.runda, h.naziv, sez.naziv;
 GO
 
 
+-- Tabela
+
+
+CREATE OR ALTER VIEW vw_TabelaPoretka AS
+WITH Poeni AS (
+    SELECT 
+        u.id AS UtakmicaId,
+        t.id AS TimId,
+        SUM(ui.pogodjeno_trojki * 3 +
+            ui.pogodjeno_dvojki * 2 +
+            ui.pogodjeno_slobodnih_bacanja) AS Poeni
+    FROM Utakmice u
+    JOIN Utakmice_Igraci ui ON ui.utakmica_id = u.id
+    JOIN Igraci i ON i.id = ui.igrac_id
+    JOIN Timovi t ON t.id = i.tim_id
+    GROUP BY u.id, t.id
+),
+
+-- PRODUŽECI – svaka ?etvrtina >= 5 zna?i da je bilo OT
+OT AS (
+    SELECT DISTINCT utakmica_id
+    FROM Utakmice_Igraci
+    WHERE cetvrtina >= 5
+),
+
+Rezultati AS (
+    SELECT 
+        u.id AS UtakmicaId,
+        dom.id AS DomacinId,
+        gost.id AS GostId,
+
+        COALESCE(pdom.Poeni, 0) AS PoeniDomacin,
+        COALESCE(pgost.Poeni, 0) AS PoeniGost,
+
+        CASE WHEN ot.utakmica_id IS NOT NULL THEN 1 ELSE 0 END AS ImaOT
+    FROM Utakmice u
+    JOIN Utakmice_Timovi utd ON utd.utakmica_id = u.id AND utd.domacin = 1
+    JOIN Utakmice_Timovi utg ON utg.utakmica_id = u.id AND utg.domacin = 0
+    JOIN Timovi dom ON dom.id = utd.tim_id
+    JOIN Timovi gost ON gost.id = utg.tim_id
+    LEFT JOIN Poeni pdom ON pdom.UtakmicaId = u.id AND pdom.TimId = dom.id
+    LEFT JOIN Poeni pgost ON pgost.UtakmicaId = u.id AND pgost.TimId = gost.id
+    LEFT JOIN OT ot ON ot.utakmica_id = u.id
+),
+
+Stat AS (
+    SELECT 
+        t.id AS TimId,
+        t.naziv AS Naziv,
+        t.logo_url AS Logo,
+
+        -- poeni dati / primljeni
+        COALESCE(SUM(CASE WHEN t.id = r.DomacinId THEN r.PoeniDomacin 
+                          ELSE r.PoeniGost END), 0) AS PoeniDati,
+
+        COALESCE(SUM(CASE WHEN t.id = r.DomacinId THEN r.PoeniGost 
+                          ELSE r.PoeniDomacin END), 0) AS PoeniPrimljeni,
+
+        -- pobede
+        COALESCE(SUM(CASE 
+            WHEN (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                 ((t.id = r.DomacinId AND r.PoeniDomacin > r.PoeniGost) OR
+                  (t.id = r.GostId    AND r.PoeniGost > r.PoeniDomacin))
+        THEN 1 END), 0) AS Pobede,
+
+        -- porazi
+        COALESCE(SUM(CASE 
+            WHEN (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                 ((t.id = r.DomacinId AND r.PoeniDomacin < r.PoeniGost) OR
+                  (t.id = r.GostId    AND r.PoeniGost < r.PoeniDomacin))
+        THEN 1 END), 0) AS Porazi,
+
+        -- ku?i
+        CONCAT(
+            COALESCE(SUM(CASE 
+                WHEN (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                     t.id = r.DomacinId AND r.PoeniDomacin > r.PoeniGost 
+            THEN 1 END), 0),
+            '-',
+            COALESCE(SUM(CASE 
+                WHEN (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                     t.id = r.DomacinId AND r.PoeniDomacin < r.PoeniGost 
+            THEN 1 END), 0)
+        ) AS BilansKuci,
+
+        -- u gostima
+        CONCAT(
+            COALESCE(SUM(CASE 
+                WHEN (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                    t.id = r.GostId AND r.PoeniGost > r.PoeniDomacin 
+            THEN 1 END), 0),
+            '-',
+            COALESCE(SUM(CASE 
+                WHEN (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                    t.id = r.GostId AND r.PoeniGost < r.PoeniDomacin 
+            THEN 1 END), 0)
+        ) AS BilansGosti,
+
+        -- produžeci
+        CONCAT(
+            COALESCE(SUM(CASE 
+                WHEN r.ImaOT = 1 AND (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                     ((t.id = r.DomacinId AND r.PoeniDomacin > r.PoeniGost) OR
+                      (t.id = r.GostId    AND r.PoeniGost > r.PoeniDomacin))
+            THEN 1 END), 0),
+            '-',
+            COALESCE(SUM(CASE 
+                WHEN r.ImaOT = 1 AND (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
+                     ((t.id = r.DomacinId AND r.PoeniDomacin < r.PoeniGost) OR
+                      (t.id = r.GostId    AND r.PoeniGost < r.PoeniDomacin))
+            THEN 1 END), 0)
+        ) AS BilansOT
+
+    FROM Timovi t
+    LEFT JOIN Rezultati r ON r.DomacinId = t.id OR r.GostId = t.id
+    GROUP BY t.id, t.naziv, t.logo_url
+)
+
+SELECT 
+    TimId,
+    Logo,
+    Naziv,
+    Pobede,
+    Porazi,
+    (PoeniDati - PoeniPrimljeni) AS KosRazlika,
+    PoeniDati,
+    PoeniPrimljeni,
+    BilansKuci,
+    BilansGosti,
+    BilansOT
+FROM Stat;
+GO
 
 
 
+
+
+select * from vw_TabelaPoretka
 
 -------------------------------------------------------------------------------------------
 
