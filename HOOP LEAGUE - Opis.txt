@@ -1,0 +1,60 @@
+HOOP LEAGUE
+
+Veb aplikacija koja sadrži informacije o tabelama lige, rezultata utakmica, vesti, stranica sa rekordima i slično
+
+Početna stranica
+- prikazuje prvo rezultate prethodnog kola i zakazane utakmice za naredno kolo pomocu slidera
+- ispod slidera ide tabela lige
+- ispod tabele idu vesti
+- i onda ide upper footer koji prikazuje sponzore ili nesto slicno
+- i footer koji prikazuje meni i ostale linkove
+
+1) Spisak svih timova u celokupnoj HoopLeague
+- lista sa timovima, svaki tim ima svoj logo, i ime
+- za svaki tim je moguće videti detaljnije informacije(roster,datum osnivanja, prethodne uspehe itd.)
+- filter po ligama 
+
+2) Stranica o klubu
+- prikaz rostera i ostalih informacija kao što su rekordi, spisak svih igrača koji su igrali ikada za taj klub
+- kod prikaza rostera moćiće da se otvori nova stranica koja prikazuje podatke o igraču(ime,prezime,godište,statistiku,bivši klubovi...)
+
+3) Stranica o igraču
+- prikaz detalja o svakom igraču
+- za svaki klub ili utakmicu koja je prikazana za igrača biće moguće da se vide detalji cele utakmice
+
+4) Prikaz tabela
+- prikaz tabele lige
+- ona prikazuje logo, naziv, broj pobeda,poraza, koš razlika,bodovi
+
+5) Stranica sa vestima
+- prikazuje sve vesti
+- svaku vest je moguće otvoriti
+
+6) Stranica vest
+- prikazuje vest sa naslovom, slikom i sl.
+
+7) Stranica igrači
+- prikazuje listu svih igrača i mogućnost da se otvori stranica sa detaljima tog igrača
+
+Potencijalno se može desiti dodavanje novih stranica po potrebi
+
+BAZA TABELE
+
+- timovi(id,naziv,logo_url,datum_osnivanja,broj_titula,grad,drzava)
+- igraci(id,ime,prezime,broj_na_dresu,datum_rodjenja,visina,tezina,pozicija,mesto_rodjenja,nacionalnost,url_slika)
+- igraci_klubovi(id,igrac_id,tim_id,datum_pocetka,datum_zavrsetka)
+- utakmice(id,hala_id,datum_vreme,runda,sezona_id)
+- utakmice_timovi(id,utakmica_id,tim_id,pobednik,domacin)
+- utakmice_igraci(id,starter, igrac_id, utakmica_id, cetvrtina, poeni, ofanzivni_skokovi,defanzivni_skokovi,asistencije,izgubljene_lopte,ukradene_lopte,sutnuto_trojki,sutnuto_dvojki,sutnuto_slobodnih_bacanja,pogodjeno_trojki,pogodjeno_dvojki,pogodjeno_slobodnih_bacanja,vreme_na_terenu,faulovi)
+- hale(id,naziv,kapacitet,drzava,grad,adresa,url_slika)
+- tim_hala(id_hala,id_tim)
+- vesti(id, naslov, tekst, datum_i_vreme, utakmica_id,slika_url)
+- sponzori (id, naziv, logo_url, tip)
+- sponzor_tim(id_sponzor,id_tim)
+- sezone(id,naziv,pocetak,kraj)
+
+
+
+
+
+

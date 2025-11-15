@@ -1,12 +1,33 @@
-using System;
+﻿using HoopLeague.Services.Implementation;
+using HoopLeague.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IHomeService, HomeService>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+{
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        context.Database.CanConnect();
+        Console.WriteLine("SQL CONNECTED ✓");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("SQL ERROR:");
+        Console.WriteLine(ex.Message);
+    }
+}
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

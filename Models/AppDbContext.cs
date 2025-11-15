@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HoopLeague.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
@@ -6,4 +7,18 @@ public class AppDbContext : DbContext
         : base(options)
     {
     }
+
+    public DbSet<GameCardViewModel> vw_UtakmicaSlider { get; set; }
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        
+        modelBuilder.Entity<GameCardViewModel>()
+            .HasNoKey()
+            .ToView("vw_UtakmicaSlider");
+
+        base.OnModelCreating(modelBuilder);
+    }
 }
+

@@ -1,8 +1,229 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model List<HoopLeague.Models.ViewModels.GameCardViewModel>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+
+    /* Kartica – FIXED SIZE */
+    body {
+        background: #ffa617;
+        background: linear-gradient(90deg,rgba(255, 166, 23, 1) 0%, rgba(224, 60, 0, 1) 86%);
+    }
+
+    .game-card {
+        background: #fff;
+        border-radius: 14px;
+        width: 240px;
+        height: 150px;
+        border: 1px solid #d8d7d7;
+        overflow: hidden;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .game-header {
+        background: #f2f2f2;
+        padding: 10px;
+        font-weight: 700;
+        color: #444;
+        font-size: 15px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .team-column {
+        width: 70px;
+        text-align: center;
+    }
+
+    .team-box {
+        width: 35px;
+        height: 35px;
+        border-radius: 6px;
+        margin: 0 auto;
+    }
+
+    .team-label {
+        font-weight: 700;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    .center-column {
+        width: 120px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .match-time {
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .match-date {
+        font-size: 14px;
+        color: #777;
+        margin-top: 2px;
+        font-weight: 500;
+    }
+
+    .score-box {
+        background: #eaffef;
+        padding: 6px 14px;
+        font-weight: 800;
+        font-size: 20px;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    .ended-label {
+        margin-top: 4px;
+        font-size: 13px;
+        color: #777;
+        font-weight: 500;
+    }
+
+    /* ============ SLIDER ============ */
+
+    .slider-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+        overflow: hidden; /* bitno! */
+    }
+
+    .slider-container {
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        white-space: nowrap;
+        width: 100%;
+        display: flex;
+        gap: 20px;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .slider-container::-webkit-scrollbar { display: none; }
+
+    .slider-arrow {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        background: white;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 22px;
+        z-index: 5; /* iznad fade efekta */
+    }
+
+    .slider-arrow:hover {
+        background: #f2f2f2;
+    }
+
+    /* ===== FADE LEFT / RIGHT EFFECT ===== */
+
+    .fade-left, .fade-right {
+        position: absolute;
+        top: 0;
+        width: 180px;
+        height: 100%;
+        pointer-events: none;
+        z-index: 4;
+        filter: blur(16px);
+    }
+
+    .fade-left {
+        left: 0;
+        background: linear-gradient(to right, rgba(255, 166, 23, 1), rgba(255,255,255,0));
+    }
+
+    .fade-right {
+        right: 0;
+        background: linear-gradient(to left, rgba(224, 60, 0, 1), rgba(255,255,255,0));
+    }
+
+
+</style>
+
+<div class="slider-wrapper">
+
+    <!-- FADE OVERLAYI -->
+    <div class="fade-left"></div>
+    <div class="fade-right"></div>
+
+    <button class="slider-arrow" onclick="slideLeft()">❮</button>
+
+    <div id="gameSlider" class="slider-container">
+
+        @foreach (var game in Model)
+        {
+            <div class="game-card">
+
+                <div class="game-header">Round @game.Runda</div>
+
+                @if (game.PoeniDomacin == 0)
+                {
+                    <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+
+                        <div class="center-column">
+                            <div class="match-time">@game.Datum.ToString("HH:mm")</div>
+                            <div class="match-date">@game.Datum.ToString("dd MMMM")</div>
+                        </div>
+
+                        <div class="team-column">
+                            <div class="team-box" style="background:black;"></div>
+                            <div class="team-label">HOME</div>
+                        </div>
+
+                        <div class="team-column">
+                            <div class="team-box" style="background:red;"></div>
+                            <div class="team-label">AWAY</div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+
+                        <div class="team-column">
+                            <div class="team-box" style="background:black;"></div>
+                            <div class="team-label">HOME</div>
+                        </div>
+
+                        <div class="center-column">
+                            <div class="score-box">@game.PoeniDomacin : @game.PoeniGost</div>
+                            <div class="ended-label">Ended</div>
+                        </div>
+
+                        <div class="team-column">
+                            <div class="team-box" style="background:red;"></div>
+                            <div class="team-label">AWAY</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+
+    <button class="slider-arrow" onclick="slideRight()">❯</button>
+
 </div>
+
+<script>
+    function slideLeft() {
+        document.getElementById("gameSlider").scrollLeft -= 300;
+    }
+    function slideRight() {
+        document.getElementById("gameSlider").scrollLeft += 300;
+    }
+</script>
