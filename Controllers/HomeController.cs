@@ -1,8 +1,10 @@
 using HoopLeague.Models;
+using HoopLeague.Models.ViewModels;
 using HoopLeague.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+
 
 namespace HoopLeague.Controllers
 {
@@ -20,12 +22,19 @@ namespace HoopLeague.Controllers
 
         public IActionResult Index()
         {
-            var games = _homeService.GetSliderGames()
-                .OrderBy(g => g.Datum) 
-                .ToList();
+            var utakmice = _homeService.GetSliderGames();
+            var tabela = _homeService.GetTabelaPoretka();
 
-            return View(games);
+            var model = new HomePageViewModel
+            {
+                Slider = utakmice,
+                Tabela = tabela
+            };
+
+            return View(model);
         }
+
+
 
 
         public IActionResult Privacy()

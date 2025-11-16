@@ -1,4 +1,5 @@
-﻿using HoopLeague.Models.ViewModels;
+﻿using HoopLeague.Models;
+using HoopLeague.Models.ViewModels;
 using HoopLeague.Services.Interfaces;
 
 namespace HoopLeague.Services.Implementation
@@ -12,13 +13,22 @@ namespace HoopLeague.Services.Implementation
             _context = context;
         }
 
+        // UTKMICE ZA SLIDER
         public List<GameCardViewModel> GetSliderGames()
         {
             return _context.vw_UtakmicaSlider
-                .OrderByDescending(x => x.UtakmicaId)
-                .Take(10)
+                .OrderBy(u => u.Runda)
+                .ThenBy(u => u.Datum)
+                .ToList();
+        }
+
+        // TABELA PORETKA
+        public List<TabelaPoretkaViewModel> GetTabelaPoretka()
+        {
+            return _context.vw_TabelaPoretka
+                .OrderByDescending(t => t.Pobede)
+                .ThenByDescending(t => t.KosRazlika)
                 .ToList();
         }
     }
-
 }
