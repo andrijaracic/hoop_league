@@ -328,6 +328,31 @@ UPDATE Timovi SET skracenica = 'DUB' WHERE naziv = 'Dubai';
 
 update Timovi set logo_url = 'images/logos/partizan.png' where id = 15;
 update Timovi set logo_url = 'images/logos/zvezda.png' where id = 5;
+update Timovi set logo_url = 'images/logos/armani.png' where id = 6;
+update Timovi set logo_url = 'images/logos/pao.png' where id = 13;
+update Timovi set logo_url = 'images/logos/oly.png' where id = 12;
+update Timovi set logo_url = 'images/logos/zalgiris.png' where id = 19;
+update Timovi set logo_url = 'images/logos/hapoel.png' where id = 10;
+update Timovi set logo_url = 'images/logos/efes.png' where id = 1;
+update Timovi set logo_url = 'images/logos/monaco.png' where id = 2;
+update Timovi set logo_url = 'images/logos/asvel.png' where id = 3;
+update Timovi set logo_url = 'images/logos/baskonia.png' where id = 4;
+update Timovi set logo_url = 'images/logos/bayern.png' where id = 8;
+update Timovi set logo_url = 'images/logos/fener.png' where id = 9;
+update Timovi set logo_url = 'images/logos/maccabi.png' where id = 11;
+update Timovi set logo_url = 'images/logos/paris.png' where id = 14;
+update Timovi set logo_url = 'images/logos/barsa.png' where id = 7;
+update Timovi set logo_url = 'images/logos/real.png' where id = 16;
+update Timovi set logo_url = 'images/logos/valencia.png' where id = 17;
+update Timovi set logo_url = 'images/logos/virtus.png' where id = 18;
+update Timovi set logo_url = 'images/logos/dubai.png' where id = 20;
+
+
+
+
+
+
+
 
 
 update Timovi set logo_url = 'wwwroot/images/logos/logo_null.png'
