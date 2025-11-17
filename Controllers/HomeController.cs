@@ -22,13 +22,11 @@ namespace HoopLeague.Controllers
 
         public IActionResult Index()
         {
-            var utakmice = _homeService.GetSliderGames();
-            var tabela = _homeService.GetTabelaPoretka();
-
             var model = new HomePageViewModel
             {
-                Slider = utakmice,
-                Tabela = tabela
+                Slider = _homeService.GetSliderGames(),
+                Tabela = _homeService.GetTabelaPoretka(),
+                Vesti = _homeService.GetLatestNews()
             };
 
             return View(model);

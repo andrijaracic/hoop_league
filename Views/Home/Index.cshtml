@@ -1,6 +1,10 @@
 ﻿@model HoopLeague.Models.ViewModels.HomePageViewModel
 
 <style>
+    body {
+        background: #ffa617;
+        background: linear-gradient(90deg,rgba(255, 166, 23, 1) 0%, rgba(224, 60, 0, 1) 86%);
+    }
     /* ===== SLIDER ===== */
 
     .game-card {
@@ -145,10 +149,8 @@
     }
 
 
-
-
     /* ======================================================
-                              TABELA – EUROLEAGUE STYLE
+                     TABELA – EUROLEAGUE STYLE
            ====================================================== */
 
     .standings-title {
@@ -167,8 +169,8 @@
         background: #fff;
         font-size: 16px;
         border-radius: 8px;
-        overflow: hidden;
         border: 1px solid #d8d7d7;
+        overflow: hidden;
     }
 
         table.standings-table th {
@@ -182,36 +184,135 @@
             padding: 12px;
             text-align: center;
             transition: background 0.15s ease;
-            border-bottom: 1px solid #d8d7d7; /* default border */
+            border-bottom: 1px solid #d8d7d7;
         }
 
             table.standings-table td img {
-                width: 40px;
-                height: 40px;
+                width: 32px !important;
+                height: 32px !important;
+                max-width: 32px !important;
+                max-height: 32px !important;
                 object-fit: contain;
+                display: block;
+                margin: 0 auto;
+                flex-shrink: 0;
             }
+
 
         table.standings-table tbody tr:hover td {
             background: #f7f7f7 !important;
             cursor: pointer;
         }
 
-    /* ZELENA DOTTED LINIJА POSLE 6. MESTA */
     tr.pos-6 td {
         border-bottom: 3px dotted #32cd32 !important;
     }
 
-    /* CRVENA ČVRSTA LINIJА POSLE 10. MESTA */
     tr.pos-10 td {
         border-bottom: 3px solid #ff0000 !important;
     }
 
-    tr.pos-20 td {
-        border-bottom: 0px;
+
+    /* ======================================================
+                           VESTI – LISTING (FULL)
+           ====================================================== */
+
+    .news-section {
+        margin-top: 60px;
+        margin-bottom: 80px;
+    }
+
+    /* Velika vest */
+    .news-main {
+        display: flex;
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+        margin-bottom: 35px;
+        border: 1px solid #ddd;
+    }
+
+        .news-main img {
+            width: 50%;
+            height: 360px;
+            object-fit: cover;
+            margin: 18px;
+            border-radius: 14px;
+        }
+
+    .news-main-content {
+        padding: 40px 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .news-main-title {
+        font-size: 34px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: #111;
+        line-height: 1.15;
+    }
+
+    .news-main-read {
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .news-date {
+        color: #999;
+        font-weight: 600;
+        margin-left: 15px;
+    }
+
+    /* GRID MANJIH VESTI */
+    .news-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        padding: 10px;
+    }
+
+    .news-card {
+        display: flex;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        transition: 0.25s;
+        padding: 12px;
+    }
+
+        .news-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+
+        .news-card img {
+            width: 150px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 8px;
+        }
+
+    .news-card-content {
+        padding: 15px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .news-card-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #222;
     }
 </style>
-
-
 
 
 <!-- ======================= SLIDER ======================= -->
@@ -280,12 +381,11 @@
 
 </div>
 
+
 <script>
     function slideLeft() { document.getElementById("gameSlider").scrollLeft -= 300; }
     function slideRight() { document.getElementById("gameSlider").scrollLeft += 300; }
 </script>
-
-
 
 
 <!-- ======================= TABELA ======================= -->
@@ -318,10 +418,8 @@
         @foreach (var t in Model.Tabela)
         {
             string cssClass = "";
-
             if (poz == 6) cssClass = "pos-6";
             if (poz == 10) cssClass = "pos-10";
-            if (poz == 20) cssClass = "pos-20";
 
             <tr class="@cssClass">
                 <td>@poz</td>
@@ -342,3 +440,46 @@
         }
     </tbody>
 </table>
+
+
+<!-- ======================= VESTI ======================= -->
+
+<h2 class="standings-title">Najnovije vesti</h2>
+
+<div class="news-section">
+    @if (Model.Vesti != null && Model.Vesti.Any())
+    {
+        var mainNews = Model.Vesti.First();
+        var otherNews = Model.Vesti.Skip(1).Take(4);
+
+        <!-- VELIKA VEST -->
+        <div class="news-main">
+            <img src="~/@mainNews.SlikaUrl" />
+
+            <div class="news-main-content">
+                <div class="news-main-title">@mainNews.Naslov</div>
+                <div class="news-main-read">2 min čitanja</div>
+                <span class="news-date">@mainNews.Datum.ToString("dd. MMMM yyyy")</span>
+            </div>
+        </div>
+
+        <!-- MALE VESTI -->
+        <div class="news-grid">
+            @foreach (var v in otherNews)
+            {
+                <div class="news-card">
+                    <img src="~/@v.SlikaUrl" />
+
+                    <div class="news-card-content">
+                        <div class="news-card-title">@v.Naslov</div>
+                        <span class="news-date">@v.Datum.ToString("dd. MMMM yyyy")</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p style="color:white;">Nema vesti.</p>
+    }
+</div>

@@ -1236,6 +1236,61 @@ CREATE TABLE Vesti (
 );
 GO
 
+INSERT INTO Vesti (naslov, tekst, utakmica_id, slika_url)
+VALUES
+-- 1
+(N'U velikom derbiju Efes savladao Fenerbah?e u produžetku',
+ N'Anadolu Efes je slavio protiv Fenerbah?ea u sjajnom me?u koji je odlu?en tek nakon produžetka. Efes je kontrolisao ve?im delom utakmice, ali je Fener u finišu izborio dodatnih 5 minuta. U produžetku, doma?i tim je bio smireniji i stigao do važne pobede u Evroligi.',
+ 1,
+ N'image_null.png'),
+
+-- 2
+(N'Crvena zvezda dominirala i upisala važnu pobedu u Beogradu',
+ N'Crvena zvezda Meridianbet je pred punom Arenom odigrala jedan od najboljih me?eva ove sezone i potpuno kontrolisala duel od po?etka do kraja. Agresivna odbrana i raspoloženi šuteri doneli su crveno-belima sigurnu pobedu protiv favorizovanog rivala.',
+ 5,
+ N'image_null.png'),
+
+-- 3
+(N'Barselona pokazala šampionski karakter u gostovanju Panatinaikosu',
+ N'Barselona je u Atini odigrala zrelo i timski, preokrenuvši me? u poslednjoj ?etvrtini. Panatinaikos je imao dvocifrenu prednost, ali je Barsa odli?nom odbranom i brzim tranzicijama preuzela kontrolu i zabeležila veliki trijumf na teškom gostovanju.',
+ 6,
+ N'image_null.png'),
+
+-- 4
+(N'Monako rutinski završio posao pred svojom publikom',
+ N'Monako je od samog starta nametnuo tempo protiv rivala koji nije uspeo da prati energiju doma?ina. Mike James je ponovo blistao, a odli?na odbrana Monaka bila je klju? u još jednoj sigurnoj pobedi u seriji.',
+ 7,
+ N'image_null.png'),
+
+-- 5
+(N'Zalgiris iznenadio favorit? u Kaunasu',
+ N'Zalgiris je priredio jedno od najve?ih iznena?enja kola savladavši mnogo ja?u ekipu po budžetu i rosteru. Litvanski tim je igrao izuzetno borbeno, a doma?a publika je nosila ekipu do velike pobede u napetoj završnici.',
+ 8,
+ N'image_null.png'),
+
+-- 6
+(N'Real Madrid ponovo dominantan – španski gigant melje sve pred sobom',
+ N'Real Madrid je još jednom potvrdio zašto je jedan od glavnih favorita za osvajanje Evrolige. Uz fenomenalnu timsku igru i minimalan broj grešaka, kraljevski klub je ubedljivo savladao protivnika i nastavio seriju pobeda.',
+ 9,
+ N'image_null.png');
+
+
+CREATE OR ALTER VIEW vw_Vesti AS
+SELECT 
+    v.id,
+    v.naslov AS Naslov,
+    v.tekst AS Tekst,
+    LEFT(v.tekst, 150) 
+        + CASE WHEN LEN(v.tekst) > 150 THEN '...' ELSE '' END AS KratakTekst,
+    v.datum_i_vreme AS Datum,
+    v.slika_url AS SlikaUrl,
+    v.utakmica_id AS UtakmicaId
+FROM Vesti v;
+GO
+
+
+
+
 --INSERTI
 -- HALE
 INSERT INTO Hale (drzava_id, naziv, kapacitet, grad, adresa, url_slika) VALUES
