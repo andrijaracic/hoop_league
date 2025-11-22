@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HoopLeague.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
     <header>
@@ -20,11 +22,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Početna</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Vesti</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Timovi">Timovi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Igrači</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Utakmice</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Statistika</a>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -36,14 +51,76 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - HoopLeague - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- ===================== U UPPER FOOTER ===================== -->
+
+    <div class="upper-footer">
+        <h1>#HOOPLEAGUE</h1>
+    </div>
+
+    <!-- ===================== MAIN FOOTER ===================== -->
+
+    <footer class="main-footer">
+
+        <div class="footer-top">
+
+            <div class="footer-column">
+                <h3>HoopLeague</h3>
+                <a href="#">O nama</a>
+                <a href="#">Kontakt</a>
+                <a href="#">Partneri</a>
+                <a href="#">Pravila</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Takmičenja</h3>
+                <a href="#">EuroLeague</a>
+                <a href="#">EuroCup</a>
+                <a href="#">ABA Liga</a>
+                <a href="#">Fantasy</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Statistika</h3>
+                <a href="#">Tabela</a>
+                <a href="#">Rezultati</a>
+                <a href="#">Igrači</a>
+                <a href="#">Timovi</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Prati nas</h3>
+                <div class="footer-socials">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <div class="footer-copy">
+                © HoopLeague 2025. Sva prava zadržana.
+            </div>
+
+            <div class="footer-links">
+                <a href="#">Politika privatnosti</a>
+                <a href="#">Uslovi korišćenja</a>
+                <a href="#">Kolačići</a>
+            </div>
+
+        </div>
+
+    </footer>
+
 </body>
 </html>

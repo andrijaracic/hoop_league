@@ -1,0 +1,53 @@
+﻿@model List<HoopLeague.Models.ViewModels.TimoviViewModel>
+
+
+
+<div class="teams-container">
+
+    <!-- SEARCH BAR -->
+    <div class="teams-top">
+        <input type="text" id="teamSearch" placeholder="Pretraži tim...">
+        
+    </div>
+
+    <!-- TIMOVI -->
+    <div class="teams-grid" id="teamsGrid">
+
+        @foreach (var team in Model)
+        {
+            <div class="team-card"
+                 data-search="@team.Naziv.ToLower()"
+                 style="border-bottom-color: @team.Boja">
+
+                <img src="~/@team.LogoUrl" />
+
+                <div class="team-info">
+                    <div class="team-name">@team.Naziv</div>
+                    
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+    const searchInput = document.getElementById("teamSearch");
+    const cards = document.querySelectorAll(".team-card");
+
+    searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase();
+
+        cards.forEach(card => {
+            const name = card.getAttribute("data-search");
+
+            if (name.includes(query)) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+</script>
+

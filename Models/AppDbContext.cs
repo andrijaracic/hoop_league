@@ -14,6 +14,9 @@ public class AppDbContext : DbContext
 
     public DbSet<VestViewModel> vw_Vesti { get; set; }
 
+    public DbSet<TimoviViewModel> vw_Timovi { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<GameCardViewModel>()
@@ -27,6 +30,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<VestViewModel>()
             .HasNoKey()
             .ToView("vw_Vesti");
+
+        modelBuilder.Entity<TimoviViewModel>()
+            .HasNoKey()
+            .ToView("vw_Timovi");
 
         base.OnModelCreating(modelBuilder);
     }

@@ -220,6 +220,9 @@
     .news-section {
         margin-top: 60px;
         margin-bottom: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     /* Velika vest */
@@ -311,6 +314,37 @@
         font-weight: 700;
         margin-bottom: 8px;
         color: #222;
+    }
+
+    .btn-vesti {
+        border: 1px solid #3d3d3d;
+        padding: 8px 20px;
+        border-radius: 15px;
+        color: black;
+        text-decoration: none;
+        margin: auto;
+        transition: 0.2s;
+        font-weight: 700;    }
+
+    .btn-vesti:hover {
+        border: 1px solid black;
+        
+        color: black;
+
+    }
+
+    .upper-footer {
+        
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        width: 100%;
+        height: 30vh;
+    }
+
+    .upper-footer span {
+        color: white;
+        font-weight: 900;
     }
 </style>
 
@@ -474,12 +508,21 @@
                         <div class="news-card-title">@v.Naslov</div>
                         <span class="news-date">@v.Datum.ToString("dd. MMMM yyyy")</span>
                     </div>
+
                 </div>
+                
             }
         </div>
+        <a href="#" class="btn-vesti" >Idi na vesti</a>
+
+        
+
     }
     else
     {
         <p style="color:white;">Nema vesti.</p>
     }
 </div>
+
+
+

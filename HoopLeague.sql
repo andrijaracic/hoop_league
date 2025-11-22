@@ -357,7 +357,50 @@ update Timovi set logo_url = 'images/logos/dubai.png' where id = 20;
 
 update Timovi set logo_url = 'wwwroot/images/logos/logo_null.png'
 
-select * from Timovi
+ALTER TABLE Timovi
+ADD boja NVARCHAR(20);
+
+UPDATE Timovi SET boja = '#0057B8' WHERE id = 1;   -- Anadolu Efes
+UPDATE Timovi SET boja = '#C8102E' WHERE id = 2;   -- AS Monaco
+UPDATE Timovi SET boja = '#1D1D1D' WHERE id = 3;   -- ASVEL
+UPDATE Timovi SET boja = '#002D72' WHERE id = 4;   -- Baskonia
+UPDATE Timovi SET boja = '#C8102E' WHERE id = 5;   -- Crvena Zvezda
+UPDATE Timovi SET boja = '#E12228' WHERE id = 6;   -- Armani Milan
+UPDATE Timovi SET boja = '#004D98' WHERE id = 7;   -- FC Barcelona
+UPDATE Timovi SET boja = '#DC052D' WHERE id = 8;   -- Bayern
+UPDATE Timovi SET boja = '#FFC600' WHERE id = 9;   -- Fenerbahce
+UPDATE Timovi SET boja = '#E12228' WHERE id = 10;  -- Hapoel Tel Aviv
+UPDATE Timovi SET boja = '#FDB913' WHERE id = 11;  -- Maccabi Tel Aviv
+UPDATE Timovi SET boja = '#ED1C24' WHERE id = 12;  -- Olympiacos
+UPDATE Timovi SET boja = '#007A33' WHERE id = 13;  -- Panathinaikos
+UPDATE Timovi SET boja = '#000000' WHERE id = 14;  -- Paris Basketball
+UPDATE Timovi SET boja = '#000000' WHERE id = 15;  -- Partizan
+UPDATE Timovi SET boja = '#FEBE10' WHERE id = 16;  -- Real Madrid
+UPDATE Timovi SET boja = '#F76800' WHERE id = 17;  -- Valencia
+UPDATE Timovi SET boja = '#000000' WHERE id = 18;  -- Virtus Bologna
+UPDATE Timovi SET boja = '#00703C' WHERE id = 19;  -- Žalgiris
+UPDATE Timovi SET boja = '#FF8000' WHERE id = 20;  -- Dubai
+
+
+
+
+CREATE OR ALTER VIEW vw_Timovi AS
+SELECT 
+    t.id as Id,
+    t.naziv as Naziv,
+    t.logo_url as LogoUrl,
+    t.grad as Grad,
+    t.broj_titula as BrojTitula,
+    t.boja as Boja,
+    t.datum_osnivanja as DatumOsnivanja,
+    d.NAME AS Drzava
+FROM Timovi t
+LEFT JOIN Countries d ON t.drzava_id = d.id;
+GO
+
+select * from vw_Timovi
+
+
 
 -- 11. Sezone
 CREATE TABLE Sezone (

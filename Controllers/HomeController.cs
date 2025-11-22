@@ -12,12 +12,15 @@ namespace HoopLeague.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHomeService _homeService;
+        private readonly ITimoviService _timoviService;
+
 
         // Jedini validan konstruktor
-        public HomeController(ILogger<HomeController> logger, IHomeService homeService)
+        public HomeController(ILogger<HomeController> logger, IHomeService homeService, ITimoviService timoviService)
         {
             _logger = logger;
             _homeService = homeService;
+            _timoviService = timoviService;
         }
 
         public IActionResult Index()
@@ -32,6 +35,12 @@ namespace HoopLeague.Controllers
             return View(model);
         }
 
+        public IActionResult Timovi()
+        {
+            var timovi = _timoviService.GetAllTimovi();
+
+            return View(timovi);
+        }
 
 
 
