@@ -1,0 +1,84 @@
+﻿@model List<HoopLeague.Models.ViewModels.IgraciViewModel>
+
+<h2>Igrači</h2>
+
+
+<div class="players-page">
+
+    <div class="players-search">
+        <input type="text" id="searchInput" placeholder="Pretraga igrača..."
+               onkeyup="searchPlayers()" />
+    </div>
+
+    <div id="players-container" class="players-grid">
+        @foreach (var p in Model)
+        {
+            <div class="player-card">
+                <img src="~/@p.TimLogo" />
+
+                <div class="player-info">
+                    <b>@p.Ime @p.Prezime</b>
+                    <span>@p.Tim - @p.Drzava</span>
+                    <span>@p.Pozicija | #@p.BrojDresa</span>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="btn-load-more">
+        <button onclick="loadMore()">Učitaj još</button>
+    </div>
+
+</div>
+
+
+
+<script>
+    let skip = 24;
+
+    function loadMore() {
+        fetch(`/Home/LoadMoreIgraci?skip=${skip}`)
+            .then(r => r.json())
+            .then(data => {
+                appendPlayers(data);
+                skip += 24;
+            });
+    }
+
+    function searchPlayers() {
+        let query = document.getElementById("searchInput").value;
+
+        if (query.trim() === "") {
+            location.reload();
+            return;
+        }
+
+        fetch(`/Home/SearchIgraci?query=${query}`)
+            .then(r => r.json())
+            .then(data => renderPlayers(data));
+    }
+
+    function renderPlayers(players) {
+        const container = document.getElementById("players-container");
+        container.innerHTML = "";
+        appendPlayers(players);
+    }
+
+    function appendPlayers(players) {
+        const container = document.getElementById("players-container");
+
+        players.forEach(p => {
+            container.innerHTML += `
+                <div class="player-card">
+                    <img src="/${p.timLogo}" />
+                    <div class="player-info">
+                        <b>${p.ime} ${p.prezime}</b><br/>
+                        ${p.tim} - ${p.drzava}<br/>
+                        ${p.pozicija} | #${p.brojDresa}
+                    </div>
+                </div>
+            `;
+        });
+    }
+</script>
+

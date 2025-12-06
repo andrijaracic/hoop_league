@@ -551,7 +551,30 @@ INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visi
 VALUES (N'Donatas', N'Motiejunas', 122, 20, '1990-09-20', 213.00, 112.00, N'Centar', N'Kaunas, Litvanija', NULL, 0, 5);
 GO
 
-select * from igraci
+drop view vw_Igraci
+
+CREATE OR ALTER VIEW vw_Igraci AS
+SELECT 
+    i.id AS IgracId,
+    i.ime AS Ime,
+    i.prezime AS Prezime,
+    t.id AS TimId,
+    t.naziv AS Tim,
+    t.logo_url AS TimLogo,
+    d.NAME AS Drzava,
+
+    -- OVDE JE KLJU?NA IZMENA
+    CAST(i.visina AS INT) AS Visina,
+
+    i.pozicija AS Pozicija,
+    i.broj_na_dresu AS BrojDresa
+FROM Igraci i
+LEFT JOIN Timovi t ON i.tim_id = t.id
+LEFT JOIN Countries d ON i.drzava_id = d.id;
+GO
+
+
+
 
 -- Treneri
 CREATE TABLE Treneri (

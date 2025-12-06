@@ -1,5 +1,4 @@
 ﻿using HoopLeague.Models.ViewModels;
-using HoopLeague.Models.ViewModels.HoopLeague.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
@@ -15,6 +14,8 @@ public class AppDbContext : DbContext
     public DbSet<VestViewModel> vw_Vesti { get; set; }
 
     public DbSet<TimoviViewModel> vw_Timovi { get; set; }
+
+    public DbSet<IgraciViewModel> vw_Igraci { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,6 +35,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<TimoviViewModel>()
             .HasNoKey()
             .ToView("vw_Timovi");
+
+        modelBuilder.Entity<IgraciViewModel>()
+        .HasNoKey()
+        .ToView("vw_Igraci");
 
         base.OnModelCreating(modelBuilder);
     }

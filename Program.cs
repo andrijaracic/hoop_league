@@ -15,6 +15,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<ITimoviService, TimoviService>();
 
+builder.Services.AddScoped<IIgraciService, IgraciService>();
+
+builder.Services.AddScoped<IVestiService, VestiService>();
+
+builder.Services.AddScoped<IUtakmiceService, UtakmiceService>();
+
 
 using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 {

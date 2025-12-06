@@ -1,5 +1,4 @@
 ﻿using HoopLeague.Models.ViewModels;
-using HoopLeague.Models.ViewModels.HoopLeague.Models.ViewModels;
 using HoopLeague.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
