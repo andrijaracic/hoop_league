@@ -5,347 +5,9 @@
         background: #ffa617;
         background: linear-gradient(90deg,rgba(255, 166, 23, 1) 0%, rgba(224, 60, 0, 1) 86%);
     }
-    /* ===== SLIDER ===== */
+    
 
-    .game-card {
-        background: #fff;
-        border-radius: 14px;
-        width: 240px;
-        height: 150px;
-        border: 1px solid #d8d7d7;
-        overflow: hidden;
-        text-align: center;
-        flex-shrink: 0;
-    }
-
-    .game-header {
-        background: #f2f2f2;
-        padding: 10px;
-        font-weight: 700;
-        color: #444;
-        font-size: 15px;
-        height: 45px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .team-column {
-        width: 70px;
-        text-align: center;
-    }
-
-    .team-logo {
-        width: 40px;
-        height: 40px;
-        object-fit: contain;
-        margin: 0 auto;
-        display: block;
-    }
-
-    .team-label {
-        font-weight: 700;
-        font-size: 14px;
-        margin-top: 4px;
-    }
-
-    .center-column {
-        width: 120px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .match-time {
-        font-size: 22px;
-        font-weight: 800;
-    }
-
-    .match-date {
-        font-size: 14px;
-        color: #777;
-        margin-top: 2px;
-        font-weight: 500;
-    }
-
-    .score-box {
-        background: #eaffef;
-        padding: 6px 14px;
-        font-weight: 800;
-        font-size: 20px;
-        border-radius: 10px;
-        display: inline-block;
-    }
-
-    .ended-label {
-        margin-top: 4px;
-        font-size: 13px;
-        color: #777;
-        font-weight: 500;
-    }
-
-    .slider-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-top: 30px;
-        overflow: hidden;
-    }
-
-    .slider-container {
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        white-space: nowrap;
-        width: 100%;
-        display: flex;
-        gap: 20px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-        .slider-container::-webkit-scrollbar {
-            display: none;
-        }
-
-    .slider-arrow {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        border: none;
-        background: white;
-        font-size: 22px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-        cursor: pointer;
-        z-index: 6;
-    }
-
-        .slider-arrow:hover {
-            background: #f2f2f2;
-        }
-
-    .fade-left, .fade-right {
-        position: absolute;
-        top: 0;
-        width: 180px;
-        height: 100%;
-        pointer-events: none;
-        z-index: 5;
-        filter: blur(16px);
-    }
-
-    .fade-left {
-        left: 0;
-        background: linear-gradient(to right, rgba(255,166,23,1), rgba(255,255,255,0));
-    }
-
-    .fade-right {
-        right: 0;
-        background: linear-gradient(to left, rgba(224,60,0,1), rgba(255,255,255,0));
-    }
-
-
-    /* ======================================================
-                     TABELA – EUROLEAGUE STYLE
-           ====================================================== */
-
-    .standings-title {
-        color: white;
-        font-size: 28px;
-        font-weight: 800;
-        margin-top: 50px;
-        margin-bottom: 15px;
-        text-transform: uppercase;
-    }
-
-    table.standings-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        background: #fff;
-        font-size: 16px;
-        border-radius: 8px;
-        border: 1px solid #d8d7d7;
-        overflow: hidden;
-    }
-
-        table.standings-table th {
-            padding: 12px;
-            background: #f2f2f2;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        table.standings-table td {
-            padding: 12px;
-            text-align: center;
-            transition: background 0.15s ease;
-            border-bottom: 1px solid #d8d7d7;
-        }
-
-            table.standings-table td img {
-                width: 32px !important;
-                height: 32px !important;
-                max-width: 32px !important;
-                max-height: 32px !important;
-                object-fit: contain;
-                display: block;
-                margin: 0 auto;
-                flex-shrink: 0;
-            }
-
-
-        table.standings-table tbody tr:hover td {
-            background: #f7f7f7 !important;
-            cursor: pointer;
-        }
-
-    tr.pos-6 td {
-        border-bottom: 3px dotted #32cd32 !important;
-    }
-
-    tr.pos-10 td {
-        border-bottom: 3px solid #ff0000 !important;
-    }
-
-
-    /* ======================================================
-                           VESTI – LISTING (FULL)
-           ====================================================== */
-
-    .news-section {
-        margin-top: 60px;
-        margin-bottom: 80px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    /* Velika vest */
-    .news-main {
-        display: flex;
-        background: white;
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-        margin-bottom: 35px;
-        border: 1px solid #ddd;
-    }
-
-        .news-main img {
-            width: 50%;
-            height: 360px;
-            object-fit: cover;
-            margin: 18px;
-            border-radius: 14px;
-        }
-
-    .news-main-content {
-        padding: 40px 35px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .news-main-title {
-        font-size: 34px;
-        font-weight: 800;
-        margin-bottom: 20px;
-        color: #111;
-        line-height: 1.15;
-    }
-
-    .news-main-read {
-        color: #666;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
-
-    .news-date {
-        color: #999;
-        font-weight: 600;
-        margin-left: 15px;
-    }
-
-    /* GRID MANJIH VESTI */
-    .news-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 28px;
-        padding: 10px;
-    }
-
-    .news-card {
-        display: flex;
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid #ddd;
-        transition: 0.25s;
-        padding: 12px;
-    }
-
-        .news-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-4px);
-        }
-
-        .news-card img {
-            width: 150px;
-            height: 110px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin: 8px;
-        }
-
-    .news-card-content {
-        padding: 15px 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .news-card-title {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 8px;
-        color: #222;
-    }
-
-    .btn-vesti {
-        border: 1px solid #3d3d3d;
-        padding: 8px 20px;
-        border-radius: 15px;
-        color: black;
-        text-decoration: none;
-        margin: auto;
-        transition: 0.2s;
-        font-weight: 700;    }
-
-    .btn-vesti:hover {
-        border: 1px solid black;
-        
-        color: black;
-
-    }
-
-    .upper-footer {
-        
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        width: 100%;
-        height: 30vh;
-    }
-
-    .upper-footer span {
-        color: white;
-        font-weight: 900;
-    }
+    
 </style>
 
 
@@ -362,7 +24,7 @@
 
         @foreach (var game in Model.Slider)
         {
-            <div class="game-card">
+            <div class="game-card-slider">
 
                 <div class="game-header">Round @game.Runda</div>
 
@@ -375,12 +37,12 @@
                         </div>
 
                         <div class="team-column">
-                            <img class="team-logo" src="~/@game.DomacinLogo" />
+                            <img class="team-logo-slider" src="~/@game.DomacinLogo" />
                             <div class="team-label">@game.DomacinSkracenica</div>
                         </div>
 
                         <div class="team-column">
-                            <img class="team-logo" src="~/@game.GostLogo" />
+                            <img class="team-logo-slider" src="~/@game.GostLogo" />
                             <div class="team-label">@game.GostSkracenica</div>
                         </div>
                     </div>
@@ -390,7 +52,7 @@
                     <div class="d-flex justify-content-between align-items-center mt-3">
 
                         <div class="team-column">
-                            <img class="team-logo" src="~/@game.DomacinLogo" />
+                            <img class="team-logo-slider" src="~/@game.DomacinLogo" />
                             <div class="team-label">@game.DomacinSkracenica</div>
                         </div>
 
@@ -400,7 +62,7 @@
                         </div>
 
                         <div class="team-column">
-                            <img class="team-logo" src="~/@game.GostLogo" />
+                            <img class="team-logo-slider" src="~/@game.GostLogo" />
                             <div class="team-label">@game.GostSkracenica</div>
                         </div>
                     </div>

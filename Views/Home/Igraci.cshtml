@@ -13,17 +13,21 @@
     <div id="players-container" class="players-grid">
         @foreach (var p in Model)
         {
-            <div class="player-card">
-                <img src="~/@p.TimLogo" />
+            <a class="player-card"
+               href="@Url.Action("Igrac", "Home", new { id = p.IgracId })">
+
+                <img src="~/@p.TimLogo" alt="@p.Ime @p.Prezime" />
 
                 <div class="player-info">
                     <b>@p.Ime @p.Prezime</b>
                     <span>@p.Tim - @p.Drzava</span>
                     <span>@p.Pozicija | #@p.BrojDresa</span>
                 </div>
-            </div>
+
+            </a>
         }
     </div>
+
 
     <div class="btn-load-more">
         <button onclick="loadMore()">Učitaj još</button>
@@ -64,21 +68,26 @@
         appendPlayers(players);
     }
 
-    function appendPlayers(players) {
+        function appendPlayers(players) {
         const container = document.getElementById("players-container");
 
         players.forEach(p => {
-            container.innerHTML += `
-                <div class="player-card">
-                    <img src="/${p.timLogo}" />
+            container.insertAdjacentHTML("beforeend", `
+                <a class="player-card"
+                   href="/Home/Igrac/${p.igracId}">
+
+                    <img src="/${p.timLogo}" alt="${p.ime} ${p.prezime}" />
+
                     <div class="player-info">
-                        <b>${p.ime} ${p.prezime}</b><br/>
-                        ${p.tim} - ${p.drzava}<br/>
-                        ${p.pozicija} | #${p.brojDresa}
+                        <b>${p.ime} ${p.prezime}</b>
+                        <span>${p.tim} - ${p.drzava}</span>
+                        <span>${p.pozicija} | #${p.brojDresa}</span>
                     </div>
-                </div>
-            `;
+
+                </a>
+            `);
         });
     }
+
 </script>
 

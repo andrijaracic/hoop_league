@@ -1,4 +1,4 @@
-
+Ôªø
 /*use master
 drop database HoopLeague*/
 
@@ -291,7 +291,7 @@ INSERT INTO Timovi (drzava_id, naziv, logo_url, datum_osnivanja, grad, broj_titu
 (104, 'EA7 Emporio Armani Milan', NULL, '1936-01-01', 'Milan', 3),
 (194, 'FC Barcelona', NULL, '1926-03-29', 'Barcelona', 2),
 (77, 'FC Bayern Munich', NULL, '1946-01-27', 'Munich', 0),
-(212, 'FenerbahÁe Beko Istanbul', NULL, '1907-05-03', 'Istanbul', 2),
+(212, 'Fenerbah√ße Beko Istanbul', NULL, '1907-05-03', 'Istanbul', 2),
 (103, 'Hapoel Shlomo Tel Aviv', NULL, '1935-01-01', 'Tel Aviv', 0),
 (103, 'Maccabi Playtika Tel Aviv', NULL, '1932-01-01', 'Tel Aviv', 6),
 (80, 'Olympiacos Piraeus', NULL, '1931-03-10', 'Piraeus', 3),
@@ -301,7 +301,7 @@ INSERT INTO Timovi (drzava_id, naziv, logo_url, datum_osnivanja, grad, broj_titu
 (194, 'Real Madrid', NULL, '1931-03-03', 'Madrid', 11),
 (194, 'Valencia Basket', NULL, '1986-01-01', 'Valencia', 0),
 (104, 'Virtus Segafredo Bologna', NULL, '1929-03-29', 'Bologna', 2),
-(121, 'éalgiris Kaunas', NULL, '1944-01-01', 'Kaunas', 1),
+(121, '≈Ωalgiris Kaunas', NULL, '1944-01-01', 'Kaunas', 1),
 (218, 'Dubai', NULL, '2024-01-01', 'Dubai', 0);
 
 UPDATE Timovi SET skracenica = 'EFS' WHERE naziv = 'Anadolu Efes Istanbul';
@@ -312,17 +312,17 @@ UPDATE Timovi SET skracenica = 'CZV' WHERE naziv = 'Crvena Zvezda Meridianbet Be
 UPDATE Timovi SET skracenica = 'MIL' WHERE naziv = 'EA7 Emporio Armani Milan';
 UPDATE Timovi SET skracenica = 'BAR' WHERE naziv = 'FC Barcelona';
 UPDATE Timovi SET skracenica = 'BAY' WHERE naziv = 'FC Bayern Munich';
-UPDATE Timovi SET skracenica = 'FEN' WHERE naziv = 'FenerbahÁe Beko Istanbul';
+UPDATE Timovi SET skracenica = 'FEN' WHERE naziv = 'Fenerbah√ße Beko Istanbul';
 UPDATE Timovi SET skracenica = 'HAP' WHERE naziv = 'Hapoel Shlomo Tel Aviv';
 UPDATE Timovi SET skracenica = 'MAC' WHERE naziv = 'Maccabi Playtika Tel Aviv';
 UPDATE Timovi SET skracenica = 'OLY' WHERE naziv = 'Olympiacos Piraeus';
 UPDATE Timovi SET skracenica = 'PAN' WHERE naziv = 'Panathinaikos AKTOR Athens';
 UPDATE Timovi SET skracenica = 'PAR' WHERE naziv = 'Paris Basketball';
-UPDATE Timovi SET skracenica = 'PAR' WHERE naziv = 'Partizan Mozzart Bet Belgrade'; -- Ako ûeliö "PAR" i za Partizan, ili moûe "PTZ"
+UPDATE Timovi SET skracenica = 'PAR' WHERE naziv = 'Partizan Mozzart Bet Belgrade'; -- Ako ≈æeli≈° "PAR" i za Partizan, ili mo≈æe "PTZ"
 UPDATE Timovi SET skracenica = 'RMB' WHERE naziv = 'Real Madrid';
 UPDATE Timovi SET skracenica = 'VAL' WHERE naziv = 'Valencia Basket';
 UPDATE Timovi SET skracenica = 'VIR' WHERE naziv = 'Virtus Segafredo Bologna';
-UPDATE Timovi SET skracenica = 'ZAL' WHERE naziv = 'éalgiris Kaunas';
+UPDATE Timovi SET skracenica = 'ZAL' WHERE naziv = '≈Ωalgiris Kaunas';
 UPDATE Timovi SET skracenica = 'DUB' WHERE naziv = 'Dubai';
 
 
@@ -378,28 +378,8 @@ UPDATE Timovi SET boja = '#000000' WHERE id = 15;  -- Partizan
 UPDATE Timovi SET boja = '#FEBE10' WHERE id = 16;  -- Real Madrid
 UPDATE Timovi SET boja = '#F76800' WHERE id = 17;  -- Valencia
 UPDATE Timovi SET boja = '#000000' WHERE id = 18;  -- Virtus Bologna
-UPDATE Timovi SET boja = '#00703C' WHERE id = 19;  -- éalgiris
+UPDATE Timovi SET boja = '#00703C' WHERE id = 19;  -- ≈Ωalgiris
 UPDATE Timovi SET boja = '#FF8000' WHERE id = 20;  -- Dubai
-
-
-
-
-CREATE OR ALTER VIEW vw_Timovi AS
-SELECT 
-    t.id as Id,
-    t.naziv as Naziv,
-    t.logo_url as LogoUrl,
-    t.grad as Grad,
-    t.broj_titula as BrojTitula,
-    t.boja as Boja,
-    t.datum_osnivanja as DatumOsnivanja,
-    d.NAME AS Drzava
-FROM Timovi t
-LEFT JOIN Countries d ON t.drzava_id = d.id;
-GO
-
-select * from vw_Timovi
-
 
 
 -- 11. Sezone
@@ -481,7 +461,7 @@ INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visi
 VALUES ('Mitar', 'Bosnjakovic', 182, 8, '2000-04-05', 198.00, 95.00, 'Bek', 'Novi Sad', NULL, 0,15);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten,tim_id)
-VALUES ('Miikka', 'Muurinen', 187, 3, '1997-06-10', 203.00, 100.00, 'Krilo', 'J‰rvenp‰‰', NULL, 0,15);
+VALUES ('Miikka', 'Muurinen', 187, 3, '1997-06-10', 203.00, 100.00, 'Krilo', 'J√§rvenp√§√§', NULL, 0,15);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten,tim_id)
 VALUES ('Uros', 'Mijailovic', 182, 10, '2002-02-11', 201.00, 98.00, 'Krilo', 'Beograd', NULL, 0,15);
@@ -509,7 +489,7 @@ INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visi
 VALUES (N'Tyson', N'Carter', 220, 11, '1998-01-14', 193.00, 80.00, N'Bek', N'Starkvil, SAD', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
-VALUES (N'Ognjen', N'Radoöi?', 182, 44, '2006-05-26', 195.00, 85.00, N'Bek', N'Beograd, Srbija', NULL, 0, 5);
+VALUES (N'Ognjen', N'Rado≈°i?', 182, 44, '2006-05-26', 195.00, 85.00, N'Bek', N'Beograd, Srbija', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
 VALUES (N'Yago', N'dos Santos', 31, 99, '1999-03-09', 178.00, 80.00, N'Bek', N'Sao Paulo, Brazil', NULL, 0, 5);
@@ -533,16 +513,16 @@ INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visi
 VALUES (N'Semi', N'Ojeleye', 220, 37, '1994-12-05', 201.00, 108.00, N'Krilo', N'Overlend Park, SAD', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
-VALUES (N'Chima', N'Moneke', 220, 95, '1995-12-24', 198.00, 102.00, N'Krilo', N'Abudûa, Nigerija', NULL, 0, 5);
+VALUES (N'Chima', N'Moneke', 220, 95, '1995-12-24', 198.00, 102.00, N'Krilo', N'Abud≈æa, Nigerija', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
-VALUES (N'Uroö', N'Plavöi?', 182, 1, '1998-12-22', 218.00, 116.00, N'Centar', N'?a?ak, Srbija', NULL, 0, 5);
+VALUES (N'Uro≈°', N'Plav≈°i?', 182, 1, '1998-12-22', 218.00, 116.00, N'Centar', N'?a?ak, Srbija', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
 VALUES (N'Jasiel', N'Rivero', 220, 14, '1993-10-31', 206.00, 114.00, N'Centar', N'Havana, Kuba', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
-VALUES (N'Ebuka', N'Izundu', 220, 15, '1996-06-28', 208.00, 103.00, N'Centar', N'Abudûa, Nigerija', NULL, 0, 5);
+VALUES (N'Ebuka', N'Izundu', 220, 15, '1996-06-28', 208.00, 103.00, N'Centar', N'Abud≈æa, Nigerija', NULL, 0, 5);
 
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
 VALUES (N'Lazar', N'Stojkovi?', 182, 17, '2007-10-22', 210.00, 100.00, N'Centar', N'Beograd, Srbija', NULL, 0, 5);
@@ -550,31 +530,6 @@ VALUES (N'Lazar', N'Stojkovi?', 182, 17, '2007-10-22', 210.00, 100.00, N'Centar'
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
 VALUES (N'Donatas', N'Motiejunas', 122, 20, '1990-09-20', 213.00, 112.00, N'Centar', N'Kaunas, Litvanija', NULL, 0, 5);
 GO
-
-drop view vw_Igraci
-
-CREATE OR ALTER VIEW vw_Igraci AS
-SELECT 
-    i.id AS IgracId,
-    i.ime AS Ime,
-    i.prezime AS Prezime,
-    t.id AS TimId,
-    t.naziv AS Tim,
-    t.logo_url AS TimLogo,
-    d.NAME AS Drzava,
-
-    -- OVDE JE KLJU?NA IZMENA
-    CAST(i.visina AS INT) AS Visina,
-
-    i.pozicija AS Pozicija,
-    i.broj_na_dresu AS BrojDresa
-FROM Igraci i
-LEFT JOIN Timovi t ON i.tim_id = t.id
-LEFT JOIN Countries d ON i.drzava_id = d.id;
-GO
-
-
-
 
 -- Treneri
 CREATE TABLE Treneri (
@@ -593,10 +548,10 @@ GO
 
 -- INSERT INTO Treneri
 INSERT INTO Treneri (ime,prezime,uloga,drzava_id,tim_id,datum_rodjenja,url_slika) 
-VALUES ('éeljko','Obradovi?','Glavni Trener',182,15,'1960-03-09',NULL)
+VALUES ('≈Ωeljko','Obradovi?','Glavni Trener',182,15,'1960-03-09',NULL)
 
 INSERT INTO Treneri (ime,prezime,uloga,drzava_id,tim_id,datum_rodjenja,url_slika) 
-VALUES('Saöa','Obradovi?','Glavni Trener',182,5,'1969-01-29',NULL)
+VALUES('Sa≈°a','Obradovi?','Glavni Trener',182,5,'1969-01-29',NULL)
 GO
 
 select * from Treneri
@@ -633,7 +588,7 @@ BEGIN
         HAVING COUNT(*) > 10
     )
     BEGIN
-        RAISERROR (N'U jednoj rundi u okviru iste sezone ne moûe biti viöe od 10 utakmica.', 16, 1);
+        RAISERROR (N'U jednoj rundi u okviru iste sezone ne mo≈æe biti vi≈°e od 10 utakmica.', 16, 1);
         ROLLBACK TRANSACTION;
         RETURN;
     END
@@ -647,7 +602,7 @@ BEGIN
         HAVING COUNT(DISTINCT u.runda) > 38
     )
     BEGIN
-        RAISERROR (N'U jednoj sezoni ne moûe postojati viöe od 38 rundi.', 16, 1);
+        RAISERROR (N'U jednoj sezoni ne mo≈æe postojati vi≈°e od 38 rundi.', 16, 1);
         ROLLBACK TRANSACTION;
         RETURN;
     END
@@ -846,7 +801,7 @@ INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
 VALUES (2, 15, 1, 0);
 
 --------------------------------------------------------------
--- CRVENA ZVEZDA (70) ó STATISTIKA
+-- CRVENA ZVEZDA (70) ‚Äî STATISTIKA
 --------------------------------------------------------------
 -- ZVEZDA (tim 5)
 
@@ -884,7 +839,7 @@ INSERT INTO Utakmice_Igraci VALUES
 
 
 --------------------------------------------------------------
--- PARTIZAN (78) ó STATISTIKA
+-- PARTIZAN (78) ‚Äî STATISTIKA
 --------------------------------------------------------------
 
 -- PARTIZAN (tim 15)
@@ -928,59 +883,70 @@ GO
 ----------------------------------------------------------
 -- VIEW 1: Prikaz rezultata App
 ----------------------------------------------------------
+
 CREATE OR ALTER VIEW vw_UtakmicaSlider AS
 SELECT 
     u.id AS UtakmicaId,
 
-    dom.naziv AS Domacin,
+    
+    dom.id  AS DomacinId,
+    gost.id AS GostId,
+
+    -- Nazivi
+    dom.naziv  AS Domacin,
     gost.naziv AS Gost,
 
-    dom.skracenica AS DomacinSkracenica,
+    -- Skraƒáenice
+    dom.skracenica  AS DomacinSkracenica,
     gost.skracenica AS GostSkracenica,
 
-    dom.logo_url AS DomacinLogo,
+    -- Logoi
+    dom.logo_url  AS DomacinLogo,
     gost.logo_url AS GostLogo,
 
-    -- Poeni doma?ina
+    -- Poeni domaƒáina
     COALESCE(SUM(
-        CASE WHEN i.tim_id = dom.id THEN
-            (ui.pogodjeno_trojki * 3 +
-             ui.pogodjeno_dvojki * 2 +
-             ui.pogodjeno_slobodnih_bacanja)
+        CASE 
+            WHEN i.tim_id = dom.id THEN
+                (ui.pogodjeno_trojki * 3 +
+                 ui.pogodjeno_dvojki * 2 +
+                 ui.pogodjeno_slobodnih_bacanja)
         END
     ), 0) AS PoeniDomacin,
 
     -- Poeni gosta
     COALESCE(SUM(
-        CASE WHEN i.tim_id = gost.id THEN
-            (ui.pogodjeno_trojki * 3 +
-             ui.pogodjeno_dvojki * 2 +
-             ui.pogodjeno_slobodnih_bacanja)
+        CASE 
+            WHEN i.tim_id = gost.id THEN
+                (ui.pogodjeno_trojki * 3 +
+                 ui.pogodjeno_dvojki * 2 +
+                 ui.pogodjeno_slobodnih_bacanja)
         END
     ), 0) AS PoeniGost,
 
     u.datum_vreme AS Datum,
-    u.runda AS Runda,
-
-    CASE WHEN u.datum_vreme < GETDATE() THEN 1 ELSE 0 END AS Ended
+    u.runda       AS Runda
 
 FROM Utakmice u
-JOIN Utakmice_Timovi ut_dom ON ut_dom.utakmica_id = u.id AND ut_dom.domacin = 1
-JOIN Utakmice_Timovi ut_gost ON ut_gost.utakmica_id = u.id AND ut_gost.domacin = 0
+JOIN Utakmice_Timovi ut_dom  
+    ON ut_dom.utakmica_id = u.id AND ut_dom.domacin = 1
+JOIN Utakmice_Timovi ut_gost 
+    ON ut_gost.utakmica_id = u.id AND ut_gost.domacin = 0
 
-JOIN Timovi dom ON ut_dom.tim_id = dom.id
+JOIN Timovi dom  ON ut_dom.tim_id  = dom.id
 JOIN Timovi gost ON ut_gost.tim_id = gost.id
 
 LEFT JOIN Utakmice_Igraci ui ON ui.utakmica_id = u.id
-LEFT JOIN Igraci i ON i.id = ui.igrac_id
+LEFT JOIN Igraci i           ON i.id = ui.igrac_id
 
 GROUP BY
-    u.id, dom.naziv, gost.naziv,
+    u.id,
+    dom.id, gost.id,
+    dom.naziv, gost.naziv,
     dom.skracenica, gost.skracenica,
     dom.logo_url, gost.logo_url,
     u.datum_vreme, u.runda;
 GO
-
 
 
 
@@ -1002,49 +968,57 @@ JOIN Timovi t ON i.tim_id = t.id
 GROUP BY t.naziv, ui.utakmica_id;
 GO
 
+use HoopLeague
+
+select * from vw_StatistikaIgraca
 
 ----------------------------------------------------------
 -- VIEW 2: Statistika igra?a po utakmici
 ----------------------------------------------------------
-CREATE VIEW vw_StatistikaIgraca AS
-SELECT 
+CREATE OR ALTER VIEW vw_StatistikaIgraca AS
+SELECT
+    i.id AS IgracId,
+    i.ime AS Ime,
+    i.prezime AS Prezime,
+
+    t.id AS TimId,
     t.naziv AS Tim,
-    i.ime + ' ' + i.prezime AS Igrac,
-    ui.utakmica_id,
+    t.logo_url AS TimLogo,
+    t.skracenica AS TimSkr,
 
-    SUM(ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja) AS Poeni,
-    SUM(ui.ofanzivni_skokovi + ui.defanzivni_skokovi) AS Skokovi,
-    SUM(ui.ofanzivni_skokovi) AS Ofanzivni,
-    SUM(ui.defanzivni_skokovi) AS Defanzivni,
-    SUM(ui.asistencije) AS Asistencije,
-    SUM(ui.izgubljene_lopte) AS Izgubljene,
-    SUM(ui.ukradene_lopte) AS Ukradene,
-    NULL AS Blokade,
-    SUM(ui.faulovi) AS Faulovi,
+    u.sezona_id AS SezonaId,
 
-    CAST(SUM(ui.sutnuto_trojki) AS VARCHAR(5)) + '/' + CAST(SUM(ui.pogodjeno_trojki) AS VARCHAR(5)) AS Trojke,
-    CAST(SUM(ui.sutnuto_dvojki) AS VARCHAR(5)) + '/' + CAST(SUM(ui.pogodjeno_dvojki) AS VARCHAR(5)) AS Dvojke,
-    CAST(SUM(ui.sutnuto_slobodnih_bacanja) AS VARCHAR(5)) + '/' + CAST(SUM(ui.pogodjeno_slobodnih_bacanja) AS VARCHAR(5)) AS Slobodna_bacanja,
-    CAST(SUM(ui.vreme_na_terenu) / 60.0 AS DECIMAL(5,1)) AS Minuta_na_terenu,
+    COUNT(DISTINCT ui.utakmica_id) AS Ut,
 
-    (
-        SUM(ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja)
-        + SUM(ui.ofanzivni_skokovi + ui.defanzivni_skokovi)
-        + SUM(ui.asistencije)
-        + SUM(ui.ukradene_lopte)
-        - (
-            (SUM(ui.sutnuto_trojki) - SUM(ui.pogodjeno_trojki))
-            + (SUM(ui.sutnuto_dvojki) - SUM(ui.pogodjeno_dvojki))
-            + (SUM(ui.sutnuto_slobodnih_bacanja) - SUM(ui.pogodjeno_slobodnih_bacanja))
-        )
-        - SUM(ui.izgubljene_lopte)
-    ) AS Indeks_Korisnosti
+    -- ako ti je vreme_na_terenu INT minut, ovo je prosek minuta po utakmici
+    CAST(AVG(CAST(ui.vreme_na_terenu AS decimal(10,2))) AS decimal(10,2)) AS Min,
 
-FROM Utakmice_Igraci ui
-JOIN Igraci i ON ui.igrac_id = i.id
-JOIN Timovi t ON i.tim_id = t.id
-GROUP BY t.naziv, i.ime, i.prezime, ui.utakmica_id;
+    -- PTS
+    CAST(AVG(CAST(
+        (ui.pogodjeno_dvojki * 2) +
+        (ui.pogodjeno_dvojki * 3) +
+        (ui.pogodjeno_slobodnih_bacanja)
+    AS decimal(10,2))) AS decimal(10,2)) AS Pts,
+
+    -- REB
+    CAST(AVG(CAST((ui.ofanzivni_skokovi + ui.defanzivni_skokovi) AS decimal(10,2))) AS decimal(10,2)) AS Reb,
+
+    -- AST
+    CAST(AVG(CAST(ui.asistencije AS decimal(10,2))) AS decimal(10,2)) AS Ast,
+
+    -- PIR (ako nema≈° PIR u bazi, mo≈æe≈° ga kasnije dodati; za sad 0)
+    CAST(0 AS decimal(10,2)) AS Pir
+
+FROM Utakmice_igraci ui
+JOIN Utakmice u ON u.id = ui.utakmica_id
+JOIN Igraci i ON i.id = ui.igrac_id
+LEFT JOIN Timovi t ON t.id = i.tim_id
+GROUP BY
+    i.id, i.ime, i.prezime,
+    t.id, t.naziv, t.logo_url, t.skracenica,
+    u.sezona_id;
 GO
+
 
 
 ----------------------------------------------------------
@@ -1127,7 +1101,7 @@ WITH Poeni AS (
     GROUP BY u.id, t.id
 ),
 
--- PRODUéECI ñ svaka ?etvrtina >= 5 zna?i da je bilo OT
+-- PRODU≈ΩECI ‚Äì svaka ?etvrtina >= 5 zna?i da je bilo OT
 OT AS (
     SELECT DISTINCT utakmica_id
     FROM Utakmice_Igraci
@@ -1207,7 +1181,7 @@ Stat AS (
             THEN 1 END), 0)
         ) AS BilansGosti,
 
-        -- produûeci
+        -- produ≈æeci
         CONCAT(
             COALESCE(SUM(CASE 
                 WHEN r.ImaOT = 1 AND (r.PoeniDomacin <> 0 OR r.PoeniGost <> 0) AND
@@ -1243,10 +1217,300 @@ FROM Stat;
 GO
 
 
+CREATE OR ALTER VIEW vw_Igraci AS
+SELECT 
+    i.id AS IgracId,
+    i.ime AS Ime,
+    i.prezime AS Prezime,
+    t.id AS TimId,
+    t.naziv AS Tim,
+    t.logo_url AS TimLogo,
+    d.NAME AS Drzava,
+
+    CAST(i.visina AS INT) AS Visina,
+
+    i.pozicija AS Pozicija,
+    i.broj_na_dresu AS BrojDresa
+FROM Igraci i
+LEFT JOIN Timovi t ON i.tim_id = t.id
+LEFT JOIN Countries d ON i.drzava_id = d.id;
+GO
+
+CREATE OR ALTER VIEW vw_Timovi AS
+SELECT 
+    t.id as Id,
+    t.naziv as Naziv,
+    t.logo_url as LogoUrl,
+    t.grad as Grad,
+    t.broj_titula as BrojTitula,
+    t.boja as Boja,
+    t.datum_osnivanja as DatumOsnivanja,
+    d.NAME AS Drzava
+FROM Timovi t
+LEFT JOIN Countries d ON t.drzava_id = d.id;
+GO
+
+
+CREATE OR ALTER VIEW vw_TimTreneri AS
+SELECT
+    t.id AS TimId,
+    tr.id AS TrenerId,
+    tr.ime AS Ime,
+    tr.prezime AS Prezime,
+    tr.uloga AS Uloga
+FROM Treneri tr
+JOIN Timovi t ON t.id = tr.tim_id;
+GO
 
 
 
-select * from vw_TabelaPoretka
+select * from vw_IgraciProsek
+
+CREATE OR ALTER VIEW vw_IgraciProsek AS
+WITH per_game AS
+(
+    SELECT
+        ui.igrac_id AS IgracId,
+        i.ime + ' ' + i.prezime AS Igrac,
+        t.id AS TimId,
+        t.naziv AS Tim,
+        ui.utakmica_id AS UtakmicaId,
+
+        -- vreme (pretpostavka: sekunde ili ne≈°to ≈°to mo≈æe u INT)
+        CAST(SUM(CAST(ui.vreme_na_terenu AS int)) AS int) AS Sekunde,
+
+        -- ≈°ut - totals po utakmici
+        SUM(CAST(ui.pogodjeno_dvojki AS int)) AS M2,
+        SUM(CAST(ui.sutnuto_dvojki  AS int)) AS A2,
+
+        SUM(CAST(ui.pogodjeno_trojki AS int)) AS M3,
+        SUM(CAST(ui.sutnuto_trojki  AS int)) AS A3,
+
+        SUM(CAST(ui.pogodjeno_slobodnih_bacanja AS int)) AS FTM,
+        SUM(CAST(ui.sutnuto_slobodnih_bacanja  AS int)) AS FTA,
+
+        -- poeni / skokovi / asistencije
+        SUM(CAST(ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja AS int)) AS Poeni,
+        SUM(CAST(ui.ofanzivni_skokovi AS int)) AS ORB,
+        SUM(CAST(ui.defanzivni_skokovi AS int)) AS DRB,
+        SUM(CAST(ui.asistencije AS int)) AS AST,
+
+        -- ostalo
+        SUM(CAST(ui.ukradene_lopte AS int)) AS STL,
+        SUM(CAST(ui.izgubljene_lopte AS int)) AS [TO],
+        SUM(CAST(ui.faulovi AS int)) AS FC
+
+        -- ako ima≈° ove kolone, odkomentari≈°i i prilagodi nazive:
+        -- ,SUM(CAST(ISNULL(ui.blokade,0) AS int)) AS BLK
+        -- ,SUM(CAST(ISNULL(ui.blokirane,0) AS int)) AS BLKA
+        -- ,SUM(CAST(ISNULL(ui.faulovi_nad,0) AS int)) AS FD
+    FROM Utakmice_Igraci ui
+    JOIN Igraci i ON i.id = ui.igrac_id
+    JOIN Timovi t ON t.id = i.tim_id
+    GROUP BY
+        ui.igrac_id, i.ime, i.prezime, t.id, t.naziv, ui.utakmica_id
+),
+played AS
+(
+    SELECT *
+    FROM per_game
+    WHERE Poeni > 0
+)
+SELECT
+    IgracId,
+    Igrac,
+    TimId,
+    Tim,
+    COUNT(*) AS OdigraneUtakmice,
+
+    -- Min proseƒçno (MM:SS)
+    CONCAT(
+        CAST(FLOOR(AVG(Sekunde * 1.0) / 60.0) AS int),
+        ':',
+        RIGHT('0' + CAST(CAST(ROUND(AVG(Sekunde * 1.0),0) AS int) % 60 AS varchar(2)), 2)
+    ) AS Min,
+
+    -- PTS / REB / AST
+    CAST(AVG(Poeni * 1.0) AS decimal(10,1)) AS ProsekPoena,
+    CAST(AVG((ORB+DRB) * 1.0) AS decimal(10,1)) AS ProsekSkokova,
+    CAST(AVG(AST * 1.0) AS decimal(10,1)) AS ProsekAsistencija,
+
+    -- ≈†ut po utakmici (make/att)
+    CAST(AVG(M2 * 1.0) AS decimal(10,1)) AS [2PM],
+    CAST(AVG(A2 * 1.0) AS decimal(10,1)) AS [2PA],
+    CAST(CASE WHEN SUM(A2)=0 THEN 0 ELSE (SUM(M2)*100.0)/SUM(A2) END AS decimal(10,1)) AS [2P%],
+
+    CAST(AVG(M3 * 1.0) AS decimal(10,1)) AS [3PM],
+    CAST(AVG(A3 * 1.0) AS decimal(10,1)) AS [3PA],
+    CAST(CASE WHEN SUM(A3)=0 THEN 0 ELSE (SUM(M3)*100.0)/SUM(A3) END AS decimal(10,1)) AS [3P%],
+
+    CAST(AVG(FTM * 1.0) AS decimal(10,1)) AS [FTM],
+    CAST(AVG(FTA * 1.0) AS decimal(10,1)) AS [FTA],
+    CAST(CASE WHEN SUM(FTA)=0 THEN 0 ELSE (SUM(FTM)*100.0)/SUM(FTA) END AS decimal(10,1)) AS [FT%],
+
+    -- Skokovi detaljno
+    CAST(AVG(ORB * 1.0) AS decimal(10,1)) AS [OR],
+    CAST(AVG(DRB * 1.0) AS decimal(10,1)) AS [DR],
+    CAST(AVG((ORB+DRB) * 1.0) AS decimal(10,1)) AS [TR],
+
+    -- Ostalo
+    CAST(AVG(STL * 1.0) AS decimal(10,1)) AS [STL],
+    CAST(AVG([TO] * 1.0) AS decimal(10,1)) AS [TO],
+    CAST(AVG(FC * 1.0) AS decimal(10,1)) AS [FC],
+
+    -- PIR (per-game) - isto kao ranije, ali na nivou utakmice
+    CAST(AVG(
+        (
+          Poeni
+          + (ORB + DRB)
+          + AST
+          + STL
+          -- + BLK + FD  -- ako dodaje≈° te kolone
+          - ((A2 - M2) + (A3 - M3))
+          - (FTA - FTM)
+          - [TO]
+          - FC
+        ) * 1.0
+    ) AS decimal(10,1)) AS [PIR]
+
+FROM played
+GROUP BY IgracId, Igrac, TimId, Tim;
+GO
+
+select * from vw_TimoviProsek
+
+CREATE OR ALTER VIEW vw_TimoviProsek AS
+WITH per_game AS
+(
+    SELECT
+        t.id AS TimId,
+        t.naziv AS Tim,
+        ui.utakmica_id AS UtakmicaId,
+
+        CAST(SUM(CAST(ui.vreme_na_terenu AS int)) AS int) AS Sekunde,
+
+        SUM(CAST(ui.pogodjeno_dvojki AS int)) AS M2,
+        SUM(CAST(ui.sutnuto_dvojki  AS int)) AS A2,
+
+        SUM(CAST(ui.pogodjeno_trojki AS int)) AS M3,
+        SUM(CAST(ui.sutnuto_trojki  AS int)) AS A3,
+
+        SUM(CAST(ui.pogodjeno_slobodnih_bacanja AS int)) AS FTM,
+        SUM(CAST(ui.sutnuto_slobodnih_bacanja  AS int)) AS FTA,
+
+        SUM(CAST(ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja AS int)) AS Poeni,
+        SUM(CAST(ui.ofanzivni_skokovi AS int)) AS ORB,
+        SUM(CAST(ui.defanzivni_skokovi AS int)) AS DRB,
+        SUM(CAST(ui.asistencije AS int)) AS AST,
+
+        SUM(CAST(ui.ukradene_lopte AS int)) AS STL,
+        SUM(CAST(ui.izgubljene_lopte AS int)) AS [TO],
+        SUM(CAST(ui.faulovi AS int)) AS FC
+    FROM Utakmice_Igraci ui
+    JOIN Igraci i ON i.id = ui.igrac_id
+    JOIN Timovi t ON t.id = i.tim_id
+    GROUP BY
+        t.id, t.naziv, ui.utakmica_id
+),
+played AS
+(
+    SELECT *
+    FROM per_game
+    WHERE Poeni > 0
+),
+agg AS
+(
+    SELECT
+        TimId,
+        Tim,
+        COUNT(*) AS OdigraneUtakmice,
+
+        AVG(Sekunde * 1.0) AS AvgSekunde,
+
+        AVG(Poeni * 1.0) AS ProsekPoena,
+        AVG((ORB+DRB) * 1.0) AS ProsekSkokova,
+        AVG(AST * 1.0) AS ProsekAsistencija,
+
+        AVG(M2 * 1.0) AS Avg2PM,
+        AVG(A2 * 1.0) AS Avg2PA,
+        CASE WHEN SUM(A2)=0 THEN 0 ELSE (SUM(M2)*100.0)/SUM(A2) END AS Pct2P,
+
+        AVG(M3 * 1.0) AS Avg3PM,
+        AVG(A3 * 1.0) AS Avg3PA,
+        CASE WHEN SUM(A3)=0 THEN 0 ELSE (SUM(M3)*100.0)/SUM(A3) END AS Pct3P,
+
+        AVG(FTM * 1.0) AS AvgFTM,
+        AVG(FTA * 1.0) AS AvgFTA,
+        CASE WHEN SUM(FTA)=0 THEN 0 ELSE (SUM(FTM)*100.0)/SUM(FTA) END AS PctFT,
+
+        AVG(ORB * 1.0) AS AvgOR,
+        AVG(DRB * 1.0) AS AvgDR,
+        AVG((ORB+DRB) * 1.0) AS AvgTR,
+
+        AVG(STL * 1.0) AS AvgSTL,
+        AVG([TO] * 1.0) AS AvgTO,
+        AVG(FC * 1.0) AS AvgFC,
+
+        AVG(
+            (
+              Poeni
+              + (ORB + DRB)
+              + AST
+              + STL
+              - ((A2 - M2) + (A3 - M3))
+              - (FTA - FTM)
+              - [TO]
+              - FC
+            ) * 1.0
+        ) AS AvgPIR
+    FROM played
+    GROUP BY TimId, Tim
+)
+SELECT
+    t.id AS TimId,
+    t.naziv AS Tim,
+
+    COALESCE(a.OdigraneUtakmice, 0) AS OdigraneUtakmice,
+
+    -- Min (MM:SS)
+    CASE
+        WHEN a.OdigraneUtakmice IS NULL THEN '0:00'
+        ELSE CONCAT(
+            CAST(FLOOR(a.AvgSekunde / 60.0) AS int),
+            ':',
+            RIGHT('0' + CAST(CAST(ROUND(a.AvgSekunde,0) AS int) % 60 AS varchar(2)), 2)
+        )
+    END AS Min,
+
+    CAST(COALESCE(a.ProsekPoena, 0) AS decimal(10,1)) AS ProsekPoena,
+    CAST(COALESCE(a.ProsekSkokova, 0) AS decimal(10,1)) AS ProsekSkokova,
+    CAST(COALESCE(a.ProsekAsistencija, 0) AS decimal(10,1)) AS ProsekAsistencija,
+
+    CAST(COALESCE(a.Avg2PM, 0) AS decimal(10,1)) AS [2PM],
+    CAST(COALESCE(a.Avg2PA, 0) AS decimal(10,1)) AS [2PA],
+    CAST(COALESCE(a.Pct2P, 0) AS decimal(10,1)) AS [2P%],
+
+    CAST(COALESCE(a.Avg3PM, 0) AS decimal(10,1)) AS [3PM],
+    CAST(COALESCE(a.Avg3PA, 0) AS decimal(10,1)) AS [3PA],
+    CAST(COALESCE(a.Pct3P, 0) AS decimal(10,1)) AS [3P%],
+
+    CAST(COALESCE(a.AvgFTM, 0) AS decimal(10,1)) AS [FTM],
+    CAST(COALESCE(a.AvgFTA, 0) AS decimal(10,1)) AS [FTA],
+    CAST(COALESCE(a.PctFT, 0) AS decimal(10,1)) AS [FT%],
+
+    CAST(COALESCE(a.AvgOR, 0) AS decimal(10,1)) AS [OR],
+    CAST(COALESCE(a.AvgDR, 0) AS decimal(10,1)) AS [DR],
+    CAST(COALESCE(a.AvgTR, 0) AS decimal(10,1)) AS [TR],
+
+    CAST(COALESCE(a.AvgSTL, 0) AS decimal(10,1)) AS [STL],
+    CAST(COALESCE(a.AvgTO, 0) AS decimal(10,1)) AS [TO],
+    CAST(COALESCE(a.AvgFC, 0) AS decimal(10,1)) AS [FC],
+
+    CAST(COALESCE(a.AvgPIR, 0) AS decimal(10,1)) AS [PIR]
+FROM Timovi t
+LEFT JOIN agg a ON a.TimId = t.id;
+GO
+
 
 -------------------------------------------------------------------------------------------
 
@@ -1271,7 +1535,7 @@ INSERT INTO Tim_Hala(id_tim,id_hala) VALUES (5,2);
 
 select * from timovi
 
--- 9. Sponzori
+/*-- 9. Sponzori
 CREATE TABLE Sponzori (
     id INT IDENTITY(1,1) PRIMARY KEY,
     naziv NVARCHAR(100) NOT NULL UNIQUE CHECK (LEN(naziv) >= 2),
@@ -1288,7 +1552,7 @@ CREATE TABLE Sponzor_Tim (
     FOREIGN KEY (id_sponzor) REFERENCES Sponzori(id) ON DELETE CASCADE,
     FOREIGN KEY (id_tim) REFERENCES Timovi(id) ON DELETE NO ACTION
 );
-GO
+GO*/
 
 -- 8. Vesti
 CREATE TABLE Vesti (
@@ -1305,38 +1569,38 @@ GO
 INSERT INTO Vesti (naslov, tekst, utakmica_id, slika_url)
 VALUES
 -- 1
-(N'U velikom derbiju Efes savladao Fenerbah?e u produûetku',
- N'Anadolu Efes je slavio protiv Fenerbah?ea u sjajnom me?u koji je odlu?en tek nakon produûetka. Efes je kontrolisao ve?im delom utakmice, ali je Fener u finiöu izborio dodatnih 5 minuta. U produûetku, doma?i tim je bio smireniji i stigao do vaûne pobede u Evroligi.',
+(N'U velikom derbiju Efes savladao Fenerbah?e u produ≈æetku',
+ N'Anadolu Efes je slavio protiv Fenerbah?ea u sjajnom me?u koji je odlu?en tek nakon produ≈æetka. Efes je kontrolisao ve?im delom utakmice, ali je Fener u fini≈°u izborio dodatnih 5 minuta. U produ≈æetku, doma?i tim je bio smireniji i stigao do va≈æne pobede u Evroligi.',
  1,
  N'image_null.png'),
 
 -- 2
-(N'Crvena zvezda dominirala i upisala vaûnu pobedu u Beogradu',
- N'Crvena zvezda Meridianbet je pred punom Arenom odigrala jedan od najboljih me?eva ove sezone i potpuno kontrolisala duel od po?etka do kraja. Agresivna odbrana i raspoloûeni öuteri doneli su crveno-belima sigurnu pobedu protiv favorizovanog rivala.',
+(N'Crvena zvezda dominirala i upisala va≈ænu pobedu u Beogradu',
+ N'Crvena zvezda Meridianbet je pred punom Arenom odigrala jedan od najboljih me?eva ove sezone i potpuno kontrolisala duel od po?etka do kraja. Agresivna odbrana i raspolo≈æeni ≈°uteri doneli su crveno-belima sigurnu pobedu protiv favorizovanog rivala.',
  5,
  N'image_null.png'),
 
 -- 3
-(N'Barselona pokazala öampionski karakter u gostovanju Panatinaikosu',
- N'Barselona je u Atini odigrala zrelo i timski, preokrenuvöi me? u poslednjoj ?etvrtini. Panatinaikos je imao dvocifrenu prednost, ali je Barsa odli?nom odbranom i brzim tranzicijama preuzela kontrolu i zabeleûila veliki trijumf na teökom gostovanju.',
+(N'Barselona pokazala ≈°ampionski karakter u gostovanju Panatinaikosu',
+ N'Barselona je u Atini odigrala zrelo i timski, preokrenuv≈°i me? u poslednjoj ?etvrtini. Panatinaikos je imao dvocifrenu prednost, ali je Barsa odli?nom odbranom i brzim tranzicijama preuzela kontrolu i zabele≈æila veliki trijumf na te≈°kom gostovanju.',
  6,
  N'image_null.png'),
 
 -- 4
-(N'Monako rutinski zavröio posao pred svojom publikom',
- N'Monako je od samog starta nametnuo tempo protiv rivala koji nije uspeo da prati energiju doma?ina. Mike James je ponovo blistao, a odli?na odbrana Monaka bila je klju? u joö jednoj sigurnoj pobedi u seriji.',
+(N'Monako rutinski zavr≈°io posao pred svojom publikom',
+ N'Monako je od samog starta nametnuo tempo protiv rivala koji nije uspeo da prati energiju doma?ina. Mike James je ponovo blistao, a odli?na odbrana Monaka bila je klju? u jo≈° jednoj sigurnoj pobedi u seriji.',
  7,
  N'image_null.png'),
 
 -- 5
 (N'Zalgiris iznenadio favorit? u Kaunasu',
- N'Zalgiris je priredio jedno od najve?ih iznena?enja kola savladavöi mnogo ja?u ekipu po budûetu i rosteru. Litvanski tim je igrao izuzetno borbeno, a doma?a publika je nosila ekipu do velike pobede u napetoj zavrönici.',
+ N'Zalgiris je priredio jedno od najve?ih iznena?enja kola savladav≈°i mnogo ja?u ekipu po bud≈æetu i rosteru. Litvanski tim je igrao izuzetno borbeno, a doma?a publika je nosila ekipu do velike pobede u napetoj zavr≈°nici.',
  8,
  N'image_null.png'),
 
 -- 6
-(N'Real Madrid ponovo dominantan ñ öpanski gigant melje sve pred sobom',
- N'Real Madrid je joö jednom potvrdio zaöto je jedan od glavnih favorita za osvajanje Evrolige. Uz fenomenalnu timsku igru i minimalan broj greöaka, kraljevski klub je ubedljivo savladao protivnika i nastavio seriju pobeda.',
+(N'Real Madrid ponovo dominantan ‚Äì ≈°panski gigant melje sve pred sobom',
+ N'Real Madrid je jo≈° jednom potvrdio za≈°to je jedan od glavnih favorita za osvajanje Evrolige. Uz fenomenalnu timsku igru i minimalan broj gre≈°aka, kraljevski klub je ubedljivo savladao protivnika i nastavio seriju pobeda.',
  9,
  N'image_null.png');
 
@@ -1360,14 +1624,14 @@ GO
 --INSERTI
 -- HALE
 INSERT INTO Hale (drzava_id, naziv, kapacitet, grad, adresa, url_slika) VALUES
-(212, 'Sinan Erdem Dome', 16000, 'Istanbul', 'Atakˆy 11. K?s?m, Bak?rkˆy', NULL),                 -- Efes
-(70,  'Salle Gaston MÈdecin', 4100, 'Monaco', '11 Av. des Castelans', NULL),                      -- Monaco
+(212, 'Sinan Erdem Dome', 16000, 'Istanbul', 'Atak√∂y 11. K?s?m, Bak?rk√∂y', NULL),                 -- Efes
+(70,  'Salle Gaston M√©decin', 4100, 'Monaco', '11 Av. des Castelans', NULL),                      -- Monaco
 (70,  'Astroballe', 5500, 'Villeurbanne', '44 Av. Marcel Cerdan', NULL),                          -- ASVEL
 (194, 'Buesa Arena', 15504, 'Vitoria-Gasteiz', 'Portal de Zurbano', NULL),                        -- Baskonia
 (194, 'Mediolanum Forum', 12331, 'Milan', 'Via Giuseppe di Vittorio', NULL),                      -- EA7 Milano
-(77,  'Palau Blaugrana', 7585, 'Barcelona', 'Carrer d''ArÌstides Maillol', NULL),                 -- Barcelona
+(77,  'Palau Blaugrana', 7585, 'Barcelona', 'Carrer d''Ar√≠stides Maillol', NULL),                 -- Barcelona
 (77,  'Audi Dome', 6700, 'Munich', 'Grasweg 74', NULL),                                           -- Bayern
-(194, '‹lker Sports Arena', 13000, 'Istanbul', 'Yenisahra, Ata?ehir', NULL),                      -- FenerbahÁe
+(194, '√úlker Sports Arena', 13000, 'Istanbul', 'Yenisahra, Ata?ehir', NULL),                      -- Fenerbah√ße
 (103, 'Menora Mivtachim Arena', 10500, 'Tel Aviv', '51 Yigal Alon St', NULL),                     -- Hapoel Tel Aviv
 (103, 'Menora Mivtachim Arena', 10500, 'Tel Aviv', '51 Yigal Alon St', NULL),                     -- Maccabi
 (194, 'Peace and Friendship Stadium', 12000, 'Piraeus', 'Faliro Coastal Zone', NULL),             -- Olympiacos
@@ -1376,7 +1640,7 @@ INSERT INTO Hale (drzava_id, naziv, kapacitet, grad, adresa, url_slika) VALUES
 (194, 'WiZink Center', 17400, 'Madrid', 'Av. Felipe II', NULL),                                  -- Real Madrid
 (194, 'Fonteta Arena', 9000, 'Valencia', 'Carrer de Bomber Ramon Duart', NULL),                  -- Valencia
 (70,  'Virtus Segafredo Arena', 9000, 'Bologna', 'Via Antonio Nannetti 1', NULL),                 -- Virtus Bologna
-(121,'éalgirio Arena', 15500, 'Kaunas', 'Karaliaus Mindaugo pr. 50', NULL),                       -- Zalgiris
+(121,'≈Ωalgirio Arena', 15500, 'Kaunas', 'Karaliaus Mindaugo pr. 50', NULL),                       -- Zalgiris
 (218,'Coca-Cola Arena', 17000, 'Dubai', 'City Walk, Al Wasl', NULL);                             -- Dubai
 -- ---------------------------------------------------------
 -- UTAKMICE

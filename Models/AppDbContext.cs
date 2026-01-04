@@ -17,6 +17,13 @@ public class AppDbContext : DbContext
 
     public DbSet<IgraciViewModel> vw_Igraci { get; set; }
 
+    public DbSet<TreneriViewModel> vw_TimTreneri { get; set; }
+
+    public DbSet<IgraciStatistikaViewModel> vw_IgraciProsek { get; set; }
+
+    public DbSet<TimoviStatistikaViewModel> vw_TimoviProsek { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -37,8 +44,12 @@ public class AppDbContext : DbContext
             .ToView("vw_Timovi");
 
         modelBuilder.Entity<IgraciViewModel>()
-        .HasNoKey()
-        .ToView("vw_Igraci");
+            .HasNoKey()
+            .ToView("vw_Igraci");
+
+        modelBuilder.Entity<TreneriViewModel>()
+            .HasNoKey()
+            .ToView("vw_TimTreneri");
 
         base.OnModelCreating(modelBuilder);
     }

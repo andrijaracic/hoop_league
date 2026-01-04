@@ -21,6 +21,17 @@ builder.Services.AddScoped<IVestiService, VestiService>();
 
 builder.Services.AddScoped<IUtakmiceService, UtakmiceService>();
 
+builder.Services.AddScoped<ITimService, TimService>();
+
+builder.Services.AddScoped<IIgracService, IgracService>();
+
+builder.Services.AddScoped<IStatistikeService, StatistikeService>();
+
+
+
+
+
+
 
 using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 {

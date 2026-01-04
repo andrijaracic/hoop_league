@@ -1,0 +1,183 @@
+﻿@model HoopLeague.Models.ViewModels.StatistikePageViewModel
+
+<div class="section">
+    <div class="section-header">Statistika timova</div>
+    <div class="section-body">
+
+        @if (Model.TimoviStatistika != null && Model.TimoviStatistika.Any())
+        {
+            <div class="stats-table-wrap">
+                <table class="stats-table" >
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="col-player">Igrač</th>
+                            <th class="num">Ut</th>
+                            <th class="num">Min</th>
+                            <th class="num">PTS</th>
+                            <th class="num">REB</th>
+                            <th class="num">AST</th>
+                            <th class="num">2PM</th>
+                            <th class="num">2PA</th>
+                            <th class="num">2P%</th>
+                            <th class="num">3PM</th>
+                            <th class="num">3PA</th>
+                            <th class="num">3P%</th>
+                            <th class="num">FTM</th>
+                            <th class="num">FTA</th>
+                            <th class="num">FT%</th>
+                            <th class="num">OR</th>
+                            <th class="num">DR</th>
+                            <th class="num">TR</th>
+                            <th class="num">STL</th>
+                            <th class="num">TO</th>
+                            <th class="num">FC</th>
+                            <th class="num">PIR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var rb = 1;
+                        }
+                        @foreach (var s in Model.TimoviStatistika.OrderByDescending(x => x.PIR))
+                        {
+                            <tr>
+                                <td class="muted">@rb</td>
+                                <td class="col-player">
+
+                                    <span style="margin-left:8px; font-size: 12px">@s.Tim</span>
+                                </td>
+
+                                <td class="num">@s.OdigraneUtakmice</td>
+                                <td class="num">@s.Min</td>
+
+                                <td class="num">@s.ProsekPoena</td>
+                                <td class="num">@s.ProsekSkokova</td>
+                                <td class="num">@s.ProsekAsistencija</td>
+
+                                <td class="num">@s._2PM</td>
+                                <td class="num">@s._2PA</td>
+                                <td class="num">@s._2PProcenat</td>
+
+                                <td class="num">@s._3PM</td>
+                                <td class="num">@s._3PA</td>
+                                <td class="num">@s._3PProcenat </td>
+
+                                <td class="num">@s.FTM</td>
+                                <td class="num">@s.FTA</td>
+                                <td class="num">@s.FTProcenat</td>
+
+                                <td class="num">@s.OR</td>
+                                <td class="num">@s.DR</td>
+                                <td class="num">@s.TR</td>
+
+                                <td class="num">@s.STL</td>
+                                <td class="num">@s.TO</td>
+                                <td class="num">@s.FC</td>
+
+                                <td class="num">@s.PIR</td>
+                            </tr>
+                            rb++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div style="font-weight:800;color:#666;">Nema statistike za tim.</div>
+        }
+
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-header">Statistika igrača</div>
+    <div class="section-body">
+
+        @if (Model.IgraciStatistika != null && Model.IgraciStatistika.Any())
+        {
+            <div class="stats-table-wrap">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="col-player">Igrač</th>
+                            <th class="num">Ut</th>
+                            <th class="num">Min</th>
+                            <th class="num">PTS</th>
+                            <th class="num">REB</th>
+                            <th class="num">AST</th>
+                            <th class="num">2PM</th>
+                            <th class="num">2PA</th>
+                            <th class="num">2P%</th>
+                            <th class="num">3PM</th>
+                            <th class="num">3PA</th>
+                            <th class="num">3P%</th>
+                            <th class="num">FTM</th>
+                            <th class="num">FTA</th>
+                            <th class="num">FT%</th>
+                            <th class="num">OR</th>
+                            <th class="num">DR</th>
+                            <th class="num">TR</th>
+                            <th class="num">STL</th>
+                            <th class="num">TO</th>
+                            <th class="num">FC</th>
+                            <th class="num">PIR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var rb = 1;
+                        }
+                        @foreach (var s in Model.IgraciStatistika.OrderByDescending(x => x.PIR))
+                        {
+                            <tr>
+                                <td class="muted">@rb</td>
+                                <td class="col-player">
+
+                                    <span style="margin-left:8px;">@s.Igrac</span>
+                                </td>
+
+                                <td class="num">@s.OdigraneUtakmice</td>
+                                <td class="num">@s.Min</td>
+
+                                <td class="num">@s.ProsekPoena</td>
+                                <td class="num">@s.ProsekSkokova</td>
+                                <td class="num">@s.ProsekAsistencija</td>
+
+                                <td class="num">@s._2PM</td>
+                                <td class="num">@s._2PA</td>
+                                <td class="num">@s._2PProcenat</td>
+
+                                <td class="num">@s._3PM</td>
+                                <td class="num">@s._3PA</td>
+                                <td class="num">@s._3PProcenat </td>
+
+                                <td class="num">@s.FTM</td>
+                                <td class="num">@s.FTA</td>
+                                <td class="num">@s.FTProcenat</td>
+
+                                <td class="num">@s.OR</td>
+                                <td class="num">@s.DR</td>
+                                <td class="num">@s.TR</td>
+
+                                <td class="num">@s.STL</td>
+                                <td class="num">@s.TO</td>
+                                <td class="num">@s.FC</td>
+
+                                <td class="num">@s.PIR</td>
+                            </tr>
+                            rb++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div style="font-weight:800;color:#666;">Nema statistike za igrače.</div>
+        }
+
+    </div>
+</div>

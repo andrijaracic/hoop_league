@@ -7,7 +7,6 @@
     <!-- SEARCH BAR -->
     <div class="teams-top">
         <input type="text" id="teamSearch" placeholder="Pretraži tim...">
-        
     </div>
 
     <!-- TIMOVI -->
@@ -15,22 +14,26 @@
 
         @foreach (var team in Model)
         {
-            <div class="team-card"
-                 data-search="@team.Naziv.ToLower()"
-                 style="border-bottom-color: @team.Boja">
+            <a href="@Url.Action("Tim", "Home", new { id = team.Id })"
+               class="team-link">
 
-                <img src="~/@team.LogoUrl" />
+                <div class="team-card"
+                     data-search="@team.Naziv.ToLower()"
+                     style="border-bottom-color: @team.Boja">
 
-                <div class="team-info">
-                    <div class="team-name">@team.Naziv</div>
-                    
+                    <img src="~/@team.LogoUrl" alt="@team.Naziv" />
+
+                    <div class="team-info">
+                        <div class="team-name">@team.Naziv</div>
+                    </div>
+
                 </div>
-
-            </div>
+            </a>
         }
 
     </div>
 </div>
+
 
 <script>
     const searchInput = document.getElementById("teamSearch");

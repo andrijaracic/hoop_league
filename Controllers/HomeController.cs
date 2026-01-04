@@ -14,6 +14,9 @@ namespace HoopLeague.Controllers
         private readonly IIgraciService _igraciService;
         private readonly IVestiService _vestiService;
         private readonly IUtakmiceService _utakmiceService;
+        private readonly ITimService _timService;
+        private readonly IIgracService _igracService;
+        private readonly IStatistikeService _statistikeService;
 
         public HomeController(
             ILogger<HomeController> logger,
@@ -21,7 +24,10 @@ namespace HoopLeague.Controllers
             ITimoviService timoviService,
             IIgraciService igraciService,
             IVestiService vestiService,
-            IUtakmiceService utakmiceService)
+            IUtakmiceService utakmiceService,
+            ITimService timService,
+            IIgracService igracService,
+            IStatistikeService statistikeService)
            
         {
             _logger = logger;
@@ -30,6 +36,10 @@ namespace HoopLeague.Controllers
             _igraciService = igraciService;
             _vestiService = vestiService;
             _utakmiceService = utakmiceService;
+            _timService = timService;
+            _igracService = igracService;
+            _statistikeService = statistikeService;
+            
         }
 
         // ================== HOME ==================
@@ -44,6 +54,45 @@ namespace HoopLeague.Controllers
 
             return View(model);
         }
+
+        public IActionResult Tim(int id)
+        {
+            var model = new TimViewModel
+            {
+                TimDetalji = _timService.GetTim(id),
+                Igraci = _timService.GetIgraci(id),
+                Treneri = _timService.GetTreneri(id),
+                Utakmice = _timService.GetTimUtakmice(id),
+                IgraciStatistika = _timService.GetStatistikaIgraci(id),
+                TimStatistika = _timService.GetTimStatistika(id)
+            };
+
+            return View(model); 
+        }
+
+        public IActionResult Statistike()
+        {
+            var model = new StatistikePageViewModel
+            {
+                IgraciStatistika = _statistikeService.GetStatistikaIgraci(),
+                TimoviStatistika = _statistikeService.GetStatistikaTimovi()
+            };
+
+            return View(model);
+        }
+
+        public IActionResult Igrac(int id)
+        {
+            var model = new IgracViewModel
+            {
+                Igrac = _igracService.GetIgrac(id),
+                IgracStatistika = _igracService.GetIgraciStatistika(id)
+                
+            };
+
+            return View(model);
+        }
+
 
         // ================== TIMOVI ==================
         public IActionResult Timovi()

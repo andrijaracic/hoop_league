@@ -1,0 +1,283 @@
+﻿@model HoopLeague.Models.ViewModels.TimViewModel
+
+
+<div class="team-page">
+
+    <!-- ===== HERO ===== -->
+    <div class="team-hero">
+        <img class="team-hero-logo" src="~/@Model.TimDetalji.LogoUrl" alt="@Model.TimDetalji.Naziv" />
+        <div class="team-hero-name">@Model.TimDetalji.Naziv</div>
+
+        <div class="team-hero-meta">
+            @if (!string.IsNullOrWhiteSpace(Model.TimDetalji.Grad))
+            {
+                <span class="pill">Grad: @Model.TimDetalji.Grad</span>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.TimDetalji.Drzava))
+            {
+                <span class="pill">Država: @Model.TimDetalji.Drzava</span>
+            }
+            @if (Model.TimDetalji.BrojTitula >= 0)
+            {
+                <span class="pill">Titule: @Model.TimDetalji.BrojTitula</span>
+            }
+            @if (Model.TimDetalji.DatumOsnivanja.HasValue)
+            {
+                <span class="pill">
+                    Osnovan: @Model.TimDetalji.DatumOsnivanja.Value.ToString("dd.MM.yyyy")
+                </span>
+            }
+
+
+            
+        </div>
+
+        @if (Model.TimStatistika != null)
+        {
+            <div class="player-stats">
+                <div class="stats-row">
+
+                    <div class="stat-box">
+                        <div class="stat-arc">
+                            <div class="stat-value">@Model.TimStatistika.ProsekPoena.ToString("0.0")</div>
+                        </div>
+
+                        <div class="stat-label">PTS</div>
+                    </div>
+
+                    <div class="stat-box">
+                        <div class="stat-arc">
+                            <div class="stat-value">@Model.TimStatistika.TR.ToString("0.0")</div>
+                        </div>
+
+                        <div class="stat-label">REB</div>
+                    </div>
+
+                    <div class="stat-box">
+                        <div class="stat-arc">
+                            <div class="stat-value">@Model.TimStatistika.ProsekAsistencija.ToString("0.0")</div>
+                        </div>
+                        <div class="stat-label">AST</div>
+                    </div>
+
+                    <div class="stat-box">
+                        <div class="stat-arc">
+                            <div class="stat-value">@Model.TimStatistika.STL.ToString("0.0")</div>
+                        </div>
+
+                        <div class="stat-label">STL</div>
+                    </div>
+
+                    <div class="stat-box">
+                        <div class="stat-arc">
+                            <div class="stat-value">@Model.TimStatistika.PIR.ToString("0.0")</div>
+                        </div>
+
+                        <div class="stat-label">PIR</div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+
+    
+
+    
+
+    <!-- ===== ROSTER ===== -->
+    <div class="section">
+        <div class="section-header">Roster</div>
+        <div class="section-body">
+            @if (Model.Igraci != null && Model.Igraci.Any())
+            {
+                <div class="players-grid">
+                    @foreach (var p in Model.Igraci.OrderBy(x => x.Prezime))
+                    {
+                        <div class="player-card">
+                            <img class="player-img" src="~/@p.TimLogo" alt="@p.Ime @p.Prezime" />
+                            <div class="player-info">
+                                <div class="player-name">@p.Ime @p.Prezime</div>
+                                <div class="player-meta">
+                                    <span class="mini-pill">#@p.BrojDresa</span>
+                                    <span class="mini-pill">@p.Pozicija</span>
+                                    @* po želji kasnije dodaj visinu *@
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div style="font-weight:800;color:#666;">Nema igrača.</div>
+            }
+        </div>
+    </div>
+
+    <!-- ===== TRENERI ===== -->
+    <div class="section">
+        <div class="section-header">Treneri</div>
+        <div class="section-body">
+            @if (Model.Treneri != null && Model.Treneri.Any())
+            {
+                <div class="coaches-grid">
+                    @foreach (var tr in Model.Treneri)
+                    {
+                        <div class="coach-card">
+                            <div class="coach-name">@tr.Ime @tr.Prezime</div>
+                            <div class="coach-role">@tr.Uloga</div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div style="font-weight:800;color:#666;">Nema trenera.</div>
+            }
+        </div>
+    </div>
+
+    <!-- ===== STATISTIKA IGRAČA (TABELA) ===== -->
+    <div class="section">
+        <div class="section-header">Statistika igrača</div>
+        <div class="section-body">
+
+            @if (Model.IgraciStatistika != null && Model.IgraciStatistika.Any())
+            {
+                <div class="stats-table-wrap">
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="col-player">Igrač</th>
+                                <th class="num">Ut</th>
+                                <th class="num">Min</th>
+                                <th class="num">PTS</th>
+                                <th class="num">REB</th>
+                                <th class="num">AST</th>
+                                <th class="num">2PM</th>
+                                <th class="num">2PA</th>
+                                <th class="num">2P%</th>
+                                <th class="num">3PM</th>
+                                <th class="num">3PA</th>
+                                <th class="num">3P%</th>
+                                <th class="num">FTM</th>
+                                <th class="num">FTA</th>
+                                <th class="num">FT%</th>
+                                <th class="num">OR</th>
+                                <th class="num">DR</th>
+                                <th class="num">TR</th>
+                                <th class="num">STL</th>
+                                <th class="num">TO</th>
+                                <th class="num">FC</th>
+                                <th class="num">PIR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var rb = 1;
+                            }
+                            @foreach (var s in Model.IgraciStatistika.OrderByDescending(x => x.PIR))
+                            {
+                                <tr>
+                                    <td class="muted">@rb</td>
+                                    <td class="col-player">
+                                        
+                                        <span style="margin-left:8px;">@s.Igrac</span>
+                                    </td>
+
+                                    <td class="num">@s.OdigraneUtakmice</td>
+                                    <td class="num">@s.Min</td>
+
+                                    <td class="num">@s.ProsekPoena</td>
+                                    <td class="num">@s.ProsekSkokova</td>
+                                    <td class="num">@s.ProsekAsistencija</td>
+
+                                    <td class="num">@s._2PM</td>
+                                    <td class="num">@s._2PA</td>
+                                    <td class="num">@s._2PProcenat</td>
+
+                                    <td class="num">@s._3PM</td>
+                                    <td class="num">@s._3PA</td>
+                                    <td class="num">@s._3PProcenat </td>
+
+                                    <td class="num">@s.FTM</td>
+                                    <td class="num">@s.FTA</td>
+                                    <td class="num">@s.FTProcenat</td>
+
+                                    <td class="num">@s.OR</td>
+                                    <td class="num">@s.DR</td>
+                                    <td class="num">@s.TR</td>
+
+                                    <td class="num">@s.STL</td>
+                                    <td class="num">@s.TO</td>
+                                    <td class="num">@s.FC</td>
+
+                                    <td class="num">@s.PIR</td>
+                                </tr>
+                                rb++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div style="font-weight:800;color:#666;">Nema statistike za igrače.</div>
+            }
+
+        </div>
+    </div>
+
+
+    <!-- ===== UTAKMICE ===== -->
+    <div class="section">
+        <div class="section-header">Utakmice</div>
+        <div class="section-body">
+            @if (Model.Utakmice != null && Model.Utakmice.Any())
+            {
+                <div class="matches-list">
+                    @foreach (var u in Model.Utakmice.OrderByDescending(x => x.Datum))
+                    {
+                        <div class="match-card">
+
+                            <div class="match-team">
+                                <img src="~/@u.DomacinLogo" alt="@u.DomacinSkracenica" />
+                                <span>@u.DomacinSkracenica</span>
+                            </div>
+
+                            <div class="match-center">
+                                <div class="match-round">Runda @u.Runda</div>
+
+                                @if (u.PoeniDomacin != 0)
+                                {
+                                    <div class="match-score">@u.PoeniDomacin : @u.PoeniGost</div>
+                                    <div class="match-status">Ended</div>
+                                }
+                                else
+                                {
+                                    <div class="match-date">@u.Datum.ToString("dd.MM.yyyy HH:mm")</div>
+                                    <div class="match-status">Scheduled</div>
+                                }
+                            </div>
+
+                            <div class="match-team right" style="justify-content:flex-end;">
+                                <span>@u.GostSkracenica</span>
+                                <img src="~/@u.GostLogo" alt="@u.GostSkracenica" />
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div style="font-weight:800;color:#666;">Nema utakmica.</div>
+            }
+        </div>
+    </div>
+
+</div>
+
