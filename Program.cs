@@ -27,6 +27,9 @@ builder.Services.AddScoped<IIgracService, IgracService>();
 
 builder.Services.AddScoped<IStatistikeService, StatistikeService>();
 
+builder.Services.AddScoped<IJednaUtakmicaService, JednaUtakmicaService>();
+
+
 
 
 

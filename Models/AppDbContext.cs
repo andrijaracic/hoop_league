@@ -23,6 +23,10 @@ public class AppDbContext : DbContext
 
     public DbSet<TimoviStatistikaViewModel> vw_TimoviProsek { get; set; }
 
+    public DbSet<TimStatistikaUtakmica> vw_TimStatistikaUtakmica { get; set; }
+
+    public DbSet<IgraciStatistikaUtakmica> vw_IgraciUtakmicaStatistika { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

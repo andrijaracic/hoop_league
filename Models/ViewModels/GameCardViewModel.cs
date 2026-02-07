@@ -1,4 +1,6 @@
-﻿namespace HoopLeague.Models.ViewModels
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace HoopLeague.Models.ViewModels
 {
     public class GameCardViewModel
     {

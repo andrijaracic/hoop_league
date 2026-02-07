@@ -1,0 +1,187 @@
+﻿
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Hoop League Admin</title>
+
+    <style>
+        :root {
+            --bg: #f6f7f9;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --side1: #0b0f19;
+            --side2: #111827;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
+        }
+
+        /* Layout */
+        .adm-wrap {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .adm-sidebar {
+            width: 260px;
+            flex: 0 0 260px; /* fiksna sirina */
+            background: linear-gradient(180deg,var(--side1),var(--side2));
+            color: #fff;
+            padding: 18px 14px;
+        }
+
+        .adm-content {
+            flex: 1 1 auto;
+            min-width: 0; /* bitno da se content ne sabije */
+            padding: 22px;
+        }
+
+        /* Sidebar */
+        .adm-brand {
+            font-weight: 800;
+            letter-spacing: .2px;
+            padding: 10px 10px 16px;
+            font-size: 16px;
+        }
+
+        .adm-section {
+            margin-top: 14px;
+            padding: 10px;
+            font-size: 12px;
+            color: rgba(255,255,255,.55);
+            text-transform: uppercase;
+            letter-spacing: .12em;
+        }
+
+        .adm-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 10px;
+            margin: 4px 0;
+            border-radius: 10px;
+            color: rgba(255,255,255,.92);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+            .adm-nav a:hover {
+                background: rgba(255,255,255,.08);
+            }
+
+        /* Topbar */
+        .adm-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 16px;
+        }
+
+        .adm-search {
+            width: min(520px,100%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .adm-search input {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                outline: none;
+                background: #fff;
+            }
+
+        .adm-userchip {
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 13px;
+            background: #fff;
+            white-space: nowrap;
+        }
+
+        /* Cards + utilities */
+        .adm-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .adm-muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        
+        .adm-sidebar {
+            width: 100%;
+            flex: 0 0 auto;
+        }
+
+        .adm-content {
+            padding: 14px;
+        }
+
+        .adm-topbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="adm-wrap">
+        <aside class="adm-sidebar">
+            <div class="adm-brand">Hoop League • Admin</div>
+
+            <nav class="adm-nav">
+                <a href="/admin">Dashboard</a>
+
+                <div class="adm-section">Upravljanje</div>
+                <a href="/admin/matches">Utakmice</a>
+                <a href="/admin/teams">Timovi</a>
+                <a href="/admin/players">Igrači</a>
+                <a href="/admin/news">Vesti</a>
+
+                <div class="adm-section">Podešavanja</div>
+                <a href="/admin/settings">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="adm-content">
+            <div class="adm-topbar">
+                <div class="adm-search">
+                    <input type="text" placeholder="Pretraga (kasnije: utakmice, timovi, igrači…)" />
+                </div>
+                <div class="adm-userchip">Admin</div>
+            </div>
+
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

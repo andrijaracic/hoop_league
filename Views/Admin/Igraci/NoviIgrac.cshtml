@@ -1,0 +1,197 @@
+﻿@model HoopLeague.Models.ViewModels.Admin.Igraci.IgracCreateViewModel
+@{
+    ViewData["Title"] = "Novi igrač";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin • Novi igrač</title>
+
+    <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+        }
+
+        .adm-root, .adm-root * {
+            box-sizing: border-box;
+        }
+
+        .adm-root {
+            margin: 0;
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            background: var(--adm-bg);
+            color: var(--adm-text);
+        }
+
+        .adm-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 28px 18px 48px;
+        }
+
+        .adm-card {
+            background: var(--adm-card);
+            border: 1px solid var(--adm-border);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .adm-title {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .adm-sub {
+            margin-top: 6px;
+            color: var(--adm-muted);
+            font-size: 13px;
+        }
+
+        .adm-form {
+            margin-top: 14px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .adm-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        
+
+        }
+
+        .adm-field label {
+            display: block;
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .adm-input,
+        .adm-select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--adm-border);
+            background: #fff;
+            outline: none;
+        }
+
+        .adm-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .adm-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .adm-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--adm-border);
+            cursor: pointer;
+            font-size: 14px;
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .adm-btn-ghost {
+            background: #fff;
+            color: #0f172a;
+        }
+
+        .adm-error {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body class="adm-root">
+    <div class="adm-wrap">
+
+        <div class="adm-top">
+            <div>
+                <h1 class="adm-title">Novi igrač</h1>
+                <div class="adm-sub">Unos novog igrača u sistem</div>
+            </div>
+
+            <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">← Nazad</a>
+        </div>
+
+        <div class="adm-card">
+            <form method="post"
+                  action="/Admin/Igraci/IzmeniIgraca"
+                  class="adm-form">
+
+                @Html.AntiForgeryToken()
+
+                <!-- ID igrača (obavezno za EDIT) -->
+                <input type="hidden" asp-for="Id" />
+
+                <!-- PRIMER POLJA -->
+                <div class="adm-field">
+                    <label asp-for="Ime"></label>
+                    <input asp-for="Ime" class="adm-input" />
+                    <span asp-validation-for="Ime" class="adm-error"></span>
+                </div>
+
+                <div class="adm-field">
+                    <label asp-for="Prezime"></label>
+                    <input asp-for="Prezime" class="adm-input" />
+                    <span asp-validation-for="Prezime" class="adm-error"></span>
+                </div>
+
+                <div class="adm-field">
+                    <label asp-for="DrzavaId">Država ID</label>
+                    <input asp-for="DrzavaId" type="number" class="adm-input" />
+                </div>
+
+                <div class="adm-actions">
+                    <button type="submit" class="adm-btn">
+                        Sačuvaj izmene
+                    </button>
+
+                    <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">
+                        Otkaži
+                    </a>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    @section Scripts{
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

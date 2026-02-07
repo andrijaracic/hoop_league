@@ -1,0 +1,433 @@
+﻿@{
+    ViewData["Title"] = "Admin • Igrači";
+    Layout = null; 
+}
+
+@model List<HoopLeague.Models.ViewModels.IgraciViewModel>
+
+
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin • Igrači</title>
+
+    <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
+            --adm-shadow2: 0 14px 40px rgba(2,6,23,.12);
+            --adm-danger: #ef4444;
+        }
+
+        /* Hard reset unutar admin stranice */
+        .adm-root, .adm-root * {
+            box-sizing: border-box;
+        }
+
+        .adm-root {
+            min-height: 100vh;
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            background: radial-gradient(1100px 800px at 20% -10%, rgba(15,23,42,.06), transparent 60%), radial-gradient(1100px 800px at 90% 10%, rgba(17,24,39,.05), transparent 55%), var(--adm-bg);
+            color: var(--adm-text);
+        }
+
+            .adm-root a {
+                color: inherit !important;
+                text-decoration: none !important;
+            }
+
+                .adm-root a:visited {
+                    color: inherit !important;
+                }
+
+        .adm-wrap {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 26px 18px 42px;
+        }
+
+        /* Top header */
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .adm-title {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .adm-subtitle {
+            margin-top: 8px;
+            color: var(--adm-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .adm-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--adm-border);
+            background: rgba(255,255,255,.85);
+            border-radius: 999px;
+            box-shadow: 0 8px 18px rgba(2,6,23,.06);
+            color: var(--adm-muted);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .adm-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+        }
+
+        .adm-linkpill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border: 1px solid var(--adm-border);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--adm-text);
+            font-size: 12px;
+        }
+
+            .adm-linkpill:hover {
+                border-color: rgba(15,23,42,.25);
+                box-shadow: 0 8px 18px rgba(2,6,23,.06);
+            }
+
+        /* Card wrapper */
+        .adm-card {
+            background: var(--adm-card);
+            border: 1px solid var(--adm-border);
+            border-radius: 18px;
+            box-shadow: var(--adm-shadow);
+            padding: 16px;
+        }
+
+        /* Toolbar */
+        .adm-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .adm-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: min(520px, 100%);
+            flex: 1 1 420px;
+        }
+
+            .adm-search input {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid var(--adm-border);
+                border-radius: 12px;
+                outline: none;
+                background: #fff;
+            }
+
+        .adm-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--adm-border);
+            
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+            .adm-btn:hover {
+                opacity: .92;
+            }
+
+        .adm-btn-ghost {
+            background: #fff;
+            color: #0f172a;
+        }
+
+        /* Table */
+        .adm-tablewrap {
+            border: 1px solid var(--adm-border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        table.adm-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .adm-table thead th {
+            text-align: left;
+            padding: 12px;
+            color: #334155;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--adm-border);
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .adm-table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid var(--adm-border);
+            color: #0f172a;
+            vertical-align: middle;
+        }
+
+        .adm-table tbody tr:hover {
+            background: #fbfdff;
+        }
+
+        .adm-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--adm-border);
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .adm-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .adm-iconbtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--adm-border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            color: #0f172a;
+        }
+
+            .adm-iconbtn:hover {
+                border-color: rgba(15,23,42,.25);
+                box-shadow: 0 8px 18px rgba(2,6,23,.06);
+            }
+
+        .adm-iconbtn-danger {
+            border-color: rgba(239,68,68,.35);
+            color: var(--adm-danger);
+        }
+
+            .adm-iconbtn-danger:hover {
+                border-color: rgba(239,68,68,.55);
+            }
+
+        .adm-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            color: var(--adm-muted);
+            font-size: 12px;
+        }
+
+        .adm-pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .adm-empty {
+            padding: 18px;
+            color: var(--adm-muted);
+            text-align: center;
+        }
+
+        .adm-col-rb {
+            width: 48px;
+            color: var(--adm-muted);
+        }
+
+        .adm-col-name {
+            font-weight: 500;
+        }
+
+        .adm-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .adm-pill-active {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .adm-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .adm-inline {
+            display: inline;
+        }
+
+        .adm-btn {
+            background: #0f172a;
+            color: #fff;
+        }
+
+            .adm-btn:hover {
+                opacity: .92;
+            }
+
+
+       
+    </style>
+</head>
+
+<body class="adm-root">
+    <div class="adm-wrap">
+        <div class="adm-top">
+            <div>
+                <h1 class="adm-title">Igrači</h1>
+                <div class="adm-subtitle">Lista igrača • pretraga • akcije (UI placeholder za sada)</div>
+            </div>
+
+            <div class="adm-chip">
+                <span class="adm-dot"></span>
+                <a class="adm-linkpill" href="/admin">← Admin meni</a>
+            </div>
+        </div>
+
+        <div class="adm-card">
+            <div class="adm-toolbar">
+                <div class="adm-search">
+                    <input type="text" placeholder="Pretraži (ime, tim, pozicija)..." />
+                </div>
+
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="adm-btn adm-btn-ghost" type="button">Filteri</button>
+                    <a href="/Admin/Igraci/NoviIgrac" class="adm-btn">+ Dodaj igrača</a>
+
+                </div>
+            </div>
+
+            <div class="adm-tablewrap">
+                <table class="adm-table">
+                    <thead>
+                        <tr>
+                            <th style="width:48px;">#</th>
+                            <th>Igrač</th>
+                            <th class="adm-hide-sm">Tim</th>
+                            <th class="adm-hide-sm">Pozicija</th>
+                            <th class="adm-hide-sm">Broj</th>
+                            <th>Status</th>
+                            <th style="width:220px;">Akcije</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            var rb = 1;
+                        }
+
+                        @if (Model == null || Model.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="7" class="adm-empty">Nema igrača u bazi.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var igrac in Model)
+                            {
+                                <tr>
+                                    <td class="adm-col-rb">@rb</td>
+
+                                    <td class="adm-col-name">
+                                        <strong>@igrac.Ime @igrac.Prezime</strong>
+                                    </td>
+
+                                    <td class="adm-hide-sm">
+                                        @(string.IsNullOrWhiteSpace(igrac.Tim) ? "—" : igrac.Tim)
+                                    </td>
+
+                                    <td class="adm-hide-sm">@igrac.Pozicija</td>
+
+                                    <td class="adm-hide-sm">#@igrac.BrojDresa</td>
+
+                                    <td>
+                                        <span class="adm-pill adm-pill-active">Aktivan</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="adm-actions">
+                                            <a class="adm-iconbtn" href="/Admin/Igraci/IzmeniIgraca/@igrac.IgracId">Edit</a>
+
+                                            <form method="post"
+                                                  action="/Admin/Igraci/Obrisi"
+                                                  onsubmit="return confirm('Da li si siguran da želiš da obrišeš ovog igrača?');"
+                                                  class="adm-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@igrac.IgracId" />
+                                                <button type="submit" class="adm-iconbtn adm-iconbtn-danger">Obriši</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                rb++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="adm-foot">
+
+                <div class="adm-pagination">
+                    <button class="adm-iconbtn" type="button">← Prev</button>
+                    <button class="adm-iconbtn" type="button">Next →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+﻿@model HoopLeague.Models.ViewModels.UtakmicaPageViewModel
+
+@{
+    var game = Model.UtakmicaDetalji;
+
+    // Tim stats: 2 reda (domacin + gost)
+    var homeTeam = Model.StatistikaTim?.FirstOrDefault(x => x.Domacin == 1);
+    var awayTeam = Model.StatistikaTim?.FirstOrDefault(x => x.Domacin == 0);
+
+    // Igraci po timu
+    var homePlayers = Model.StatistikaIgraci?
+        .Where(x => homeTeam != null && x.TimId == homeTeam.TimId)
+        .OrderByDescending(x => x.Poeni)
+        .ToList() ?? new List<HoopLeague.Models.ViewModels.IgraciStatistikaUtakmica>();
+
+    var awayPlayers = Model.StatistikaIgraci?
+        .Where(x => awayTeam != null && x.TimId == awayTeam.TimId)
+        .OrderByDescending(x => x.Poeni)
+        .ToList() ?? new List<HoopLeague.Models.ViewModels.IgraciStatistikaUtakmica>();
+
+    bool ended = (homeTeam?.Poeni ?? 0) > 0 || (awayTeam?.Poeni ?? 0) > 0;
+}
+
+<link rel="stylesheet" href="~/css/single-game.css" />
+
+<div class="single-game-page">
+
+    <!-- HERO -->
+    <div class="single-game-card">
+        <div class="single-game-hero">
+
+            <div class="single-game-hero-top">
+                <div class="single-game-pill">
+                    Runda: <b>@game.Runda</b>
+                </div>
+
+                <div class="single-game-pill">
+                    Datum: <b>@game.Datum.ToString("dd.MM.yyyy HH:mm")</b>
+                </div>
+
+                @if (ended)
+                {
+                    <div class="single-game-status single-game-status--ended">Ended</div>
+                }
+                else
+                {
+                    <div class="single-game-status single-game-status--scheduled">Scheduled</div>
+                }
+            </div>
+
+            <div class="single-game-scoreboard">
+
+                <!-- HOME -->
+                <div class="single-game-team">
+                    <img class="single-game-team-logo" src="~/@game.DomacinLogo" alt="@game.DomacinSkracenica" />
+                    <div class="single-game-team-text">
+                        <div class="single-game-team-name">@game.DomacinSkracenica</div>
+                        <div class="single-game-team-sub">Domaćin</div>
+                    </div>
+                </div>
+
+                <!-- SCORE -->
+                <div class="single-game-center">
+                    @if (ended)
+                    {
+                        <div class="single-game-score">
+                            @homeTeam?.Poeni <small>:</small> @awayTeam?.Poeni
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="single-game-score">
+                            <small>VS</small>
+                        </div>
+                    }
+                </div>
+
+                <!-- AWAY -->
+                <div class="single-game-team single-game-team--right">
+                    <img class="single-game-team-logo" src="~/@game.GostLogo" alt="@game.GostSkracenica" />
+                    <div class="single-game-team-text single-game-team-text--right">
+                        <div class="single-game-team-name">@game.GostSkracenica</div>
+                        <div class="single-game-team-sub">Gost</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- QUARTERS -->
+            <div class="single-game-quarters">
+                <div class="single-game-quarter">
+                    <div class="single-game-quarter-label">Q1</div>
+                    <div class="single-game-quarter-value">@homeTeam?.Q1 - @awayTeam?.Q1</div>
+                </div>
+                <div class="single-game-quarter">
+                    <div class="single-game-quarter-label">Q2</div>
+                    <div class="single-game-quarter-value">@homeTeam?.Q2 - @awayTeam?.Q2</div>
+                </div>
+                <div class="single-game-quarter">
+                    <div class="single-game-quarter-label">Q3</div>
+                    <div class="single-game-quarter-value">@homeTeam?.Q3 - @awayTeam?.Q3</div>
+                </div>
+                <div class="single-game-quarter">
+                    <div class="single-game-quarter-label">Q4</div>
+                    <div class="single-game-quarter-value">@homeTeam?.Q4 - @awayTeam?.Q4</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TEAM STATS -->
+    <div class="single-game-section">
+        <div class="single-game-section-header">
+            <span>Timska statistika</span>
+        </div>
+
+        <div class="single-game-section-body">
+            <div class="single-game-table-wrap">
+                <table class="single-game-table">
+                    <thead>
+                        <tr>
+                            <th class="single-game-th single-game-th--name">Tim</th>
+                            <th class="single-game-th">PTS</th>
+                            <th class="single-game-th">2PM</th>
+                            <th class="single-game-th">2PA</th>
+                            <th class="single-game-th">2P%</th>
+                            <th class="single-game-th">3PM</th>
+                            <th class="single-game-th">3PA</th>
+                            <th class="single-game-th">3P%</th>
+                            <th class="single-game-th">FTM</th>
+                            <th class="single-game-th">FTA</th>
+                            <th class="single-game-th">FT%</th>
+                            <th class="single-game-th">ORB</th>
+                            <th class="single-game-th">DRB</th>
+                            <th class="single-game-th">TRB</th>
+                            <th class="single-game-th">AST</th>
+                            <th class="single-game-th">STL</th>
+                            <th class="single-game-th">TO</th>
+                            <th class="single-game-th">FC</th>
+                            <th class="single-game-th">PIR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (homeTeam != null)
+                        {
+                            <tr>
+                                <td class="single-game-td single-game-td--name"><b>@homeTeam.Tim</b> (D)</td>
+                                <td class="single-game-td">@homeTeam.Poeni</td>
+                                <td class="single-game-td">@homeTeam._2PM</td>
+                                <td class="single-game-td">@homeTeam._2PA</td>
+                                <td class="single-game-td">@homeTeam._2PProcenat</td>
+                                <td class="single-game-td">@homeTeam._3PM</td>
+                                <td class="single-game-td">@homeTeam._3PA</td>
+                                <td class="single-game-td">@homeTeam._3PProcenat</td>
+                                <td class="single-game-td">@homeTeam.FTM</td>
+                                <td class="single-game-td">@homeTeam.FTA</td>
+                                <td class="single-game-td">@homeTeam.FTProcenat</td>
+                                <td class="single-game-td">@homeTeam.ORB</td>
+                                <td class="single-game-td">@homeTeam.DRB</td>
+                                <td class="single-game-td">@homeTeam.TRB</td>
+                                <td class="single-game-td">@homeTeam.AST</td>
+                                <td class="single-game-td">@homeTeam.STL</td>
+                                <td class="single-game-td">@homeTeam.TO</td>
+                                <td class="single-game-td">@homeTeam.FC</td>
+                                <td class="single-game-td">@homeTeam.PIR</td>
+                            </tr>
+                        }
+
+                        @if (awayTeam != null)
+                        {
+                            <tr>
+                                <td class="single-game-td single-game-td--name"><b>@awayTeam.Tim</b> (G)</td>
+                                <td class="single-game-td">@awayTeam.Poeni</td>
+                                <td class="single-game-td">@awayTeam._2PM</td>
+                                <td class="single-game-td">@awayTeam._2PA</td>
+                                <td class="single-game-td">@awayTeam._2PProcenat</td>
+                                <td class="single-game-td">@awayTeam._3PM</td>
+                                <td class="single-game-td">@awayTeam._3PA</td>
+                                <td class="single-game-td">@awayTeam._3PProcenat</td>
+                                <td class="single-game-td">@awayTeam.FTM</td>
+                                <td class="single-game-td">@awayTeam.FTA</td>
+                                <td class="single-game-td">@awayTeam.FTProcenat</td>
+                                <td class="single-game-td">@awayTeam.ORB</td>
+                                <td class="single-game-td">@awayTeam.DRB</td>
+                                <td class="single-game-td">@awayTeam.TRB</td>
+                                <td class="single-game-td">@awayTeam.AST</td>
+                                <td class="single-game-td">@awayTeam.STL</td>
+                                <td class="single-game-td">@awayTeam.TO</td>
+                                <td class="single-game-td">@awayTeam.FC</td>
+                                <td class="single-game-td">@awayTeam.PIR</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLAYER STATS - HOME -->
+    <div class="single-game-section">
+        <div class="single-game-section-header">
+            <span>Igrači – @homeTeam?.Tim (domaćin)</span>
+        </div>
+
+        <div class="single-game-section-body">
+            <div class="single-game-table-wrap">
+                <table class="single-game-table">
+                    <thead>
+                        <tr>
+                            <th class="single-game-th single-game-th--name">Igrač</th>
+                            <th class="single-game-th">MIN</th>
+                            <th class="single-game-th">PTS</th>
+                            <th class="single-game-th">REB</th>
+                            <th class="single-game-th">AST</th>
+                            <th class="single-game-th">2PM</th>
+                            <th class="single-game-th">2PA</th>
+                            <th class="single-game-th">2P%</th>
+                            <th class="single-game-th">3PM</th>
+                            <th class="single-game-th">3PA</th>
+                            <th class="single-game-th">3P%</th>
+                            <th class="single-game-th">FTM</th>
+                            <th class="single-game-th">FTA</th>
+                            <th class="single-game-th">FT%</th>
+                            <th class="single-game-th">OR</th>
+                            <th class="single-game-th">DR</th>
+                            <th class="single-game-th">TR</th>
+                            <th class="single-game-th">STL</th>
+                            <th class="single-game-th">TO</th>
+                            <th class="single-game-th">FC</th>
+                            <th class="single-game-th">PIR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in homePlayers)
+                        {
+                            <tr>
+                                <td class="single-game-td single-game-td--name">@p.Igrac</td>
+                                <td class="single-game-td">@p.Min</td>
+                                <td class="single-game-td"><b>@p.Poeni</b></td>
+                                <td class="single-game-td">@p.Skokovi</td>
+                                <td class="single-game-td">@p.Asistencije</td>
+
+                                <td class="single-game-td">@p._2PM</td>
+                                <td class="single-game-td">@p._2PA</td>
+                                <td class="single-game-td">@p._2PProcenat</td>
+
+                                <td class="single-game-td">@p._3PM</td>
+                                <td class="single-game-td">@p._3PA</td>
+                                <td class="single-game-td">@p._3PProcenat</td>
+
+                                <td class="single-game-td">@p.FTM</td>
+                                <td class="single-game-td">@p.FTA</td>
+                                <td class="single-game-td">@p.FTProcenat</td>
+
+                                <td class="single-game-td">@p.OR</td>
+                                <td class="single-game-td">@p.DR</td>
+                                <td class="single-game-td">@p.TR</td>
+
+                                <td class="single-game-td">@p.STL</td>
+                                <td class="single-game-td">@p.TO</td>
+                                <td class="single-game-td">@p.FC</td>
+
+                                <td class="single-game-td">@p.PIR</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLAYER STATS - AWAY -->
+    <div class="single-game-section">
+        <div class="single-game-section-header">
+            <span>Igrači – @awayTeam?.Tim (gost)</span>
+        </div>
+
+        <div class="single-game-section-body">
+            <div class="single-game-table-wrap">
+                <table class="single-game-table">
+                    <thead>
+                        <tr>
+                            <th class="single-game-th single-game-th--name">Igrač</th>
+                            <th class="single-game-th">MIN</th>
+                            <th class="single-game-th">PTS</th>
+                            <th class="single-game-th">REB</th>
+                            <th class="single-game-th">AST</th>
+                            <th class="single-game-th">2PM</th>
+                            <th class="single-game-th">2PA</th>
+                            <th class="single-game-th">2P%</th>
+                            <th class="single-game-th">3PM</th>
+                            <th class="single-game-th">3PA</th>
+                            <th class="single-game-th">3P%</th>
+                            <th class="single-game-th">FTM</th>
+                            <th class="single-game-th">FTA</th>
+                            <th class="single-game-th">FT%</th>
+                            <th class="single-game-th">OR</th>
+                            <th class="single-game-th">DR</th>
+                            <th class="single-game-th">TR</th>
+                            <th class="single-game-th">STL</th>
+                            <th class="single-game-th">TO</th>
+                            <th class="single-game-th">FC</th>
+                            <th class="single-game-th">PIR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in awayPlayers)
+                        {
+                            <tr>
+                                <td class="single-game-td single-game-td--name">@p.Igrac</td>
+                                <td class="single-game-td">@p.Min</td>
+                                <td class="single-game-td"><b>@p.Poeni</b></td>
+                                <td class="single-game-td">@p.Skokovi</td>
+                                <td class="single-game-td">@p.Asistencije</td>
+
+                                <td class="single-game-td">@p._2PM</td>
+                                <td class="single-game-td">@p._2PA</td>
+                                <td class="single-game-td">@p._2PProcenat</td>
+
+                                <td class="single-game-td">@p._3PM</td>
+                                <td class="single-game-td">@p._3PA</td>
+                                <td class="single-game-td">@p._3PProcenat</td>
+
+                                <td class="single-game-td">@p.FTM</td>
+                                <td class="single-game-td">@p.FTA</td>
+                                <td class="single-game-td">@p.FTProcenat</td>
+
+                                <td class="single-game-td">@p.OR</td>
+                                <td class="single-game-td">@p.DR</td>
+                                <td class="single-game-td">@p.TR</td>
+
+                                <td class="single-game-td">@p.STL</td>
+                                <td class="single-game-td">@p.TO</td>
+                                <td class="single-game-td">@p.FC</td>
+
+                                <td class="single-game-td">@p.PIR</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER BUTTONS -->
+    <div class="single-game-footer">
+        <a class="single-game-btn" href="@Url.Action("Utakmice", "Home")">← Nazad na utakmice</a>
+        <a class="single-game-btn" href="@Url.Action("Tim", "Home", new { id = homeTeam?.TimId ?? 0 })">Domaćin →</a>
+        <a class="single-game-btn" href="@Url.Action("Tim", "Home", new { id = awayTeam?.TimId ?? 0 })">Gost →</a>
+    </div>
+
+</div>

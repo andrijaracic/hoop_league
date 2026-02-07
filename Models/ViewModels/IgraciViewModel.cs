@@ -11,6 +11,7 @@
         public string TimLogo { get; set; }
         public string Drzava { get; set; }
         public int? Visina { get; set; }
+
         public string Pozicija { get; set; }
         public int BrojDresa { get; set; }
     }

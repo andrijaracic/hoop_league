@@ -17,6 +17,7 @@ namespace HoopLeague.Controllers
         private readonly ITimService _timService;
         private readonly IIgracService _igracService;
         private readonly IStatistikeService _statistikeService;
+        private readonly IJednaUtakmicaService _jednaUtakmicaService;
 
         public HomeController(
             ILogger<HomeController> logger,
@@ -27,7 +28,8 @@ namespace HoopLeague.Controllers
             IUtakmiceService utakmiceService,
             ITimService timService,
             IIgracService igracService,
-            IStatistikeService statistikeService)
+            IStatistikeService statistikeService,
+            IJednaUtakmicaService jednaUtakmicaService)
            
         {
             _logger = logger;
@@ -39,6 +41,7 @@ namespace HoopLeague.Controllers
             _timService = timService;
             _igracService = igracService;
             _statistikeService = statistikeService;
+            _jednaUtakmicaService = jednaUtakmicaService;
             
         }
 
@@ -76,6 +79,18 @@ namespace HoopLeague.Controllers
             {
                 IgraciStatistika = _statistikeService.GetStatistikaIgraci(),
                 TimoviStatistika = _statistikeService.GetStatistikaTimovi()
+            };
+
+            return View(model);
+        }
+
+        public IActionResult JednaUtakmica(int id)
+        {
+            var model = new UtakmicaPageViewModel
+            {
+                StatistikaIgraci = _jednaUtakmicaService.GetIgraciStatistikaUtakmica(id),
+                StatistikaTim = _jednaUtakmicaService.GetTimoviStatistikaUtakmica(id),
+                UtakmicaDetalji = _jednaUtakmicaService.GetUtakmicaDetalji(id)
             };
 
             return View(model);

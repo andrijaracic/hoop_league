@@ -884,6 +884,8 @@ GO
 -- VIEW 1: Prikaz rezultata App
 ----------------------------------------------------------
 
+select * from vw_UtakmicaSlider
+
 CREATE OR ALTER VIEW vw_UtakmicaSlider AS
 SELECT 
     u.id AS UtakmicaId,
@@ -1510,6 +1512,249 @@ SELECT
 FROM Timovi t
 LEFT JOIN agg a ON a.TimId = t.id;
 GO
+
+select * from vw_IgraciUtakmicaStatistika
+
+CREATE OR ALTER VIEW vw_IgraciUtakmicaStatistika AS
+WITH per_game AS
+(
+    SELECT
+        ui.utakmica_id AS UtakmicaId,
+
+        ui.igrac_id AS IgracId,
+        i.ime + ' ' + i.prezime AS Igrac,
+
+        t.id AS TimId,
+        t.naziv AS Tim,
+
+        CAST(SUM(CAST(ui.vreme_na_terenu AS int)) AS int) AS Sekunde,
+
+        -- šut
+        SUM(CAST(ui.pogodjeno_dvojki AS int)) AS M2,
+        SUM(CAST(ui.sutnuto_dvojki  AS int)) AS A2,
+
+        SUM(CAST(ui.pogodjeno_trojki AS int)) AS M3,
+        SUM(CAST(ui.sutnuto_trojki  AS int)) AS A3,
+
+        SUM(CAST(ui.pogodjeno_slobodnih_bacanja AS int)) AS FTM,
+        SUM(CAST(ui.sutnuto_slobodnih_bacanja  AS int)) AS FTA,
+
+        -- osnovno
+        SUM(CAST(ui.pogodjeno_trojki * 3 
+               + ui.pogodjeno_dvojki * 2 
+               + ui.pogodjeno_slobodnih_bacanja AS int)) AS Poeni,
+
+        SUM(CAST(ui.ofanzivni_skokovi AS int)) AS ORB,
+        SUM(CAST(ui.defanzivni_skokovi AS int)) AS DRB,
+        SUM(CAST(ui.asistencije AS int)) AS AST,
+
+        SUM(CAST(ui.ukradene_lopte AS int)) AS STL,
+        SUM(CAST(ui.izgubljene_lopte AS int)) AS [TO],
+        SUM(CAST(ui.faulovi AS int)) AS FC
+    FROM Utakmice_Igraci ui
+    JOIN Igraci i ON i.id = ui.igrac_id
+    JOIN Timovi t ON t.id = i.tim_id
+    GROUP BY
+        ui.utakmica_id,
+        ui.igrac_id, i.ime, i.prezime, t.id, t.naziv
+)
+SELECT
+    UtakmicaId,
+    IgracId,
+    Igrac,
+    TimId,
+    Tim,
+
+    1 AS OdigraneUtakmice,
+
+    -- MIN (MM:SS)
+    CONCAT(
+        CAST(FLOOR(Sekunde / 60.0) AS int),
+        ':',
+        RIGHT('0' + CAST(Sekunde % 60 AS varchar(2)), 2)
+    ) AS Min,
+
+    -- OSNOVNO
+    Poeni,
+    (ORB + DRB) AS Skokovi,
+    AST AS Asistencije,
+
+    -- ŠUT
+    M2  AS [2PM],
+    A2  AS [2PA],
+    CAST(CASE WHEN A2=0 THEN 0 ELSE (M2*100.0)/A2 END AS decimal(5,1)) AS [2P%],
+
+    M3  AS [3PM],
+    A3  AS [3PA],
+    CAST(CASE WHEN A3=0 THEN 0 ELSE (M3*100.0)/A3 END AS decimal(5,1)) AS [3P%],
+
+    FTM AS [FTM],
+    FTA AS [FTA],
+    CAST(CASE WHEN FTA=0 THEN 0 ELSE (FTM*100.0)/FTA END AS decimal(5,1)) AS [FT%],
+
+    -- SKOKOVI
+    ORB AS [OR],
+    DRB AS [DR],
+    (ORB + DRB) AS [TR],
+
+    -- OSTALO
+    STL,
+    [TO],
+    FC,
+
+    -- PIR
+    CAST(
+        (
+            Poeni
+            + (ORB + DRB)
+            + AST
+            + STL
+            - ((A2 - M2) + (A3 - M3))
+            - (FTA - FTM)
+            - [TO]
+            - FC
+        )
+    AS int) AS PIR
+
+FROM per_game;
+GO
+
+select * from vw_TimStatistikaUtakmica
+
+CREATE OR ALTER VIEW vw_TimStatistikaUtakmica AS
+WITH team_in_game AS
+(
+    SELECT
+        ut.utakmica_id AS UtakmicaId,
+        ut.tim_id      AS TimId,
+        t.naziv        AS Tim,
+        CAST(ut.domacin AS int) AS Domacin   -- ✅ DODATO
+    FROM Utakmice_Timovi ut
+    JOIN Timovi t ON t.id = ut.tim_id
+),
+agg AS
+(
+    SELECT
+        ui.utakmica_id AS UtakmicaId,
+        i.tim_id       AS TimId,
+
+        -- ŠUT (ukupno za tim u utakmici)
+        SUM(CAST(ui.pogodjeno_dvojki AS int)) AS [2PM],
+        SUM(CAST(ui.sutnuto_dvojki  AS int)) AS [2PA],
+
+        SUM(CAST(ui.pogodjeno_trojki AS int)) AS [3PM],
+        SUM(CAST(ui.sutnuto_trojki  AS int)) AS [3PA],
+
+        SUM(CAST(ui.pogodjeno_slobodnih_bacanja AS int)) AS [FTM],
+        SUM(CAST(ui.sutnuto_slobodnih_bacanja  AS int)) AS [FTA],
+
+        -- PTS / REB / AST itd
+        SUM(ui.pogodjeno_trojki * 3 +
+            ui.pogodjeno_dvojki * 2 +
+            ui.pogodjeno_slobodnih_bacanja) AS Poeni,
+
+        SUM(ui.ofanzivni_skokovi) AS ORB,
+        SUM(ui.defanzivni_skokovi) AS DRB,
+        SUM(ui.ofanzivni_skokovi + ui.defanzivni_skokovi) AS TRB,
+
+        SUM(ui.asistencije) AS AST,
+        SUM(ui.ukradene_lopte) AS STL,
+        SUM(ui.izgubljene_lopte) AS [TO],
+        SUM(ui.faulovi) AS FC,
+
+        -- POENI PO ČETVRTINAMA (iz ui.cetvrtina)
+        SUM(CASE WHEN ui.cetvrtina = 1 THEN
+            (ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja)
+            ELSE 0 END) AS Q1,
+
+        SUM(CASE WHEN ui.cetvrtina = 2 THEN
+            (ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja)
+            ELSE 0 END) AS Q2,
+
+        SUM(CASE WHEN ui.cetvrtina = 3 THEN
+            (ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja)
+            ELSE 0 END) AS Q3,
+
+        SUM(CASE WHEN ui.cetvrtina = 4 THEN
+            (ui.pogodjeno_trojki * 3 + ui.pogodjeno_dvojki * 2 + ui.pogodjeno_slobodnih_bacanja)
+            ELSE 0 END) AS Q4
+    FROM Utakmice_Igraci ui
+    JOIN Igraci i ON i.id = ui.igrac_id
+    GROUP BY ui.utakmica_id, i.tim_id
+),
+final AS
+(
+    SELECT
+        tig.UtakmicaId,
+        tig.TimId,
+        tig.Tim,
+        tig.Domacin,  -- ✅ DODATO
+
+        COALESCE(a.Poeni, 0) AS Poeni,
+
+        COALESCE(a.[2PM], 0) AS [2PM],
+        COALESCE(a.[2PA], 0) AS [2PA],
+        CAST(
+            CASE WHEN COALESCE(a.[2PA],0) = 0 THEN 0
+                 ELSE (COALESCE(a.[2PM],0) * 100.0) / COALESCE(a.[2PA],0)
+            END AS decimal(10,1)
+        ) AS [2P%],
+
+        COALESCE(a.[3PM], 0) AS [3PM],
+        COALESCE(a.[3PA], 0) AS [3PA],
+        CAST(
+            CASE WHEN COALESCE(a.[3PA],0) = 0 THEN 0
+                 ELSE (COALESCE(a.[3PM],0) * 100.0) / COALESCE(a.[3PA],0)
+            END AS decimal(10,1)
+        ) AS [3P%],
+
+        COALESCE(a.[FTM], 0) AS [FTM],
+        COALESCE(a.[FTA], 0) AS [FTA],
+        CAST(
+            CASE WHEN COALESCE(a.[FTA],0) = 0 THEN 0
+                 ELSE (COALESCE(a.[FTM],0) * 100.0) / COALESCE(a.[FTA],0)
+            END AS decimal(10,1)
+        ) AS [FT%],
+
+        COALESCE(a.ORB, 0) AS ORB,
+        COALESCE(a.DRB, 0) AS DRB,
+        COALESCE(a.TRB, 0) AS TRB,
+        COALESCE(a.AST, 0) AS AST,
+        COALESCE(a.STL, 0) AS STL,
+        COALESCE(a.[TO], 0) AS [TO],
+        COALESCE(a.FC, 0) AS FC,
+
+        COALESCE(a.Q1, 0) AS Q1,
+        COALESCE(a.Q2, 0) AS Q2,
+        COALESCE(a.Q3, 0) AS Q3,
+        COALESCE(a.Q4, 0) AS Q4,
+
+        -- PIR (timski)
+        CAST(
+            (
+                COALESCE(a.Poeni,0)
+                + COALESCE(a.TRB,0)
+                + COALESCE(a.AST,0)
+                + COALESCE(a.STL,0)
+                - ((COALESCE(a.[2PA],0) - COALESCE(a.[2PM],0)) + (COALESCE(a.[3PA],0) - COALESCE(a.[3PM],0)))
+                - (COALESCE(a.[FTA],0) - COALESCE(a.[FTM],0))
+                - COALESCE(a.[TO],0)
+                - COALESCE(a.FC,0)
+            ) AS int
+        ) AS PIR
+    FROM team_in_game tig
+    LEFT JOIN agg a
+        ON a.UtakmicaId = tig.UtakmicaId
+       AND a.TimId = tig.TimId
+)
+SELECT
+    f.*,
+    CASE WHEN f.Poeni > 0 THEN 1 ELSE 0 END AS Ended
+FROM final f;
+GO
+
+
+
 
 
 -------------------------------------------------------------------------------------------

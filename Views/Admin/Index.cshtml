@@ -1,0 +1,340 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+    Layout = null; 
+}
+
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hoop League Admin</title>
+
+    <style>
+        
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2, 6, 23, .08);
+            --adm-shadow2: 0 14px 40px rgba(2, 6, 23, .12);
+        }
+
+       
+        .adm-root, .adm-root * {
+            box-sizing: border-box;
+        }
+
+        .adm-card {
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 20px;
+            transition: 0.4s;
+        }
+
+        .adm-root {
+            min-height: 100vh;
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            background: radial-gradient(1100px 800px at 20% -10%, rgba(15,23,42,.06), transparent 60%), radial-gradient(1100px 800px at 90% 10%, rgba(17,24,39,.05), transparent 55%), var(--adm-bg);
+            color: var(--adm-text);
+        }
+
+            
+            .adm-root a {
+                color: inherit !important;
+                text-decoration: none !important;
+            }
+
+                .adm-root a:visited {
+                    color: inherit !important;
+                }
+
+                .adm-root a:hover {
+                    color: inherit !important;
+                }
+
+        .adm-wrap {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 28px 18px 44px;
+        }
+
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .adm-title {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: -0.02em;
+        }
+
+        .adm-subtitle {
+            margin-top: 8px;
+            color: var(--adm-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .adm-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--adm-border);
+            background: rgba(255,255,255,.85);
+            border-radius: 999px;
+            box-shadow: 0 8px 18px rgba(2,6,23,.06);
+            color: var(--adm-muted);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .adm-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+        }
+
+        .adm-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+       
+
+        .adm-grid {
+            grid-template-columns: 1fr;
+        }
+
+        }
+
+        .adm-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: var(--adm-card);
+            border: 1px solid var(--adm-border);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: var(--adm-shadow);
+            transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+        }
+
+            .adm-card:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--adm-shadow2);
+                border-color: rgba(15,23,42,.22);
+            }
+
+        .adm-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .adm-left {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            min-width: 0;
+        }
+
+        .adm-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--adm-border);
+            background: #fff;
+            font-size: 18px;
+            flex: 0 0 40px;
+        }
+
+        .adm-cardtitle {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .adm-desc {
+            margin: 6px 0 0;
+            color: var(--adm-muted);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .adm-badge {
+            font-size: 12px;
+            color: #334155;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 6px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
+            align-self: flex-start;
+        }
+
+        .adm-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2px;
+            color: var(--adm-muted);
+            font-size: 12px;
+        }
+
+        .adm-note {
+            margin-top: 16px;
+            color: var(--adm-muted);
+            font-size: 12px;
+        }
+
+        .adm-kbd {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            padding: 3px 7px;
+            border-radius: 8px;
+            border: 1px solid var(--adm-border);
+            background: #fff;
+            color: #475569;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body class="adm-root">
+    <div class="adm-wrap">
+        <div class="adm-top">
+            <div>
+                <h1 class="adm-title">Admin Panel</h1>
+            </div>
+
+            <div class="adm-chip">
+                <span class="adm-dot"></span>
+                Hoop League • Admin
+            </div>
+        </div>
+
+        <div class="adm-grid">
+            <a class="adm-card" href="/admin/matches">
+                <div class="adm-row">
+                    <div class="adm-left">
+                        <div class="adm-icon">🏀</div>
+                        <div>
+                            <div class="adm-cardtitle">Utakmice</div>
+                            <p class="adm-desc">Unos, izmena, rezultat i status utakmice.</p>
+                        </div>
+                    </div>
+                    <span class="adm-badge">/admin/matches</span>
+                </div>
+                <div class="adm-foot">
+                    <span>Tip: datum • timovi • rezultat</span>
+                    <span>→</span>
+                </div>
+            </a>
+
+            <a class="adm-card" href="/admin/teams">
+                <div class="adm-row">
+                    <div class="adm-left">
+                        <div class="adm-icon">🛡️</div>
+                        <div>
+                            <div class="adm-cardtitle">Timovi</div>
+                            <p class="adm-desc">Naziv, logo, roster i povezani igrači.</p>
+                        </div>
+                    </div>
+                    <span class="adm-badge">/admin/teams</span>
+                </div>
+                <div class="adm-foot">
+                    <span>Tip: roster • sezona</span>
+                    <span>→</span>
+                </div>
+            </a>
+
+            <a class="adm-card" href="/Admin/Igraci">
+                <div class="adm-row">
+                    <div class="adm-left">
+                        <div class="adm-icon">👤</div>
+                        <div>
+                            <div class="adm-cardtitle">Igrači</div>
+                            <p class="adm-desc">Dodavanje i uređivanje profila igrača.</p>
+                        </div>
+                    </div>
+                    <span class="adm-badge">/admin/players</span>
+                </div>
+                <div class="adm-foot">
+                    <span>Tip: tim • pozicija • broj</span>
+                    <span>→</span>
+                </div>
+            </a>
+
+            <a class="adm-card" href="/admin/news">
+                <div class="adm-row">
+                    <div class="adm-left">
+                        <div class="adm-icon">📰</div>
+                        <div>
+                            <div class="adm-cardtitle">Vesti</div>
+                            <p class="adm-desc">Kreiranje i uređivanje vesti (draft/published).</p>
+                        </div>
+                    </div>
+                    <span class="adm-badge">/admin/news</span>
+                </div>
+                <div class="adm-foot">
+                    <span>Tip: status • utakmica</span>
+                    <span>→</span>
+                </div>
+            </a>
+
+            <a class="adm-card" href="/admin/stats">
+                <div class="adm-row">
+                    <div class="adm-left">
+                        <div class="adm-icon">📊</div>
+                        <div>
+                            <div class="adm-cardtitle">Statistika</div>
+                            <p class="adm-desc">Unos statistike po utakmici (poeni, skokovi, asist...).</p>
+                        </div>
+                    </div>
+                    <span class="adm-badge">/admin/stats</span>
+                </div>
+                <div class="adm-foot">
+                    <span>Tip: po utakmici</span>
+                    <span>→</span>
+                </div>
+            </a>
+
+            <a class="adm-card" href="/admin/settings">
+                <div class="adm-row">
+                    <div class="adm-left">
+                        <div class="adm-icon">⚙️</div>
+                        <div>
+                            <div class="adm-cardtitle">Podešavanja</div>
+                            <p class="adm-desc">Sezone, lige i sistemske opcije (kasnije).</p>
+                        </div>
+                    </div>
+                    <span class="adm-badge">/admin/settings</span>
+                </div>
+                <div class="adm-foot">
+                    <span>Tip: liga → sezona</span>
+                    <span>→</span>
+                </div>
+            </a>
+        </div>
+
+        
+    </div>
+</body>
+</html>

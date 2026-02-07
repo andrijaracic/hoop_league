@@ -47,7 +47,7 @@
                 <!-- SREDINA: timovi + rezultat/VS -->
                 <div class="game-center">
                     <div class="team-block">
-                        <span class="team-name">@u.Domacin</span>
+                        <span class="team-name">@u.DomacinSkracenica</span>
                         <img src="~/@u.DomacinLogo" alt="@u.DomacinSkracenica" />
                     </div>
 
@@ -75,7 +75,7 @@
 
                     <div class="team-block">
                         <img src="~/@u.GostLogo" alt="@u.GostSkracenica" />
-                        <span class="team-name">@u.Gost</span>
+                        <span class="team-name">@u.GostSkracenica</span>
                     </div>
                 </div>
 
@@ -83,11 +83,9 @@
                 <div class="game-right">
                     @if (finished)
                     {
-                        <button class="btn-overview">Overview</button>
-                    }
-                    else
-                    {
-                        <button class="btn-arrow">➜</button>
+
+                        <a class="btn-arrow" href="@Url.Action("JednaUtakmica", "Home", new { id = u.UtakmicaId })">➜</a>
+                            
                     }
                 </div>
             </div>
