@@ -1941,3 +1941,78 @@ INSERT INTO Utakmice_Timovi (utakmica_id, tim_id, pobednik, domacin)
 VALUES
 (9, 20, NULL, 1),  -- Dubai
 (9, 15, NULL, 0); 
+GO
+--PROCEDURE--
+--Igraci--
+
+--CREATE--
+CREATE PROCEDURE sp_Igrac_Insert
+    @Ime NVARCHAR(50),
+    @Prezime NVARCHAR(50),
+	@DrzavaId INT,
+	@DatumRodjenja DATETIME,
+    @TimId INT,
+    @Pozicija NVARCHAR(10),
+    @BrojDresa INT,
+    @Visina INT,
+	@Tezina INT,
+	@MestoRodjenja NVARCHAR(50),
+	@UrlSlika NVARCHAR(100),
+	@Kapiten TINYINT
+AS
+BEGIN
+    INSERT INTO Igraci (ime,prezime,drzava_id,broj_na_dresu,datum_rodjenja,visina,tezina,pozicija,mesto_rodjenja,url_slika,kapiten,tim_id)
+    VALUES (@Ime,@Prezime,@DrzavaId,@BrojDresa,@DatumRodjenja,@Visina,@Tezina,@Pozicija,@MestoRodjenja,@UrlSlika,@Kapiten,@TimId)
+END
+GO
+
+--DELETE--
+CREATE PROCEDURE sp_Igrac_Delete
+    @IgracId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Igraci
+    WHERE id = @IgracId;
+END
+GO
+
+--UPDATE--
+CREATE PROCEDURE sp_Igrac_Update
+    @IgracId INT,
+    @Ime NVARCHAR(50),
+    @Prezime NVARCHAR(50),
+    @DrzavaId INT,
+    @DatumRodjenja DATETIME,
+    @TimId INT,
+    @Pozicija NVARCHAR(10),
+    @BrojDresa INT,
+    @Visina INT,
+    @Tezina INT,
+    @MestoRodjenja NVARCHAR(50),
+    @UrlSlika NVARCHAR(100),
+    @Kapiten TINYINT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Igraci
+    SET
+        ime = @Ime,
+        prezime = @Prezime,
+        drzava_id = @DrzavaId,
+        datum_rodjenja = @DatumRodjenja,
+        tim_id = @TimId,
+        pozicija = @Pozicija,
+        broj_na_dresu = @BrojDresa,
+        visina = @Visina,
+        tezina = @Tezina,
+        mesto_rodjenja = @MestoRodjenja,
+        url_slika = @UrlSlika,
+        kapiten = @Kapiten
+    WHERE id = @IgracId;
+END
+GO
+
+
