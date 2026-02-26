@@ -2015,4 +2015,212 @@ BEGIN
 END
 GO
 
+--VESTI--
+CREATE VIEW vw_Vesti_Admin AS
+SELECT
+    v.id AS VestId,
+    v.naslov AS Naslov,
+    v.datum_i_vreme AS Datum,
+    u.id AS UtakmicaId,
+	v.tekst AS Tekst,
+	v.slika_url AS SlikaUrl
+FROM Vesti v
+LEFT JOIN Utakmice u ON u.id = v.utakmica_id;
+GO
+
+--CREATE--
+
+CREATE PROCEDURE sp_Vest_Insert
+    @Naslov NVARCHAR(200),
+    @Tekst NVARCHAR(MAX),
+    @UtakmicaId INT = NULL,
+    @SlikaUrl NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Vesti (
+        naslov,
+        tekst,
+        datum_i_vreme,
+        utakmica_id,
+        slika_url
+    )
+    VALUES (
+        @Naslov,
+        @Tekst,
+        GETDATE(),
+		@UtakmicaId,
+        'images/image_null.png'
+        
+    );
+END
+GO
+
+--DELETE--
+CREATE PROCEDURE sp_Vest_Delete
+    @VestId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Vesti
+    WHERE id = @VestId;
+END
+GO
+
+--UPDATE--
+drop procedure sp_Vest_Update
+CREATE PROCEDURE sp_Vest_Update
+    @VestId INT,
+    @Naslov NVARCHAR(200),
+    @Tekst NVARCHAR(MAX),
+    @UtakmicaId INT = NULL,
+    @SlikaUrl NVARCHAR(255) = 'images/image_null.png'
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Vesti
+    SET
+        naslov = @Naslov,
+        tekst = @Tekst,
+        utakmica_id = @UtakmicaId,
+        slika_url = @SlikaUrl
+    WHERE id = @VestId;
+END
+GO
+
+EXEC sp_Vest_Update
+    @VestId = 1,
+    @Naslov = N'Izmenjena vest',
+    @Tekst = N'Izmenjen tekst',
+    @UtakmicaId = NULL
+	
+
+
+--TIMOVI--
+
+CREATE VIEW vw_Timovi_Admin AS
+SELECT
+    t.id                AS TimId,
+    t.naziv             AS Naziv,
+    t.grad              AS Grad,
+    t.logo_url          AS LogoUrl,
+    t.datum_osnivanja   AS DatumOsnivanja,
+    t.broj_titula       AS BrojTitula,
+    t.drzava_id         AS DrzavaId,
+    c.name				AS Drzava,
+	t.skracenica		AS Skracenica,
+	t.boja				AS Boja
+FROM Timovi t
+JOIN Countries c ON c.id = t.drzava_id;
+GO
+
+select * from vw_Timovi_Admin
+
+
+--CREATE--
+
+CREATE PROCEDURE sp_Tim_Insert
+    @Naziv NVARCHAR(100),
+    @Grad NVARCHAR(50),
+    @DrzavaId INT,
+    @LogoUrl NVARCHAR(255) = 'images/logos/logo_null.png',
+    @DatumOsnivanja DATE = NULL,
+    @BrojTitula INT = 0,
+	@Boja NVARCHAR(50),
+	@Skracenica NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Timovi (
+        naziv,
+        grad,
+        drzava_id,
+        logo_url,
+        datum_osnivanja,
+        broj_titula,
+		boja,
+		skracenica
+    )
+    VALUES (
+        @Naziv,
+        @Grad,
+        @DrzavaId,
+        @LogoUrl,
+        @DatumOsnivanja,
+        @BrojTitula,
+		@Boja,
+		@Skracenica
+    );
+END
+GO
+
+EXEC sp_Tim_Insert
+    @Naziv = N'Test Tim1',
+    @Grad = N'Beograd',
+    @DrzavaId = 1,
+    @DatumOsnivanja = '2000-01-01',
+    @BrojTitula = 0,
+	@Boja = '#0057B8',
+	@Skracenica = 'TST'
+
+
+--DELETE--
+
+CREATE PROCEDURE sp_Tim_Delete
+    @TimId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Timovi
+    WHERE id = @TimId;
+END
+GO
+
+--UPDATE--
+
+CREATE PROCEDURE sp_Tim_Update
+    @TimId INT,
+    @Naziv NVARCHAR(100),
+    @Grad NVARCHAR(50),
+    @DrzavaId INT,
+    @LogoUrl NVARCHAR(255) = NULL,
+    @DatumOsnivanja DATE = NULL,
+    @BrojTitula INT,
+    @Skracenica NVARCHAR(10),
+    @Boja NVARCHAR(30)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Timovi
+    SET
+        naziv = @Naziv,
+        grad = @Grad,
+        drzava_id = @DrzavaId,
+        logo_url = @LogoUrl,
+        datum_osnivanja = @DatumOsnivanja,
+        broj_titula = @BrojTitula,
+        skracenica = @Skracenica,
+        boja = @Boja
+    WHERE id = @TimId;
+END
+GO
+
+EXEC sp_Tim_Update
+    @TimId = 1,
+    @Naziv = N'Efes',
+    @Grad = N'Beograd',
+    @DrzavaId = 1,
+    @DatumOsnivanja = '2005-06-01',
+    @BrojTitula = 3,
+    @Skracenica = N'TST',
+    @Boja = N'#00000',
+	@LogoUrl = 'images/logos/efes.png'
+
+	
 

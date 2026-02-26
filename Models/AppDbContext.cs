@@ -29,6 +29,8 @@ public class AppDbContext : DbContext
 
     public DbSet<VestListViewModel> vw_Vesti_Admin { get; set; }
 
+    public DbSet<TimListViewModel> vw_Timovi_Admin { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -60,6 +62,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<VestListViewModel>()
             .HasNoKey()
             .ToView("vw_Vesti_Admin");
+
+        modelBuilder.Entity<TimListViewModel>()
+            .HasNoKey()
+            .ToView("vw_Timovi_Admin");
 
 
         base.OnModelCreating(modelBuilder);
