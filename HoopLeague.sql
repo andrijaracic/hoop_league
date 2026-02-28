@@ -2224,3 +2224,128 @@ EXEC sp_Tim_Update
 
 	
 
+--UTAKMICE--
+
+CREATE OR ALTER PROCEDURE sp_Utakmica_Insert
+    @Runda INT,
+    @DatumVreme DATETIME,
+    @SezonaId INT,
+	@HalaId INT,
+    @DomacinTimId INT,
+    @GostTimId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRAN;
+
+        INSERT INTO dbo.Utakmice (runda, datum_vreme, sezona_id,hala_id)
+        VALUES (@Runda, @DatumVreme, @SezonaId,@HalaId);
+
+        DECLARE @UtakmicaId INT = SCOPE_IDENTITY();
+
+        INSERT INTO dbo.Utakmice_Timovi (utakmica_id, tim_id, domacin)
+        VALUES (@UtakmicaId, @DomacinTimId, 1);
+
+        INSERT INTO dbo.Utakmice_Timovi (utakmica_id, tim_id, domacin)
+        VALUES (@UtakmicaId, @GostTimId, 0);
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK;
+        THROW;
+    END CATCH
+END
+GO
+
+EXEC sp_Utakmica_Insert
+    @Runda = 20,
+    @DatumVreme = '2026-03-10 19:00',
+    @DomacinTimId = 10,
+    @GostTimId = 20,
+	@HalaId = 1,
+	@SezonaId = 1;
+
+select * from Utakmice
+
+--DELETE--
+CREATE OR ALTER PROCEDURE sp_Utakmica_Delete
+    @UtakmicaId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRAN;
+
+        -- 1. Briši statistiku igrača
+        DELETE FROM dbo.Utakmice_Igraci
+        WHERE utakmica_id = @UtakmicaId;
+
+        -- 2. Briši vezu utakmica–timovi
+        DELETE FROM dbo.Utakmice_Timovi
+        WHERE utakmica_id = @UtakmicaId;
+
+        -- 3. Briši samu utakmicu
+        DELETE FROM dbo.Utakmice
+        WHERE id = @UtakmicaId;
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK;
+
+        THROW;
+    END CATCH
+END
+GO
+
+--UPDATE--
+CREATE OR ALTER PROCEDURE sp_Utakmica_Update
+    @UtakmicaId INT,
+    @Runda INT,
+    @DatumVreme DATETIME,
+    @SezonaId INT,
+    @DomacinTimId INT,
+    @GostTimId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRAN;
+
+        -- update utakmice
+        UPDATE dbo.Utakmice
+        SET
+            runda = @Runda,
+            datum_vreme = @DatumVreme,
+            sezona_id = @SezonaId
+        WHERE id = @UtakmicaId;
+
+        -- obriši stare timove
+        DELETE FROM dbo.Utakmice_Timovi
+        WHERE utakmica_id = @UtakmicaId;
+
+        -- novi domaćin
+        INSERT INTO dbo.Utakmice_Timovi (utakmica_id, tim_id, domacin)
+        VALUES (@UtakmicaId, @DomacinTimId, 1);
+
+        -- novi gost
+        INSERT INTO dbo.Utakmice_Timovi (utakmica_id, tim_id, domacin)
+        VALUES (@UtakmicaId, @GostTimId, 0);
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK;
+        THROW;
+    END CATCH
+END
+GO
+
