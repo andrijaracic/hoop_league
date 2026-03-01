@@ -1,0 +1,126 @@
+﻿@model List<HoopLeague.Models.ViewModels.Admin.TrenerListViewModel>
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <title>Admin • Treneri</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f3f3f3;
+        }
+
+        img {
+            height: 40px;
+            border-radius: 4px;
+        }
+
+        .actions a {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Treneri</h1>
+
+    <a href="/Admin">← Nazad na admin</a>
+    <br />
+    <br />
+    <a href="/Admin/Treneri/Novi">+ Novi trener</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ime</th>
+                <th>Uloga</th>
+                <th>Tim</th>
+                <th>Država</th>
+                <th>Datum rođenja</th>
+                <th>Slika</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="8">Nema trenera u bazi.</td>
+                </tr>
+            }
+            else
+            {
+                var rb = 1;
+                foreach (var t in Model)
+                {
+                    <tr>
+                        <td>@rb</td>
+                        <td>@t.Ime @t.Prezime</td>
+                        <td>
+                            @if (t.Uloga == 1)
+                            {
+                                <span>Glavni Trener</span>
+                            }
+                            else
+                            {
+                                <span>Pomocni Trener</span>
+                            }
+                        </td>
+                        <td>@t.Tim</td>
+                        <td>@t.Drzava</td>
+                        <td>@(t.DatumRodjenja.ToString("dd.MM.yyyy") ?? "—")</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(t.UrlSlika))
+                            {
+                                <img src="@t.UrlSlika" />
+                            }
+                            else
+                            {
+                                <span>—</span>
+                            }
+                        </td>
+                        <td class="actions">
+                            <a href="/Admin/Treneri/Izmeni/@t.TrenerId">Edit</a>
+                            <form method="post"
+                                  action="/Admin/Treneri/Obrisi"
+                                  onsubmit="return confirm('Da li si siguran da želiš da obrišeš trenera?');"
+                                  style="display:inline;">
+
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@t.TrenerId" />
+
+                                <button type="submit">Obriši</button>
+                            </form>
+                        </td>
+                    </tr>
+                    rb++;
+                }
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>

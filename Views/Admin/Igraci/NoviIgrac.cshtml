@@ -1,6 +1,6 @@
 ﻿@model HoopLeague.Models.ViewModels.Admin.Igraci.IgracCreateViewModel
 @{
-    ViewData["Title"] = "Novi igrač";
+    ViewData["Title"] = "Dodaj igrača";
     Layout = null;
 }
 
@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin • Novi igrač</title>
+    <title>Admin • Dodaj igrača</title>
 
     <style>
         :root {
@@ -77,8 +77,6 @@
             gap: 14px;
         }
 
-        
-
         }
 
         .adm-field label {
@@ -103,6 +101,7 @@
             align-items: center;
             gap: 8px;
             font-size: 14px;
+            margin-top: 6px;
         }
 
         .adm-actions {
@@ -140,52 +139,112 @@
 
         <div class="adm-top">
             <div>
-                <h1 class="adm-title">Novi igrač</h1>
-                <div class="adm-sub">Unos novog igrača u sistem</div>
+                <h1 class="adm-title">Dodaj igraca</h1>
+                <div class="adm-sub">Dodavanje igrača</div>
             </div>
 
             <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">← Nazad</a>
         </div>
 
         <div class="adm-card">
-            <form method="post"
-                  action="/Admin/Igraci/IzmeniIgraca"
-                  class="adm-form">
-
+            <form class="adm-form" method="post" action="/Admin/Igraci/NoviIgrac">
                 @Html.AntiForgeryToken()
 
-                <!-- ID igrača (obavezno za EDIT) -->
-                <input type="hidden" asp-for="Id" />
+                <!-- Ime / Prezime -->
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label asp-for="Ime"></label>
+                        <input asp-for="Ime" class="adm-input" />
+                        <span asp-validation-for="Ime" class="adm-error"></span>
+                    </div>
 
-                <!-- PRIMER POLJA -->
-                <div class="adm-field">
-                    <label asp-for="Ime"></label>
-                    <input asp-for="Ime" class="adm-input" />
-                    <span asp-validation-for="Ime" class="adm-error"></span>
+                    <div class="adm-field">
+                        <label asp-for="Prezime"></label>
+                        <input asp-for="Prezime" class="adm-input" />
+                        <span asp-validation-for="Prezime" class="adm-error"></span>
+                    </div>
                 </div>
 
-                <div class="adm-field">
-                    <label asp-for="Prezime"></label>
-                    <input asp-for="Prezime" class="adm-input" />
-                    <span asp-validation-for="Prezime" class="adm-error"></span>
+                <!-- Država / Datum rođenja -->
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label asp-for="DrzavaId">Država</label>
+                        <input asp-for="DrzavaId" type="number" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="DatumRodjenja">Datum rođenja</label>
+                        <input asp-for="DatumRodjenja" type="date" class="adm-input" />
+                    </div>
                 </div>
 
-                <div class="adm-field">
-                    <label asp-for="DrzavaId">Država ID</label>
-                    <input asp-for="DrzavaId" type="number" class="adm-input" />
+                <!-- Tim / Pozicija -->
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label asp-for="TimId">Tim</label>
+                        <select asp-for="TimId" class="adm-select">
+                            @foreach (var t in ViewBag.Timovi)
+                            {
+                                <option value="@t.Id">@t.Naziv</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="Pozicija">Pozicija</label>
+                        <select asp-for="Pozicija" class="adm-select">
+                            <option value="bek">Bek</option>
+                            <option value="krilo">Krilo</option>
+                            <option value="centar">Centar</option>
+                        </select>
+                    </div>
                 </div>
 
+                <!-- Broj / Visina -->
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label asp-for="BrojDresa">Broj dresa</label>
+                        <input asp-for="BrojDresa" type="number" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="Visina">Visina (cm)</label>
+                        <input asp-for="Visina" type="number" class="adm-input" />
+                    </div>
+                </div>
+
+                <!-- Težina / Mesto rođenja -->
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label asp-for="Tezina">Težina (kg)</label>
+                        <input asp-for="Tezina" type="number" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="MestoRodjenja">Mesto rođenja</label>
+                        <input asp-for="MestoRodjenja" class="adm-input" />
+                    </div>
+                </div>
+
+                <!-- Slika / Kapiten -->
+                <div class="adm-row">
+                    <div class="adm-field">
+                        <label asp-for="UrlSlika">URL slike</label>
+                        <input asp-for="UrlSlika" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field adm-checkbox">
+                        <input asp-for="Kapiten" />
+                        <label asp-for="Kapiten">Kapiten</label>
+                    </div>
+                </div>
+
+                <!-- Actions -->
                 <div class="adm-actions">
-                    <button type="submit" class="adm-btn">
-                        Sačuvaj izmene
-                    </button>
-
-                    <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">
-                        Otkaži
-                    </a>
+                    <button type="submit" class="adm-btn">Dodaj igraca</button>
+                    <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">Otkaži</a>
                 </div>
             </form>
-
         </div>
 
     </div>

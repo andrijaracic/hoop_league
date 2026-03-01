@@ -6,6 +6,6 @@
         public int TrenerId { get; set; }
         public string Ime { get; set; }
         public string Prezime { get; set; }
-        public string Uloga { get; set; }
+        public byte Uloga { get; set; }
     }
 }

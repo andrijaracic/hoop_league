@@ -1,0 +1,168 @@
+﻿@model HoopLeague.Models.ViewModels.Admin.UtakmicaStatistikaVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <title>Unos statistike</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 40px;
+        }
+
+        h3 {
+            margin-top: 25px;
+        }
+
+        h4 {
+            margin-top: 15px;
+        }
+
+        .igrac-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quarter-box {
+            border: 1px dashed #aaa;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: inline-block;
+            width: 240px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+        }
+
+        .row {
+            margin-bottom: 6px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 6px 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Unos statistike — utakmica #@Model.UtakmicaId</h1>
+
+    <!-- ================= DOMAĆIN ================= -->
+    <h2>Domaćin</h2>
+
+    @foreach (var igrac in Model.DomacinIgraci)
+    {
+        <div class="igrac-box">
+            <h3>#@igrac.BrojDresa @igrac.Ime @igrac.Prezime (@igrac.Pozicija)</h3>
+
+            @for (int q = 1; q <= 4; q++)
+            {
+                <div class="quarter-box">
+                    <h4>Četvrtina @q</h4>
+
+                    <form method="post" action="/Admin/Utakmice/Statistika/Unos">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" name="UtakmicaId" value="@Model.UtakmicaId" />
+                        <input type="hidden" name="IgracId" value="@igrac.IgracId" />
+                        <input type="hidden" name="Cetvrtina" value="@q" />
+
+                        <div class="row"><label>Starter (0 ili 1)</label><input type="number" name="Starter" value="0" /></div>
+
+                        <div class="row"><label>Vreme na terenu (sekunde)</label><input type="number" name="VremeNaTerenu" value="0" /></div>
+
+                        <div class="row"><label>Pogođeno dvojki</label><input type="number" name="PogodjenoDvojki" value="0" /></div>
+                        <div class="row"><label>Šutnuto dvojki</label><input type="number" name="SutnutoDvojki" value="0" /></div>
+
+                        <div class="row"><label>Pogođeno trojki</label><input type="number" name="PogodjenoTrojki" value="0" /></div>
+                        <div class="row"><label>Šutnuto trojki</label><input type="number" name="SutnutoTrojki" value="0" /></div>
+
+                        <div class="row"><label>Pogođeno slobodnih bacanja</label><input type="number" name="PogodjenoSlobodnihBacanja" value="0" /></div>
+                        <div class="row"><label>Šutnuto slobodnih bacanja</label><input type="number" name="SutnutoSlobodnihBacanja" value="0" /></div>
+
+                        <div class="row"><label>Ofanzivni skokovi</label><input type="number" name="OfanzivniSkokovi" value="0" /></div>
+                        <div class="row"><label>Defanzivni skokovi</label><input type="number" name="DefanzivniSkokovi" value="0" /></div>
+
+                        <div class="row"><label>Asistencije</label><input type="number" name="Asistencije" value="0" /></div>
+                        <div class="row"><label>Ukradene lopte</label><input type="number" name="UkradeneLopte" value="0" /></div>
+                        <div class="row"><label>Izgubljene lopte</label><input type="number" name="IzgubljeneLopte" value="0" /></div>
+
+                        <div class="row"><label>Faulovi</label><input type="number" name="Faulovi" value="0" /></div>
+
+                        <button type="submit">Sačuvaj četvrtinu</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- ================= GOST ================= -->
+    <h2>Gost</h2>
+
+    @foreach (var igrac in Model.GostIgraci)
+    {
+        <div class="igrac-box">
+            <h3>#@igrac.BrojDresa @igrac.Ime @igrac.Prezime (@igrac.Pozicija)</h3>
+
+            @for (int q = 1; q <= 4; q++)
+            {
+                <div class="quarter-box">
+                    <h4>Četvrtina @q</h4>
+
+                    <form method="post" action="/Admin/Utakmice/Statistika/Unos">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" name="UtakmicaId" value="@Model.UtakmicaId" />
+                        <input type="hidden" name="IgracId" value="@igrac.IgracId" />
+                        <input type="hidden" name="Cetvrtina" value="@q" />
+
+                        <div class="row"><label>Starter (0 ili 1)</label><input type="number" name="Starter" value="0" /></div>
+
+                        <div class="row"><label>Vreme na terenu (sekunde)</label><input type="number" name="VremeNaTerenu" value="0" /></div>
+
+                        <div class="row"><label>Pogođeno dvojki</label><input type="number" name="PogodjenoDvojki" value="0" /></div>
+                        <div class="row"><label>Šutnuto dvojki</label><input type="number" name="SutnutoDvojki" value="0" /></div>
+
+                        <div class="row"><label>Pogođeno trojki</label><input type="number" name="PogodjenoTrojki" value="0" /></div>
+                        <div class="row"><label>Šutnuto trojki</label><input type="number" name="SutnutoTrojki" value="0" /></div>
+
+                        <div class="row"><label>Pogođeno slobodnih bacanja</label><input type="number" name="PogodjenoSlobodnihBacanja" value="0" /></div>
+                        <div class="row"><label>Šutnuto slobodnih bacanja</label><input type="number" name="SutnutoSlobodnihBacanja" value="0" /></div>
+
+                        <div class="row"><label>Ofanzivni skokovi</label><input type="number" name="OfanzivniSkokovi" value="0" /></div>
+                        <div class="row"><label>Defanzivni skokovi</label><input type="number" name="DefanzivniSkokovi" value="0" /></div>
+
+                        <div class="row"><label>Asistencije</label><input type="number" name="Asistencije" value="0" /></div>
+                        <div class="row"><label>Ukradene lopte</label><input type="number" name="UkradeneLopte" value="0" /></div>
+                        <div class="row"><label>Izgubljene lopte</label><input type="number" name="IzgubljeneLopte" value="0" /></div>
+
+                        <div class="row"><label>Faulovi</label><input type="number" name="Faulovi" value="0" /></div>
+
+                        <button type="submit">Sačuvaj četvrtinu</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+
+    <br />
+    <a href="/Admin/Utakmice">← Nazad na utakmice</a>
+
+</body>
+</html>

@@ -234,6 +234,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>ID</th>
                             <th>Utakmica</th>
                             <th>Rezultat</th>
                             <th>Datum</th>
@@ -264,6 +265,7 @@
 
                                 <tr>
                                     <td>@rb</td>
+                                    <td>@u.UtakmicaId</td>
 
                                     <td>
                                         <strong>@u.Domacin</strong>
@@ -304,6 +306,11 @@
                                             <a class="adm-iconbtn"
                                                href="/Admin/Utakmice/Izmeni/@u.UtakmicaId">
                                                 Izmeni
+                                            </a>
+
+                                            <a class="adm-iconbtn"
+                                               href="/Admin/Utakmice/Statistika/Unos/@u.UtakmicaId">
+                                                Unesi statistiku
                                             </a>
 
                                             <form method="post"

@@ -1,0 +1,82 @@
+﻿
+@model HoopLeague.Models.ViewModels.Admin.TrenerListViewModel
+@{
+    Layout = null;
+    var timovi = ViewBag.Timovi as IEnumerable<dynamic>;
+}
+
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <title>Izmeni trenera</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        input, select {
+            width: 320px;
+            padding: 6px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Izmeni trenera</h1>
+
+    <form method="post" action="/Admin/Treneri/Izmeni">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="TrenerId" />
+
+        <label>Ime</label>
+        <input asp-for="Ime" />
+
+        <label>Prezime</label>
+        <input asp-for="Prezime" />
+
+        <label>Uloga</label>
+        <select asp-for="Uloga">
+            <option value="1">Glavni trener</option>
+            <option value="2">Pomoćni trener</option>
+        </select>
+
+        <label>Država ID</label>
+        <input asp-for="DrzavaId" type="number" />
+
+        <label>Tim</label>
+        <select asp-for="TimId">
+            @foreach (var t in timovi)
+            {
+                <option value="@t.Id">@t.Naziv</option>
+            }
+        </select>
+
+        <label>Datum rođenja</label>
+        <input asp-for="DatumRodjenja" type="date" />
+
+        <label>URL slike</label>
+        <input asp-for="UrlSlika" />
+
+        <br />
+
+        <button type="submit">Sačuvaj izmene</button>
+        <a href="/Admin/Treneri">Otkaži</a>
+    </form>
+
+</body>
+</html>

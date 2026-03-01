@@ -530,13 +530,13 @@ VALUES (N'Lazar', N'Stojkovi?', 182, 17, '2007-10-22', 210.00, 100.00, N'Centar'
 INSERT INTO Igraci (ime, prezime, drzava_id, broj_na_dresu, datum_rodjenja, visina, tezina, pozicija, mesto_rodjenja, url_slika, kapiten, tim_id)
 VALUES (N'Donatas', N'Motiejunas', 122, 20, '1990-09-20', 213.00, 112.00, N'Centar', N'Kaunas, Litvanija', NULL, 0, 5);
 GO
-
+drop table Treneri
 -- Treneri
 CREATE TABLE Treneri (
     id INT IDENTITY(1,1) PRIMARY KEY,
     ime NVARCHAR(50) NOT NULL,
     prezime NVARCHAR(50) NOT NULL,
-    uloga NVARCHAR(50) NOT NULL CHECK (uloga IN ('Glavni Trener', 'Pomo?ni Trener')),
+    uloga TINYINT NOT NULL CHECK (uloga IN (1, 2)),
     drzava_id INT NOT NULL,
     tim_id INT NOT NULL,
     datum_rodjenja DATE CHECK (datum_rodjenja < GETDATE()),
@@ -2169,8 +2169,8 @@ EXEC sp_Tim_Insert
 
 
 --DELETE--
-
-CREATE PROCEDURE sp_Tim_Delete
+drop procedure sp_Tim_Delete
+/*CREATE PROCEDURE sp_Tim_Delete
     @TimId INT
 AS
 BEGIN
@@ -2178,6 +2178,43 @@ BEGIN
 
     DELETE FROM Timovi
     WHERE id = @TimId;
+END
+GO*/
+CREATE OR ALTER PROCEDURE sp_Tim_Delete
+    @TimId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRAN;
+
+        -- 1. Statistika igrača za utakmice tog tima
+        DELETE ui
+        FROM dbo.Utakmice_Igraci ui
+        JOIN dbo.Utakmice_Timovi ut ON ut.utakmica_id = ui.utakmica_id
+        WHERE ut.tim_id = @TimId;
+
+        -- 2. Veze utakmica–timovi
+        DELETE FROM dbo.Utakmice_Timovi
+        WHERE tim_id = @TimId;
+
+        -- 3. Utakmice koje više nemaju timove
+        DELETE u
+        FROM dbo.Utakmice u
+        LEFT JOIN dbo.Utakmice_Timovi ut ON ut.utakmica_id = u.id
+        WHERE ut.utakmica_id IS NULL;
+
+        -- 4. Tim
+        DELETE FROM dbo.Timovi
+        WHERE id = @TimId;
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK;
+        THROW;
+    END CATCH
 END
 GO
 
@@ -2349,3 +2386,284 @@ BEGIN
 END
 GO
 
+--UNOS STATISTIKE--
+
+CREATE OR ALTER PROCEDURE sp_UtakmicaIgracStatistika_Insert
+    @UtakmicaId INT,
+    @IgracId INT,
+    @Cetvrtina INT,        -- 1–4
+
+    @Starter BIT,
+
+    @OfanzivniSkokovi INT,
+    @DefanzivniSkokovi INT,
+    @Asistencije INT,
+    @IzgubljeneLopte INT,
+    @UkradeneLopte INT,
+
+    @SutnutoTrojki INT,
+    @SutnutoDvojki INT,
+    @SutnutoSlobodnihBacanja INT,
+
+    @PogodjenoTrojki INT,
+    @PogodjenoDvojki INT,
+    @PogodjenoSlobodnihBacanja INT,
+
+    @VremeNaTerenu INT,    -- 0–600 sekundi
+    @Faulovi INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- VALIDACIJA CETVRTINE
+    IF @Cetvrtina NOT BETWEEN 1 AND 4
+    BEGIN
+        RAISERROR('Cetvrtina mora biti izmedju 1 i 4.', 16, 1);
+        RETURN;
+    END
+
+    -- ZABRANA DUPLOG UNOSA ZA ISTU CETVRTINU
+    IF EXISTS (
+        SELECT 1
+        FROM Utakmice_Igraci
+        WHERE utakmica_id = @UtakmicaId
+          AND igrac_id = @IgracId
+          AND cetvrtina = @Cetvrtina
+    )
+    BEGIN
+        RAISERROR(
+            'Statistika za ovog igraca u ovoj cetvrtini vec postoji.',
+            16, 1
+        );
+        RETURN;
+    END
+
+    INSERT INTO Utakmice_Igraci
+    (
+        utakmica_id,
+        igrac_id,
+        cetvrtina,
+        starter,
+
+        ofanzivni_skokovi,
+        defanzivni_skokovi,
+        asistencije,
+        izgubljene_lopte,
+        ukradene_lopte,
+
+        sutnuto_trojki,
+        sutnuto_dvojki,
+        sutnuto_slobodnih_bacanja,
+
+        pogodjeno_trojki,
+        pogodjeno_dvojki,
+        pogodjeno_slobodnih_bacanja,
+
+        vreme_na_terenu,
+        faulovi
+    )
+    VALUES
+    (
+        @UtakmicaId,
+        @IgracId,
+        @Cetvrtina,
+        @Starter,
+
+        @OfanzivniSkokovi,
+        @DefanzivniSkokovi,
+        @Asistencije,
+        @IzgubljeneLopte,
+        @UkradeneLopte,
+
+        @SutnutoTrojki,
+        @SutnutoDvojki,
+        @SutnutoSlobodnihBacanja,
+
+        @PogodjenoTrojki,
+        @PogodjenoDvojki,
+        @PogodjenoSlobodnihBacanja,
+
+        @VremeNaTerenu,
+        @Faulovi
+    );
+END
+GO
+
+EXEC sp_UtakmicaIgracStatistika_Insert
+    @UtakmicaId = 25,
+    @IgracId = 85,
+    @Cetvrtina = 4,
+    @Starter = 1,
+    @OfanzivniSkokovi = 1,
+    @DefanzivniSkokovi = 2,
+    @Asistencije = 1,
+    @IzgubljeneLopte = 0,
+    @UkradeneLopte = 1,
+    @SutnutoTrojki = 1,
+    @SutnutoDvojki = 3,
+    @SutnutoSlobodnihBacanja = 2,
+    @PogodjenoTrojki = 2,
+    @PogodjenoDvojki = 2,
+    @PogodjenoSlobodnihBacanja = 2,
+    @VremeNaTerenu = 480,
+    @Faulovi = 1;
+
+--TRENERI--
+
+CREATE OR ALTER PROCEDURE sp_Trener_Insert
+    @Ime NVARCHAR(50),
+    @Prezime NVARCHAR(50),
+    @Uloga TINYINT,
+    @DrzavaId INT,
+    @TimId INT,
+    @DatumRodjenja DATE,
+    @UrlSlika NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Treneri
+    (
+        ime,
+        prezime,
+        uloga,
+        drzava_id,
+        tim_id,
+        datum_rodjenja,
+        url_slika
+    )
+    VALUES
+    (
+        @Ime,
+        @Prezime,
+        @Uloga,
+        @DrzavaId,
+        @TimId,
+        @DatumRodjenja,
+        @UrlSlika
+    );
+END
+GO
+
+EXEC sp_Trener_Insert
+    @Ime = 'Petar',
+    @Prezime = 'Petrović',
+    @Uloga = 1,
+    @DrzavaId = 1,
+    @TimId = 1,
+    @DatumRodjenja = '1975-05-12',
+    @UrlSlika = NULL;
+
+--DELETE--
+CREATE OR ALTER PROCEDURE sp_Trener_Delete
+    @TrenerId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Treneri
+    WHERE id = @TrenerId;
+END
+GO
+--UPDATE--
+CREATE OR ALTER PROCEDURE sp_Trener_Update
+    @TrenerId INT,
+    @Ime NVARCHAR(50),
+    @Prezime NVARCHAR(50),
+    @Uloga TINYINT,
+    @DrzavaId INT,
+    @TimId INT,
+    @DatumRodjenja DATE,
+    @UrlSlika NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Treneri
+    SET
+        ime = @Ime,
+        prezime = @Prezime,
+        uloga = @Uloga,
+        drzava_id = @DrzavaId,
+        tim_id = @TimId,
+        datum_rodjenja = @DatumRodjenja,
+        url_slika = @UrlSlika
+    WHERE id = @TrenerId;
+END
+GO
+--HALE--
+CREATE OR ALTER PROCEDURE sp_Hala_Insert
+    @Naziv NVARCHAR(100),
+    @DrzavaId INT,
+    @Kapacitet INT = NULL,
+    @Grad NVARCHAR(50) = NULL,
+    @Adresa NVARCHAR(150) = NULL,
+    @UrlSlika NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Hale
+    (
+        naziv,
+        drzava_id,
+        kapacitet,
+        grad,
+        adresa,
+        url_slika
+    )
+    VALUES
+    (
+        @Naziv,
+        @DrzavaId,
+        @Kapacitet,
+        @Grad,
+        @Adresa,
+        @UrlSlika
+    );
+END
+GO
+
+EXEC sp_Hala_Insert
+    @Naziv = 'Arena Test',
+    @DrzavaId = 1,
+    @Kapacitet = 18000,
+    @Grad = 'Beograd',
+    @Adresa = 'Test 123',
+    @UrlSlika = NULL;
+
+--DELETE--
+CREATE OR ALTER PROCEDURE sp_Hala_Delete
+    @HalaId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Hale
+    WHERE id = @HalaId;
+END
+GO
+--UPDATE--
+CREATE OR ALTER PROCEDURE sp_Hala_Update
+    @HalaId INT,
+    @Naziv NVARCHAR(100),
+    @DrzavaId INT,
+    @Kapacitet INT = NULL,
+    @Grad NVARCHAR(50) = NULL,
+    @Adresa NVARCHAR(150) = NULL,
+    @UrlSlika NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Hale
+    SET
+        naziv = @Naziv,
+        drzava_id = @DrzavaId,
+        kapacitet = @Kapacitet,
+        grad = @Grad,
+        adresa = @Adresa,
+        url_slika = @UrlSlika
+    WHERE id = @HalaId;
+END
+GO
