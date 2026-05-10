@@ -1,5 +1,6 @@
 ﻿using HoopLeague.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,18 @@ namespace HoopLeague.Controllers.Admin
         public VestiController(AppDbContext context)
         {
             _context = context;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var isAdmin = context.HttpContext.Session.GetString("Admin");
+
+            if (isAdmin != "true")
+            {
+                context.Result = new RedirectToActionResult("Login", "AdminAuth", null);
+            }
+
+            base.OnActionExecuting(context);
         }
 
         // READ – lista vesti
@@ -29,6 +42,7 @@ namespace HoopLeague.Controllers.Admin
         [HttpGet("NovaVest")]
         public IActionResult NovaVest()
         {
+
             return View("~/Views/Admin/Vesti/NovaVest.cshtml",
                 new VestListViewModel());
         }

@@ -1,6 +1,7 @@
 ﻿@model List<HoopLeague.Models.ViewModels.Admin.HalaListViewModel>
 @{
     Layout = null;
+    
 }
 
 <!doctype html>
@@ -10,83 +11,227 @@
     <title>Admin • Hale</title>
 
     <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
+            --adm-danger: #ef4444;
+        }
+
         body {
-            font-family: Arial;
-            padding: 30px;
+            margin: 0;
+            font-family: system-ui;
+            background: var(--adm-bg);
+        }
+
+        .adm-wrap {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .adm-title {
+            font-size: 26px;
+        }
+
+        .adm-subtitle {
+            font-size: 14px;
+            color: var(--adm-muted);
+        }
+
+        /* CARD */
+        .adm-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--adm-shadow);
+        }
+
+        /* BUTTON */
+        .adm-btn {
+            background: linear-gradient(90deg,#ff8c00,#ff3c00);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* TABLE */
+        .adm-tablewrap {
+            overflow-x: auto;
         }
 
         table {
-            border-collapse: collapse;
             width: 100%;
-            margin-top: 20px;
+            border-collapse: collapse;
         }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        thead {
+            background: #f8fafc;
         }
 
         th {
-            background: #f2f2f2;
+            text-align: left;
+            padding: 12px;
+            font-size: 13px;
+            color: #475569;
         }
 
-        a {
-            margin-right: 10px;
+        td {
+            padding: 12px;
+            border-top: 1px solid var(--adm-border);
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* BADGE */
+        .adm-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid var(--adm-border);
+        }
+
+        /* ACTIONS */
+        .adm-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .adm-iconbtn {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--adm-border);
+            background: white;
+            cursor: pointer;
+        }
+
+        .adm-iconbtn-danger {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .adm-empty {
+            text-align: center;
+            padding: 20px;
+            color: var(--adm-muted);
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Hale</h1>
+    <div class="adm-wrap">
 
-    <a href="/Admin/Hale/Nova">+ Nova hala</a>
+        <!-- HEADER -->
+        <div class="adm-top">
+            <div>
+                <h1 class="adm-title">🏟 Hale</h1>
+                <div class="adm-subtitle">Pregled svih hala</div>
+            </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Naziv</th>
-                <th>Grad</th>
-                <th>Kapacitet</th>
-                <th>Država ID</th>
-                <th>Akcije</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.Any())
-            {
-                <tr>
-                    <td colspan="6">Nema hala u bazi.</td>
-                </tr>
-            }
-            else
-            {
-                foreach (var h in Model)
-                {
-                    <tr>
-                        <td>@h.HalaId</td>
-                        <td><strong>@h.Naziv</strong></td>
-                        <td>@(h.Grad ?? "-")</td>
-                        <td>@(h.Kapacitet?.ToString() ?? "-")</td>
-                        <td>@h.DrzavaId</td>
-                        <td>
-                            <a href="/Admin/Hale/Izmeni/@h.HalaId">Edit</a>
+            <a href="/Admin/Hale/Nova" class="adm-btn">
+                + Nova hala
+            </a>
+        </div>
 
-                            <form method="post"
-                                  action="/Admin/Hale/Obrisi"
-                                  style="display:inline"
-                                  onsubmit="return confirm('Da li si siguran da želiš da obrišeš ovu halu?');">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@h.HalaId" />
-                                <button type="submit">Obriši</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+        <!-- CARD -->
+        <div class="adm-card">
+
+            <div class="adm-tablewrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Naziv</th>
+                            <th>Grad</th>
+                            <th>Kapacitet</th>
+                            <th>Država</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model == null || !Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="adm-empty">
+                                    Nema hala u bazi.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var h in Model)
+                            {
+                                <tr>
+                                    <td>@h.Id</td>
+
+                                    <td>
+                                        <strong>@h.Naziv</strong>
+                                    </td>
+
+                                    <td>@(h.Grad ?? "—")</td>
+
+                                    <td>
+                                        <span class="adm-pill">
+                                            @(h.Kapacitet?.ToString() ?? "—")
+                                        </span>
+                                    </td>
+
+                                    <td>@h.DrzavaId</td>
+
+                                    <td>
+                                        <div class="adm-actions">
+
+                                            <a href="/Admin/Hale/Izmeni/@h.Id"
+                                               class="adm-iconbtn">
+                                                ✏️
+                                            </a>
+
+                                            <form method="post"
+                                                  action="/Admin/Hale/Obrisi"
+                                                  onsubmit="return confirm('Obrisati halu?');">
+
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@h.Id" />
+
+                                                <button type="submit"
+                                                        class="adm-iconbtn adm-iconbtn-danger">
+                                                    🗑
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

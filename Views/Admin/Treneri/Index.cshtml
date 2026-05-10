@@ -10,117 +10,253 @@
     <title>Admin • Treneri</title>
 
     <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
+            margin: 0;
+            font-family: system-ui;
+            background: var(--adm-bg);
+        }
+
+        .adm-wrap {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .adm-title {
+            font-size: 26px;
+        }
+
+        .adm-subtitle {
+            font-size: 14px;
+            color: var(--adm-muted);
+        }
+
+        /* CARD */
+        .adm-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--adm-shadow);
+        }
+
+        /* BUTTON */
+        .adm-btn {
+            background: linear-gradient(90deg, #ff8c00, #ff3c00);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* TABLE */
+        .adm-tablewrap {
+            overflow-x: auto;
         }
 
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
         }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+        thead {
+            background: #f8fafc;
         }
 
         th {
-            background: #f3f3f3;
+            text-align: left;
+            padding: 12px;
+            font-size: 13px;
+            color: #475569;
         }
 
-        img {
+        td {
+            padding: 12px;
+            border-top: 1px solid var(--adm-border);
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* IMAGE */
+        .adm-img {
             height: 40px;
-            border-radius: 4px;
+            width: 40px;
+            object-fit: cover;
+            border-radius: 8px;
         }
 
-        .actions a {
-            margin-right: 10px;
+        /* STATUS */
+        .adm-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* ACTIONS */
+        .adm-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .adm-iconbtn {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--adm-border);
+            background: white;
+            cursor: pointer;
+        }
+
+        .adm-iconbtn-danger {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .adm-empty {
+            text-align: center;
+            padding: 20px;
+            color: var(--adm-muted);
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Treneri</h1>
+    <div class="adm-wrap">
 
-    <a href="/Admin">← Nazad na admin</a>
-    <br />
-    <br />
-    <a href="/Admin/Treneri/Novi">+ Novi trener</a>
+        <!-- HEADER -->
+        <div class="adm-top">
+            <div>
+                <h1 class="adm-title">🎯 Treneri</h1>
+                <div class="adm-subtitle">Pregled svih trenera</div>
+            </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ime</th>
-                <th>Uloga</th>
-                <th>Tim</th>
-                <th>Država</th>
-                <th>Datum rođenja</th>
-                <th>Slika</th>
-                <th>Akcije</th>
-            </tr>
-        </thead>
+            <a href="/Admin/Treneri/Novi" class="adm-btn">
+                + Novi trener
+            </a>
+        </div>
 
-        <tbody>
-            @if (Model.Count == 0)
-            {
-                <tr>
-                    <td colspan="8">Nema trenera u bazi.</td>
-                </tr>
-            }
-            else
-            {
-                var rb = 1;
-                foreach (var t in Model)
-                {
-                    <tr>
-                        <td>@rb</td>
-                        <td>@t.Ime @t.Prezime</td>
-                        <td>
-                            @if (t.Uloga == 1)
+        <!-- CARD -->
+        <div class="adm-card">
+
+            <div class="adm-tablewrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Trener</th>
+                            <th>Uloga</th>
+                            <th>Tim</th>
+                            <th>Država</th>
+                            <th>Datum rođenja</th>
+                            <th>Slika</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            var rb = 1;
+                        }
+
+                        @if (Model == null || Model.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="8" class="adm-empty">
+                                    Nema trenera u bazi.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var t in Model)
                             {
-                                <span>Glavni Trener</span>
-                            }
-                            else
-                            {
-                                <span>Pomocni Trener</span>
-                            }
-                        </td>
-                        <td>@t.Tim</td>
-                        <td>@t.Drzava</td>
-                        <td>@(t.DatumRodjenja.ToString("dd.MM.yyyy") ?? "—")</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(t.UrlSlika))
-                            {
-                                <img src="@t.UrlSlika" />
-                            }
-                            else
-                            {
-                                <span>—</span>
-                            }
-                        </td>
-                        <td class="actions">
-                            <a href="/Admin/Treneri/Izmeni/@t.TrenerId">Edit</a>
-                            <form method="post"
-                                  action="/Admin/Treneri/Obrisi"
-                                  onsubmit="return confirm('Da li si siguran da želiš da obrišeš trenera?');"
-                                  style="display:inline;">
+                                <tr>
+                                    <td>@rb</td>
 
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@t.TrenerId" />
+                                    <td>
+                                        <strong>@t.Ime @t.Prezime</strong>
+                                    </td>
 
-                                <button type="submit">Obriši</button>
-                            </form>
-                        </td>
-                    </tr>
-                    rb++;
-                }
-            }
-        </tbody>
-    </table>
+                                    <td>
+                                        <span class="adm-pill">
+                                            @(t.Uloga == 1 ? "Glavni trener" : "Pomoćni trener")
+                                        </span>
+                                    </td>
+
+                                    <td>@t.Tim</td>
+
+                                    <td>@t.Drzava</td>
+
+                                    <td>@t.DatumRodjenja.ToString("dd.MM.yyyy")</td>
+
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(t.UrlSlika))
+                                        {
+                                            <img src="@t.UrlSlika" class="adm-img" />
+                                        }
+                                        else
+                                        {
+                                            <span>—</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <div class="adm-actions">
+
+                                            <a href="/Admin/Treneri/Izmeni/@t.TrenerId"
+                                               class="adm-iconbtn">
+                                                ✏️
+                                            </a>
+
+                                            <form method="post"
+                                                  action="/Admin/Treneri/Obrisi"
+                                                  onsubmit="return confirm('Obrisati trenera?');">
+
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@t.TrenerId" />
+
+                                                <button type="submit"
+                                                        class="adm-iconbtn adm-iconbtn-danger">
+                                                    🗑
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                rb++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

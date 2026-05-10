@@ -1,5 +1,6 @@
 ﻿using HoopLeague.Models.ViewModels.Admin.Igraci;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,18 @@ namespace HoopLeague.Controllers.Admin
         {
             _context = context;
         }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var isAdmin = context.HttpContext.Session.GetString("Admin");
+
+            if (isAdmin != "true")
+            {
+                context.Result = new RedirectToActionResult("Login", "AdminAuth", null);
+            }
+
+            base.OnActionExecuting(context);
+        }
+
 
         [HttpGet("")]
         public async Task<IActionResult> Index()
@@ -22,6 +35,8 @@ namespace HoopLeague.Controllers.Admin
             var igraci = await _context.vw_Igraci
                 .OrderBy(i => i.Prezime)
                 .ToListAsync();
+
+            
 
             return View("~/Views/Admin/Igraci/Index.cshtml", igraci);
         }
@@ -68,7 +83,13 @@ namespace HoopLeague.Controllers.Admin
         public IActionResult NoviIgrac()
         {
             ViewBag.Timovi = _context.vw_Timovi.ToList();
-            
+
+            var drzave = _context.Countries
+                .Select(d => new { d.Id, d.Name })
+                .ToList();
+
+            ViewBag.Drzave = drzave;
+
             return View("~/Views/Admin/Igraci/NoviIgrac.cshtml");
         }
 
@@ -91,6 +112,12 @@ namespace HoopLeague.Controllers.Admin
             ViewBag.Timovi = await _context.vw_Timovi
                 .OrderBy(t => t.Naziv)
                 .ToListAsync();
+
+            var drzave = _context.Countries
+                .Select(d => new { d.Id, d.Name })
+                .ToList();
+
+            ViewBag.Drzave = drzave;
 
             var sql = @"
                 SELECT

@@ -29,8 +29,7 @@ builder.Services.AddScoped<IStatistikeService, StatistikeService>();
 
 builder.Services.AddScoped<IJednaUtakmicaService, JednaUtakmicaService>();
 
-
-
+builder.Services.AddSession();
 
 
 
@@ -57,6 +56,9 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.UseSession();
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -78,5 +80,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+builder.Services.AddSession();
+
+
+
+app.UseSession();
 
 app.Run();

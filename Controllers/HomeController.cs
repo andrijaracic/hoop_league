@@ -109,14 +109,14 @@ namespace HoopLeague.Controllers
         }
 
 
-        // ================== TIMOVI ==================
+        
         public IActionResult Timovi()
         {
             var timovi = _timoviService.GetAllTimovi();
             return View(timovi);
         }
 
-        // ================== IGRACI ==================
+        
         public async Task<IActionResult> Igraci()
         {
             var igraci = await _igraciService.GetIgraci(0, 24); 

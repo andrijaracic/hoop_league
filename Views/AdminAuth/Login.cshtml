@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin login</title>
+
+    <style>
+        :root {
+            --bg: #f6f7f9;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg);
+            font-family: system-ui;
+        }
+
+        /* CARD */
+        .card {
+            width: 360px;
+            background: var(--card);
+            padding: 32px 28px;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* TITLE */
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        /* INPUT */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+            input:focus {
+                outline: none;
+                border-color: #ff3c00;
+                box-shadow: 0 0 0 2px rgba(255,60,0,0.15);
+            }
+
+        /* BUTTON */
+        button {
+            margin-top: 6px;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg,#ff8c00,#ff3c00);
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            button:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px rgba(255,60,0,0.25);
+            }
+
+        /* ERROR */
+        .error {
+            text-align: center;
+            font-size: 13px;
+            color: #dc2626;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="title">🔐 Admin login</div>
+        <div class="subtitle">Unesi šifru za pristup admin panelu</div>
+
+        <form method="post">
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Šifra" required />
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error">@ViewBag.Error</div>
+        }
+
+    </div>
+
+</body>
+</html>

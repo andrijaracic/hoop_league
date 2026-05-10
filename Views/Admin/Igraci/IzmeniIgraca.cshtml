@@ -1,14 +1,13 @@
 ﻿@model HoopLeague.Models.ViewModels.Admin.Igraci.IgracCreateViewModel
 @{
-    ViewData["Title"] = "Izmeni igrača";
     Layout = null;
+    var drzave = ViewBag.Drzave;
 }
 
 <!doctype html>
 <html lang="sr">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Admin • Izmeni igrača</title>
 
     <style>
@@ -18,243 +17,209 @@
             --adm-text: #0f172a;
             --adm-muted: #64748b;
             --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
         }
 
-        .adm-root, .adm-root * {
-            box-sizing: border-box;
-        }
-
-        .adm-root {
+        body {
             margin: 0;
-            min-height: 100vh;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            font-family: system-ui;
             background: var(--adm-bg);
-            color: var(--adm-text);
         }
 
         .adm-wrap {
             max-width: 900px;
-            margin: 0 auto;
-            padding: 28px 18px 48px;
-        }
-
-        .adm-card {
-            background: var(--adm-card);
-            border: 1px solid var(--adm-border);
-            border-radius: 18px;
-            padding: 18px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
         .adm-top {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 14px;
+            margin-bottom: 20px;
         }
 
         .adm-title {
-            margin: 0;
-            font-size: 24px;
-            letter-spacing: -0.02em;
+            font-size: 26px;
         }
 
-        .adm-sub {
-            margin-top: 6px;
-            color: var(--adm-muted);
-            font-size: 13px;
+        .adm-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--adm-shadow);
         }
 
-        .adm-form {
-            margin-top: 14px;
-            display: grid;
-            gap: 14px;
+        .adm-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .adm-row {
+        .adm-form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 16px;
         }
 
-        
-        }
-
-        .adm-field label {
-            display: block;
-            font-size: 12px;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-
-        .adm-input,
-        .adm-select {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 1px solid var(--adm-border);
-            background: #fff;
-            outline: none;
-        }
-
-        .adm-checkbox {
+        .adm-field {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            margin-top: 6px;
+            flex-direction: column;
         }
+
+            .adm-field label {
+                font-size: 13px;
+                margin-bottom: 6px;
+                color: var(--adm-muted);
+            }
+
+        .adm-input, .adm-select {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--adm-border);
+        }
+
+            .adm-input:focus, .adm-select:focus {
+                outline: none;
+                border-color: #ff3c00;
+                box-shadow: 0 0 0 2px rgba(255,60,0,0.15);
+            }
 
         .adm-actions {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 6px;
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
         .adm-btn {
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--adm-border);
-            cursor: pointer;
-            font-size: 14px;
-            background: #0f172a;
-            color: #fff;
+            background: linear-gradient(90deg,#ff8c00,#ff3c00);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
         }
 
         .adm-btn-ghost {
-            background: #fff;
-            color: #0f172a;
-        }
-
-        .adm-error {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #b91c1c;
+            background: white;
+            border: 1px solid var(--adm-border);
+            color: black;
         }
     </style>
 </head>
 
-<body class="adm-root">
+<body>
+
     <div class="adm-wrap">
 
         <div class="adm-top">
-            <div>
-                <h1 class="adm-title">Izmeni igrača</h1>
-                <div class="adm-sub">Izmena postojećeg igrača</div>
-            </div>
-
-            <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">← Nazad</a>
+            <h1 class="adm-title">✏️ Izmeni igrača</h1>
+            <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">Nazad</a>
         </div>
 
         <div class="adm-card">
-            <form class="adm-form" method="post" action="/Admin/Igraci/IzmeniIgraca">
+
+            <form method="post" action="/Admin/Igraci/IzmeniIgraca">
                 @Html.AntiForgeryToken()
 
-                <!-- ID (hidden) -->
                 <input type="hidden" asp-for="Id" />
 
-                <!-- Ime / Prezime -->
-                <div class="adm-row">
+                <div class="adm-section-title">📋 Osnovne informacije</div>
+
+                <div class="adm-form-grid">
+
                     <div class="adm-field">
                         <label asp-for="Ime"></label>
                         <input asp-for="Ime" class="adm-input" />
-                        <span asp-validation-for="Ime" class="adm-error"></span>
                     </div>
 
                     <div class="adm-field">
                         <label asp-for="Prezime"></label>
                         <input asp-for="Prezime" class="adm-input" />
-                        <span asp-validation-for="Prezime" class="adm-error"></span>
-                    </div>
-                </div>
-
-                <!-- Država / Datum rođenja -->
-                <div class="adm-row">
-                    <div class="adm-field">
-                        <label asp-for="DrzavaId">Država</label>
-                        <input asp-for="DrzavaId" type="number" class="adm-input" />
                     </div>
 
+                    <!-- 🔥 DROPDOWN DRŽAVA -->
                     <div class="adm-field">
-                        <label asp-for="DatumRodjenja">Datum rođenja</label>
-                        <input asp-for="DatumRodjenja" type="date" class="adm-input" />
-                    </div>
-                </div>
-
-                <!-- Tim / Pozicija -->
-                <div class="adm-row">
-                    <div class="adm-field">
-                        <label asp-for="TimId">Tim</label>
-                        <select asp-for="TimId" class="adm-select">
-                            @foreach (var t in ViewBag.Timovi)
+                        <label>Država</label>
+                        <select asp-for="DrzavaId" class="adm-select">
+                            <option value="">-- izaberi državu --</option>
+                            @foreach (var d in drzave)
                             {
-                                <option value="@t.Id">@t.Naziv</option>
+                                <option value="@d.Id" selected="@(d.Id == Model.DrzavaId)">
+                                    @d.Name
+                                </option>
                             }
                         </select>
                     </div>
 
                     <div class="adm-field">
-                        <label asp-for="Pozicija">Pozicija</label>
-                        <select asp-for="Pozicija" class="adm-select">
-                            <option value="bek">Bek</option>
-                            <option value="krilo">Krilo</option>
-                            <option value="centar">Centar</option>
+                        <label asp-for="DatumRodjenja"></label>
+                        <input asp-for="DatumRodjenja" type="date" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="TimId"></label>
+                        <select asp-for="TimId" class="adm-select">
+                            @foreach (var t in ViewBag.Timovi)
+                            {
+                                <option value="@t.Id" selected="@(t.Id == Model.TimId)">
+                                    @t.Naziv
+                                </option>
+                            }
                         </select>
                     </div>
-                </div>
 
-                <!-- Broj / Visina -->
-                <div class="adm-row">
                     <div class="adm-field">
-                        <label asp-for="BrojDresa">Broj dresa</label>
+                        <label asp-for="Pozicija"></label>
+                        <select asp-for="Pozicija" class="adm-select">
+                            <option value="bek" selected="@(Model.Pozicija == "bek")">Bek</option>
+                            <option value="krilo" selected="@(Model.Pozicija == "krilo")">Krilo</option>
+                            <option value="centar" selected="@(Model.Pozicija == "centar")">Centar</option>
+                        </select>
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="BrojDresa"></label>
                         <input asp-for="BrojDresa" type="number" class="adm-input" />
                     </div>
 
                     <div class="adm-field">
-                        <label asp-for="Visina">Visina (cm)</label>
+                        <label asp-for="Visina"></label>
                         <input asp-for="Visina" type="number" class="adm-input" />
                     </div>
-                </div>
 
-                <!-- Težina / Mesto rođenja -->
-                <div class="adm-row">
                     <div class="adm-field">
-                        <label asp-for="Tezina">Težina (kg)</label>
+                        <label asp-for="Tezina"></label>
                         <input asp-for="Tezina" type="number" class="adm-input" />
                     </div>
 
                     <div class="adm-field">
-                        <label asp-for="MestoRodjenja">Mesto rođenja</label>
+                        <label asp-for="MestoRodjenja"></label>
                         <input asp-for="MestoRodjenja" class="adm-input" />
                     </div>
-                </div>
 
-                <!-- Slika / Kapiten -->
-                <div class="adm-row">
                     <div class="adm-field">
-                        <label asp-for="UrlSlika">URL slike</label>
+                        <label asp-for="UrlSlika"></label>
                         <input asp-for="UrlSlika" class="adm-input" />
                     </div>
 
-                    <div class="adm-field adm-checkbox">
-                        <input asp-for="Kapiten" />
-                        <label asp-for="Kapiten">Kapiten</label>
+                    <div class="adm-field">
+                        <label>
+                            <input asp-for="Kapiten" /> Kapiten
+                        </label>
                     </div>
+
                 </div>
 
-                <!-- Actions -->
                 <div class="adm-actions">
-                    <button type="submit" class="adm-btn">Sačuvaj izmene</button>
                     <a href="/Admin/Igraci" class="adm-btn adm-btn-ghost">Otkaži</a>
+                    <button type="submit" class="adm-btn">Sačuvaj izmene</button>
                 </div>
+
             </form>
+
         </div>
 
     </div>
 
-    @section Scripts{
-        <partial name="_ValidationScriptsPartial" />
-    }
 </body>
 </html>

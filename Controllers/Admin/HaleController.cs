@@ -1,5 +1,6 @@
 ﻿using HoopLeague.Models.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,18 @@ namespace HoopLeague.Controllers.Admin
         {
             _context = context;
         }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var isAdmin = context.HttpContext.Session.GetString("Admin");
+
+            if (isAdmin != "true")
+            {
+                context.Result = new RedirectToActionResult("Login", "AdminAuth", null);
+            }
+
+            base.OnActionExecuting(context);
+        }
+
 
         // READ – lista hala
         [HttpGet("")]
@@ -23,6 +36,8 @@ namespace HoopLeague.Controllers.Admin
 
             var conn = _context.Database.GetDbConnection();
             await conn.OpenAsync();
+
+            
 
             using var cmd = conn.CreateCommand();
             cmd.CommandText = @"
@@ -42,7 +57,7 @@ namespace HoopLeague.Controllers.Admin
             {
                 list.Add(new HalaListViewModel
                 {
-                    HalaId = r.GetInt32(0),
+                    Id = r.GetInt32(0),
                     Naziv = r.GetString(1),
                     DrzavaId = r.GetInt32(2),
                     Kapacitet = r.IsDBNull(3) ? null : r.GetInt32(3),
@@ -58,6 +73,12 @@ namespace HoopLeague.Controllers.Admin
         [HttpGet("Nova")]
         public IActionResult Nova()
         {
+            var drzave = _context.Countries
+                .Select(d => new { d.Id, d.Name })
+                .ToList();
+
+            ViewBag.Drzave = drzave;
+
             return View("~/Views/Admin/Hale/Nova.cshtml",
                 new HalaListViewModel());
         }
@@ -106,6 +127,12 @@ namespace HoopLeague.Controllers.Admin
             var conn = _context.Database.GetDbConnection();
             await conn.OpenAsync();
 
+            var drzave = _context.Countries
+                .Select(d => new { d.Id, d.Name })
+                .ToList();
+
+            ViewBag.Drzave = drzave;
+
             using var cmd = conn.CreateCommand();
             cmd.CommandText = @"
                 SELECT
@@ -127,7 +154,7 @@ namespace HoopLeague.Controllers.Admin
 
             var model = new HalaListViewModel
             {
-                HalaId = r.GetInt32(0),
+                Id = r.GetInt32(0),
                 Naziv = r.GetString(1),
                 DrzavaId = r.GetInt32(2),
                 Kapacitet = r.IsDBNull(3) ? null : r.GetInt32(3),
@@ -154,7 +181,7 @@ namespace HoopLeague.Controllers.Admin
             @Grad,
             @Adresa,
             @UrlSlika",
-                new SqlParameter("@HalaId", model.HalaId),
+                new SqlParameter("@HalaId", model.Id),
                 new SqlParameter("@Naziv", model.Naziv),
                 new SqlParameter("@DrzavaId", model.DrzavaId),
                 new SqlParameter("@Kapacitet", (object?)model.Kapacitet ?? DBNull.Value),

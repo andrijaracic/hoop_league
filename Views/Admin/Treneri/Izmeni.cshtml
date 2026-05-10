@@ -1,82 +1,202 @@
-﻿
-@model HoopLeague.Models.ViewModels.Admin.TrenerListViewModel
+﻿@model HoopLeague.Models.ViewModels.Admin.TrenerListViewModel
 @{
     Layout = null;
     var timovi = ViewBag.Timovi as IEnumerable<dynamic>;
+    var drzave = ViewBag.Drzave;
 }
 
 <!doctype html>
 <html lang="sr">
 <head>
     <meta charset="utf-8" />
-    <title>Izmeni trenera</title>
+    <title>Admin • Izmeni trenera</title>
 
     <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
+        }
+
         body {
-            font-family: Arial;
-            padding: 30px;
+            margin: 0;
+            font-family: system-ui;
+            background: var(--adm-bg);
         }
 
-        label {
-            display: block;
-            margin-top: 12px;
+        .adm-wrap {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
-        input, select {
-            width: 320px;
-            padding: 6px;
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        button {
+        .adm-title {
+            font-size: 26px;
+        }
+
+        .adm-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--adm-shadow);
+        }
+
+        .adm-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .adm-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .adm-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .adm-field label {
+                font-size: 13px;
+                margin-bottom: 6px;
+                color: var(--adm-muted);
+            }
+
+        .adm-input, .adm-select {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--adm-border);
+        }
+
+            .adm-input:focus, .adm-select:focus {
+                outline: none;
+                border-color: #ff3c00;
+                box-shadow: 0 0 0 2px rgba(255,60,0,0.15);
+            }
+
+        .adm-actions {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
-            padding: 10px 20px;
+        }
+
+        .adm-btn {
+            background: linear-gradient(90deg,#ff8c00,#ff3c00);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .adm-btn-ghost {
+            background: white;
+            border: 1px solid var(--adm-border);
+            color: black;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Izmeni trenera</h1>
+    <div class="adm-wrap">
 
-    <form method="post" action="/Admin/Treneri/Izmeni">
-        @Html.AntiForgeryToken()
+        <div class="adm-top">
+            <h1 class="adm-title">✏️ Izmeni trenera</h1>
+            <a href="/Admin/Treneri" class="adm-btn adm-btn-ghost">Nazad</a>
+        </div>
 
-        <input type="hidden" asp-for="TrenerId" />
+        <div class="adm-card">
 
-        <label>Ime</label>
-        <input asp-for="Ime" />
+            <form method="post" action="/Admin/Treneri/Izmeni">
+                @Html.AntiForgeryToken()
 
-        <label>Prezime</label>
-        <input asp-for="Prezime" />
+                <input type="hidden" asp-for="TrenerId" />
 
-        <label>Uloga</label>
-        <select asp-for="Uloga">
-            <option value="1">Glavni trener</option>
-            <option value="2">Pomoćni trener</option>
-        </select>
+                <div class="adm-section-title">📋 Osnovne informacije</div>
 
-        <label>Država ID</label>
-        <input asp-for="DrzavaId" type="number" />
+                <div class="adm-form-grid">
 
-        <label>Tim</label>
-        <select asp-for="TimId">
-            @foreach (var t in timovi)
-            {
-                <option value="@t.Id">@t.Naziv</option>
-            }
-        </select>
+                    <div class="adm-field">
+                        <label>Ime</label>
+                        <input asp-for="Ime" class="adm-input" />
+                    </div>
 
-        <label>Datum rođenja</label>
-        <input asp-for="DatumRodjenja" type="date" />
+                    <div class="adm-field">
+                        <label>Prezime</label>
+                        <input asp-for="Prezime" class="adm-input" />
+                    </div>
 
-        <label>URL slike</label>
-        <input asp-for="UrlSlika" />
+                    <!-- ULOGA -->
+                    <div class="adm-field">
+                        <label>Uloga</label>
+                        <select asp-for="Uloga" class="adm-select">
+                            <option value="1" selected="@(Model.Uloga == 1)">Glavni trener</option>
+                            <option value="2" selected="@(Model.Uloga == 2)">Pomoćni trener</option>
+                        </select>
+                    </div>
 
-        <br />
+                    <!-- 🔥 DRŽAVA DROPDOWN -->
+                    <div class="adm-field">
+                        <label>Država</label>
+                        <select asp-for="DrzavaId" class="adm-select">
+                            <option value="">-- izaberi državu --</option>
+                            @foreach (var d in drzave)
+                            {
+                                <option value="@d.Id" selected="@(d.Id == Model.DrzavaId)">
+                                    @d.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
 
-        <button type="submit">Sačuvaj izmene</button>
-        <a href="/Admin/Treneri">Otkaži</a>
-    </form>
+                    <!-- TIM -->
+                    <div class="adm-field">
+                        <label>Tim</label>
+                        <select asp-for="TimId" class="adm-select">
+                            @foreach (var t in timovi)
+                            {
+                                <option value="@t.Id" selected="@(t.Id == Model.TimId)">
+                                    @t.Naziv
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="adm-field">
+                        <label>Datum rođenja</label>
+                        <input asp-for="DatumRodjenja" type="date" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label>URL slike</label>
+                        <input asp-for="UrlSlika" class="adm-input" />
+                    </div>
+
+                </div>
+
+                <div class="adm-actions">
+                    <a href="/Admin/Treneri" class="adm-btn adm-btn-ghost">Otkaži</a>
+                    <button type="submit" class="adm-btn">Sačuvaj izmene</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

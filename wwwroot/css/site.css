@@ -21,6 +21,75 @@ body {
   margin-bottom: 60px;
 }
 
+.btn-admin {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+    .btn-admin:hover {
+        background: white;
+        color: #ff3c00;
+    }
+
+.custom-navbar {
+    background: linear-gradient(90deg, #ff8c00, #ff3c00);
+    padding: 12px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    color: white !important;
+    margin: 0 10px;
+    font-weight: 500;
+    position: relative;
+    transition: 0.3s;
+}
+
+    .nav-link:hover {
+        color: #ffd6a5 !important;
+    }
+
+    /* underline hover efekat */
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: white;
+        transition: 0.3s;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+/* dugme */
+.btn-league {
+    background: white;
+    color: #ff3c00;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+    .btn-league:hover {
+        background: #000;
+        color: white;
+    }
+
 /* ===== SLIDER ===== */
 
 .game-card-slider {
@@ -170,7 +239,7 @@ body {
            ====================================================== */
 
 .standings-title {
-    color: white;
+    color: #111;
     font-size: 28px;
     font-weight: 800;
     margin-top: 50px;
@@ -369,7 +438,7 @@ tr.pos-10 td {
 /* ===================== MAIN FOOTER ===================== */
 
 .main-footer {
-    background: black;
+    background: #111;
     padding: 50px 80px 35px 80px;
     color: white;
     position: absolute;
@@ -1645,8 +1714,7 @@ body {
         color: #fff;
     }
 
-/* ================== SINGLE GAME PAGE ================== */
-/* Potpuno izolovano: single-game-* da nema preklapanja */
+
 
 .single-game-page {
     max-width: 1200px;
@@ -1728,7 +1796,7 @@ body {
 }
 
 .single-game-team--right {
-    justify-content: flex-end;
+    /*justify-content: flex-end;*/
     flex-direction: row-reverse;
 }
 

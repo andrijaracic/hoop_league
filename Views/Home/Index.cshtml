@@ -1,22 +1,8 @@
 ﻿@model HoopLeague.Models.ViewModels.HomePageViewModel
 
-<style>
-    body {
-        background: #ffa617;
-        background: linear-gradient(90deg,rgba(255, 166, 23, 1) 0%, rgba(224, 60, 0, 1) 86%);
-    }
-    
 
-    
-</style>
-
-
-<!-- ======================= SLIDER ======================= -->
 
 <div class="slider-wrapper">
-
-    <div class="fade-left"></div>
-    <div class="fade-right"></div>
 
     <button class="slider-arrow" onclick="slideLeft()">❮</button>
 
@@ -175,7 +161,7 @@
                 
             }
         </div>
-        <a href="#" class="btn-vesti" >Idi na vesti</a>
+        <a class="btn-vesti" asp-controller="Home" asp-action="Vesti">Idi na vesti</a>
 
         
 

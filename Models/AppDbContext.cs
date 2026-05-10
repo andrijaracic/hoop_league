@@ -1,5 +1,8 @@
 ﻿using HoopLeague.Models.ViewModels;
+using HoopLeague.Models.ViewModels.Admin;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Diagnostics.Metrics;
 
 public class AppDbContext : DbContext
 {
@@ -31,7 +34,9 @@ public class AppDbContext : DbContext
 
     public DbSet<TimListViewModel> vw_Timovi_Admin { get; set; }
 
+    public DbSet<HalaListViewModel> Hale { get; set; }
 
+    public DbSet<CountryViewModel> Countries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,6 +72,7 @@ public class AppDbContext : DbContext
             .HasNoKey()
             .ToView("vw_Timovi_Admin");
 
+        modelBuilder.Entity<HalaListViewModel>().HasNoKey();
 
         base.OnModelCreating(modelBuilder);
     }

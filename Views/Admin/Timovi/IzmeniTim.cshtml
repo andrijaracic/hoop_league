@@ -1,6 +1,7 @@
 ﻿@model HoopLeague.Models.ViewModels.TimListViewModel
 @{
     Layout = null;
+    var drzave = ViewBag.Drzave;
 }
 
 <!doctype html>
@@ -8,15 +9,117 @@
 <head>
     <meta charset="utf-8" />
     <title>Admin • Izmeni tim</title>
+
+    <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui;
+            background: var(--adm-bg);
+        }
+
+        .adm-wrap {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .adm-title {
+            font-size: 26px;
+        }
+
+        .adm-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--adm-shadow);
+        }
+
+        .adm-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .adm-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .adm-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .adm-field label {
+                font-size: 13px;
+                margin-bottom: 6px;
+                color: var(--adm-muted);
+            }
+
+        .adm-input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--adm-border);
+        }
+
+            .adm-input:focus {
+                outline: none;
+                border-color: #ff3c00;
+                box-shadow: 0 0 0 2px rgba(255,60,0,0.15);
+            }
+
+        .adm-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .adm-btn {
+            background: linear-gradient(90deg,#ff8c00,#ff3c00);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .adm-btn-ghost {
+            background: white;
+            border: 1px solid var(--adm-border);
+            color: black;
+        }
+
+        .adm-error {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
 </head>
 
-<body class="adm-root">
+<body>
+
     <div class="adm-wrap">
 
-        <!-- Header -->
         <div class="adm-top">
             <div>
-                <h1 class="adm-title">Izmeni tim</h1>
+                <h1 class="adm-title">✏️ Izmeni tim</h1>
                 <div class="adm-subtitle">Izmena postojećeg tima</div>
             </div>
 
@@ -25,91 +128,83 @@
             </a>
         </div>
 
-        <!-- Card -->
         <div class="adm-card">
-            <!-- BITNO: action ostaje NoviTim -->
+
             <form method="post" action="/Admin/Timovi/Izmeni">
                 @Html.AntiForgeryToken()
-
                 <input type="hidden" asp-for="TimId" />
 
-                <!-- Naziv -->
-                <div class="adm-field">
-                    <label asp-for="Naziv">Naziv tima</label>
-                    <input asp-for="Naziv" class="adm-input" />
-                    <span asp-validation-for="Naziv" class="adm-error"></span>
+                <div class="adm-section-title">📋 Osnovne informacije</div>
+
+                <div class="adm-form-grid">
+
+                    <div class="adm-field">
+                        <label asp-for="Naziv"></label>
+                        <input asp-for="Naziv" class="adm-input" />
+                        <span asp-validation-for="Naziv" class="adm-error"></span>
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="Grad"></label>
+                        <input asp-for="Grad" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="Skracenica"></label>
+                        <input asp-for="Skracenica" class="adm-input" />
+                    </div>
+
+                    <!-- 🔥 DROPDOWN DRŽAVA -->
+                    <div class="adm-field">
+                        <label>Država</label>
+                        <select asp-for="DrzavaId" class="adm-input">
+                            <option value="">-- izaberi državu --</option>
+                            @foreach (var d in drzave)
+                            {
+                                <option value="@d.Id">@d.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="DatumOsnivanja"></label>
+                        <input asp-for="DatumOsnivanja" type="date" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="BrojTitula"></label>
+                        <input asp-for="BrojTitula" type="number" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="Boja"></label>
+                        <input asp-for="Boja" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label asp-for="LogoUrl"></label>
+                        <input asp-for="LogoUrl" class="adm-input" />
+                    </div>
+
                 </div>
 
-                <!-- Skraćenica -->
-                <div class="adm-field">
-                    <label asp-for="Skracenica">Skraćenica</label>
-                    <input asp-for="Skracenica"
-                           class="adm-input"
-                           maxlength="10" />
-                </div>
-
-                <!-- Grad -->
-                <div class="adm-field">
-                    <label asp-for="Grad">Grad</label>
-                    <input asp-for="Grad" class="adm-input" />
-                </div>
-
-                <!-- Država -->
-                <div class="adm-field">
-                    <label asp-for="DrzavaId">Država (ID)</label>
-                    <input asp-for="DrzavaId"
-                           type="number"
-                           class="adm-input" />
-                </div>
-
-                <!-- Datum osnivanja -->
-                <div class="adm-field">
-                    <label asp-for="DatumOsnivanja">Datum osnivanja</label>
-                    <input asp-for="DatumOsnivanja"
-                           type="date"
-                           class="adm-input" />
-                </div>
-
-                <!-- Broj titula -->
-                <div class="adm-field">
-                    <label asp-for="BrojTitula">Broj titula</label>
-                    <input asp-for="BrojTitula"
-                           type="number"
-                           min="0"
-                           class="adm-input" />
-                </div>
-
-                <!-- Boja -->
-                <div class="adm-field">
-                    <label asp-for="Boja">Boja</label>
-                    <input asp-for="Boja"
-                           class="adm-input"
-                           placeholder="npr. crvena ili #FF0000" />
-                </div>
-
-                <!-- Logo -->
-                <div class="adm-field">
-                    <label asp-for="LogoUrl">Logo URL</label>
-                    <input asp-for="LogoUrl"
-                           class="adm-input" />
-                </div>
-
-                <!-- Actions -->
                 <div class="adm-actions">
+                    <a href="/Admin/Timovi" class="adm-btn adm-btn-ghost">
+                        Otkaži
+                    </a>
+
                     <button type="submit" class="adm-btn">
                         Sačuvaj izmene
                     </button>
-
-                    <a href="/Admin/Timovi"
-                       class="adm-btn adm-btn-ghost">
-                        Otkaži
-                    </a>
                 </div>
+
             </form>
+
         </div>
 
     </div>
 
     <partial name="_ValidationScriptsPartial" />
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using HoopLeague.Models.ViewModels;
 using HoopLeague.Models.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,18 @@ namespace HoopLeague.Controllers.Admin
         public UtakmiceController(AppDbContext context)
         {
             _context = context;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var isAdmin = context.HttpContext.Session.GetString("Admin");
+
+            if (isAdmin != "true")
+            {
+                context.Result = new RedirectToActionResult("Login", "AdminAuth", null);
+            }
+
+            base.OnActionExecuting(context);
         }
 
         [HttpGet("")]
@@ -32,6 +45,10 @@ namespace HoopLeague.Controllers.Admin
         {
             ViewBag.Timovi = _context.vw_Timovi
                 .OrderBy(t => t.Naziv)
+                .ToList();
+
+            ViewBag.Hale = _context.Hale
+                .Select(h => new { h.Id, h.Naziv })
                 .ToList();
 
             return View("~/Views/Admin/Utakmice/Nova.cshtml",
@@ -90,6 +107,10 @@ namespace HoopLeague.Controllers.Admin
         {
             ViewBag.Timovi = _context.vw_Timovi
                 .OrderBy(t => t.Naziv)
+                .ToList();
+
+            ViewBag.Hale = _context.Hale
+                .Select(h => new { h.Id, h.Naziv })
                 .ToList();
 
             var sql = @"

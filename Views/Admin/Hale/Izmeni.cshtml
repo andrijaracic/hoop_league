@@ -1,69 +1,184 @@
 ﻿@model HoopLeague.Models.ViewModels.Admin.HalaListViewModel
 @{
     Layout = null;
+    var drzave = ViewBag.Drzave;
 }
 
 <!doctype html>
 <html lang="sr">
 <head>
     <meta charset="utf-8" />
-    <title>Izmeni halu</title>
+    <title>Admin • Izmeni halu</title>
 
     <style>
+        :root {
+            --adm-bg: #f6f7f9;
+            --adm-card: #ffffff;
+            --adm-text: #0f172a;
+            --adm-muted: #64748b;
+            --adm-border: #e2e8f0;
+            --adm-shadow: 0 10px 30px rgba(2,6,23,.08);
+        }
+
         body {
-            font-family: Arial;
-            padding: 30px;
+            margin: 0;
+            font-family: system-ui;
+            background: var(--adm-bg);
         }
 
-        label {
-            display: block;
-            margin-top: 12px;
+        .adm-wrap {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
-        input {
-            width: 320px;
-            padding: 6px;
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        button {
+        .adm-title {
+            font-size: 26px;
+        }
+
+        .adm-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--adm-shadow);
+        }
+
+        .adm-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .adm-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .adm-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .adm-field label {
+                font-size: 13px;
+                margin-bottom: 6px;
+                color: var(--adm-muted);
+            }
+
+        .adm-input, .adm-select {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--adm-border);
+        }
+
+            .adm-input:focus, .adm-select:focus {
+                outline: none;
+                border-color: #ff3c00;
+                box-shadow: 0 0 0 2px rgba(255,60,0,0.15);
+            }
+
+        .adm-actions {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
-            padding: 10px 20px;
+        }
+
+        .adm-btn {
+            background: linear-gradient(90deg,#ff8c00,#ff3c00);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .adm-btn-ghost {
+            background: white;
+            border: 1px solid var(--adm-border);
+            color: black;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Izmeni halu</h1>
+    <div class="adm-wrap">
 
-    <form method="post" action="/Admin/Hale/Izmeni">
-        @Html.AntiForgeryToken()
+        <div class="adm-top">
+            <h1 class="adm-title">🏟 Izmeni halu</h1>
+            <a href="/Admin/Hale" class="adm-btn adm-btn-ghost">Nazad</a>
+        </div>
 
-        <input type="hidden" asp-for="HalaId" />
+        <div class="adm-card">
 
-        <label>Naziv hale</label>
-        <input asp-for="Naziv" />
+            <form method="post" action="/Admin/Hale/Izmeni">
+                @Html.AntiForgeryToken()
 
-        <label>Država ID</label>
-        <input asp-for="DrzavaId" type="number" />
+                <input type="hidden" asp-for="Id" />
 
-        <label>Kapacitet</label>
-        <input asp-for="Kapacitet" type="number" />
+                <div class="adm-section-title">📋 Osnovne informacije</div>
 
-        <label>Grad</label>
-        <input asp-for="Grad" />
+                <div class="adm-form-grid">
 
-        <label>Adresa</label>
-        <input asp-for="Adresa" />
+                    <div class="adm-field">
+                        <label>Naziv hale</label>
+                        <input asp-for="Naziv" class="adm-input" />
+                    </div>
 
-        <label>URL slike</label>
-        <input asp-for="UrlSlika" />
+                    <!-- 🔥 DROPDOWN DRŽAVA -->
+                    <div class="adm-field">
+                        <label>Država</label>
+                        <select asp-for="DrzavaId" class="adm-select">
+                            <option value="">-- izaberi državu --</option>
+                            @foreach (var d in drzave)
+                            {
+                                <option value="@d.Id" selected="@(d.Id == Model.DrzavaId)">
+                                    @d.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
 
-        <br />
+                    <div class="adm-field">
+                        <label>Kapacitet</label>
+                        <input asp-for="Kapacitet" type="number" class="adm-input" />
+                    </div>
 
-        <button type="submit">Sačuvaj izmene</button>
-        <a href="/Admin/Hale">Otkaži</a>
-    </form>
+                    <div class="adm-field">
+                        <label>Grad</label>
+                        <input asp-for="Grad" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label>Adresa</label>
+                        <input asp-for="Adresa" class="adm-input" />
+                    </div>
+
+                    <div class="adm-field">
+                        <label>URL slike</label>
+                        <input asp-for="UrlSlika" class="adm-input" />
+                    </div>
+
+                </div>
+
+                <div class="adm-actions">
+                    <a href="/Admin/Hale" class="adm-btn adm-btn-ghost">Otkaži</a>
+                    <button type="submit" class="adm-btn">Sačuvaj izmene</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

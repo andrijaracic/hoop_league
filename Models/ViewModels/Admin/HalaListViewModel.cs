@@ -2,7 +2,7 @@
 {
     public class HalaListViewModel
     {
-        public int HalaId { get; set; }
+        public int Id { get; set; }
         public string Naziv { get; set; }
         public int DrzavaId { get; set; }
         public int? Kapacitet { get; set; }
